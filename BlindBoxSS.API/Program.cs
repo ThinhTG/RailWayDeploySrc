@@ -11,6 +11,13 @@ using Net.payOS;
 using Services.AccountService;
 using Services.Email;
 using Services;
+using Repositories.WalletRepo;
+using BlindBoxSS.API.Services;
+using Repositories.Product;
+using Services.Product;
+using Services.Wallet;
+using Services.Payment;
+using System.Runtime.ConstrainedExecution;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = new ConfigurationBuilder()
@@ -30,6 +37,15 @@ builder.Services.AddSingleton(payOS);
 
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<IWalletTransactionRepository, WalletTransactionRepository>();
+builder.Services.AddScoped<IWalletService, WalletService>();
+builder.Services.AddScoped<IWalletTransactionService, WalletTransactionService>();
+builder.Services.AddScoped<IBlindBoxRepository, BlindBoxRepository>();
+builder.Services.AddScoped<IBlindBoxService, BlindBoxService>();
+builder.Services.AddScoped<IPackageRepository, PackageRepository>();
+builder.Services.AddScoped<IPackageService, PackageService>();
 
 // Add DB
 builder.Services.AddDbContext<BlindBoxDbContext>(options =>

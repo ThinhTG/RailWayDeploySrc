@@ -33,6 +33,9 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
+                "projectPath": "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+              },
               "G:\\BlindBox_BackEnd\\Services\\Services.csproj": {
                 "projectPath": "G:\\BlindBox_BackEnd\\Services\\Services.csproj"
               }
@@ -335,6 +338,9 @@
             "projectReferences": {
               "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
                 "projectPath": "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+              },
+              "G:\\BlindBox_BackEnd\\Models\\Models.csproj": {
+                "projectPath": "G:\\BlindBox_BackEnd\\Models\\Models.csproj"
               }
             }
           }

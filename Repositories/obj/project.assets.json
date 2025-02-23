@@ -4803,7 +4803,8 @@
       "DAO >= 1.0.0",
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.8",
-      "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.8"
+      "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.8",
+      "Models >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -4841,6 +4842,9 @@
           "projectReferences": {
             "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
               "projectPath": "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+            },
+            "G:\\BlindBox_BackEnd\\Models\\Models.csproj": {
+              "projectPath": "G:\\BlindBox_BackEnd\\Models\\Models.csproj"
             }
           }
         }

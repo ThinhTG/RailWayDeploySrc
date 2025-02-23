@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "JdxV4hZJGKgOwez+YHr1QBKXU+5VbB1JxTjMiBOdFmU=",
+  "Source": "BlindBoxSS.API",
+  "BasePath": "_content/BlindBoxSS.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

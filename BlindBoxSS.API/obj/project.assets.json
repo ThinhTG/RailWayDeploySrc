@@ -2011,7 +2011,8 @@
         "dependencies": {
           "DAO": "1.0.0",
           "Microsoft.EntityFrameworkCore": "8.0.8",
-          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8"
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8",
+          "Models": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Repositories.dll": {}
@@ -5325,6 +5326,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "DAO >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.Google >= 8.0.8",
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.8",
@@ -5367,6 +5369,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
+              "projectPath": "G:\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+            },
             "G:\\BlindBox_BackEnd\\Services\\Services.csproj": {
               "projectPath": "G:\\BlindBox_BackEnd\\Services\\Services.csproj"
             }

@@ -309,9 +309,6 @@ namespace DAO.Migrations
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FullName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Gender")
                         .HasColumnType("nvarchar(max)");
 
@@ -677,8 +674,9 @@ namespace DAO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletId"));
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
@@ -697,17 +695,14 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.WalletTransaction", b =>
                 {
-                    b.Property<int>("WalletTransactionId")
+                    b.Property<Guid>("WalletTransactionId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletTransactionId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
                     b.Property<int?>("OrderId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("TransactionBalance")
@@ -904,7 +899,7 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Wallet", b =>
                 {
-                    b.HasOne("Models.Account", "Account")
+                    b.HasOne("Models.ApplicationUser", "Account")
                         .WithMany()
                         .HasForeignKey("AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -923,9 +918,7 @@ namespace DAO.Migrations
                 {
                     b.HasOne("Models.Order", "Order")
                         .WithMany("WalletTransactions")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.HasOne("Models.Wallet", "Wallet")
                         .WithMany("WalletTransactions")

@@ -11,9 +11,9 @@ namespace Models
         public int WalletId { get; set; }
 
         [Required]
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
 
-        public virtual Account? Account { get; set; }
+        public virtual ApplicationUser? Account { get; set; }
 
         [Required]
         public int Balance { get; set; }

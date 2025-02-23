@@ -26,5 +26,8 @@ namespace Services.AccountService
         //Send Email
         //Task<bool> ConfirmEmailAsync(string userId, string token);
         Task<bool> ResendConfirmationEmailAsync(string email);
+
+        //Create Wallet
+        Task CreateWalletForUserAsync(string accountId);
     }
 }

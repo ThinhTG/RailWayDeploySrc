@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Net.payOS.Types;
 using Net.payOS;
-using NetCoreDemo.Types;
+using Services.Payment;
+using Services.Request;
 
 namespace BlindBoxSS.API.Controllers
 {
@@ -9,29 +10,28 @@ namespace BlindBoxSS.API.Controllers
     [ApiController]
     public class PaymentController : Controller
     {
-        private readonly PayOS _payOS;
+        private readonly IPaymentService _paymentService;
 
-        public PaymentController(PayOS payOS)
+        public PaymentController(IPaymentService paymentService)
         {
-            _payOS = payOS;
+            _paymentService = paymentService;
         }
 
-        [HttpPost("create")]
-        public async Task<IActionResult> CreatePaymentLink(CreatePaymentLinkRequest body)
+        // Update the CreatePaymentLink method to use the correct type
+        [HttpPost("createPayment")]
+        public async Task<IActionResult> CreatePaymentLink([FromBody] CreatePaymentLinkRequest body)
         {
+            if (body == null)
+            {
+                return BadRequest(new Response(-1, "Request body is null", null));
+            }
+
             try
             {
-                int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
-                ItemData item = new ItemData(body.productName, 1, body.price);
-                List<ItemData> items = new List<ItemData>();
-                items.Add(item);
-                PaymentData paymentData = new PaymentData(orderCode, body.price, body.description, items, body.cancelUrl, body.returnUrl);
-
-                CreatePaymentResult createPayment = await _payOS.createPaymentLink(paymentData);
-
+                var createPayment = await _paymentService.CreatePaymentLinkAsync(body);
                 return Ok(new Response(0, "success", createPayment));
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
                 Console.WriteLine(exception);
                 return Ok(new Response(-1, "fail", null));
@@ -43,57 +43,37 @@ namespace BlindBoxSS.API.Controllers
         {
             try
             {
-                PaymentLinkInformation paymentLinkInformation = await _payOS.getPaymentLinkInformation(orderId);
+                var paymentLinkInformation = await _paymentService.GetPaymentLinkInformationAsync(orderId);
                 return Ok(new Response(0, "Ok", paymentLinkInformation));
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
-
                 Console.WriteLine(exception);
                 return Ok(new Response(-1, "fail", null));
             }
-
         }
-        //[HttpPut("{orderId}")]
-        //public async Task<IActionResult> CancelOrder([FromRoute] int orderId)
-        //{
-        //    try
-        //    {
-        //        PaymentLinkInformation paymentLinkInformation = await _payOS.cancelPaymentLink(orderId);
-        //        return Ok(new Response(0, "Ok", paymentLinkInformation));
-        //    }
-        //    catch (System.Exception exception)
-        //    {
-
-        //        Console.WriteLine(exception);
-        //        return Ok(new Response(-1, "fail", null));
-        //    }
-
-        //}
 
         [HttpPost("confirm-webhook")]
         public async Task<IActionResult> ConfirmWebhook(ConfirmWebhook body)
         {
             try
             {
-                await _payOS.confirmWebhook(body.webhook_url);
+                await _paymentService.ConfirmWebhookAsync(body.webhook_url);
                 return Ok(new Response(0, "Ok", null));
             }
-            catch (System.Exception exception)
+            catch (Exception exception)
             {
-
                 Console.WriteLine(exception);
                 return Ok(new Response(-1, "fail", null));
             }
-
         }
 
         [HttpPost("payos_transfer_handler")]
-        public IActionResult payOSTransferHandler(WebhookType body)
+        public IActionResult PayOSTransferHandler(WebhookType body)
         {
             try
             {
-                WebhookData data = _payOS.verifyPaymentWebhookData(body);
+                var data = _paymentService.VerifyPaymentWebhookData(body);
 
                 if (data.description == "Ma giao dich thu nghiem" || data.description == "BlindBoxQR123")
                 {
@@ -106,7 +86,6 @@ namespace BlindBoxSS.API.Controllers
                 Console.WriteLine(e.Message);
                 return Ok(new Response(-1, "fail", null));
             }
-
         }
     }
 }
