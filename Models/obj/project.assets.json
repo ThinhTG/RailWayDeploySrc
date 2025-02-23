@@ -4600,11 +4600,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\BlindBox\\BlindBox_BackEnd\\Models\\Models.csproj",
+      "projectUniqueName": "E:\\BlindBoxV2\\BlindBox_BackEnd\\Models\\Models.csproj",
       "projectName": "Models",
-      "projectPath": "E:\\BlindBox\\BlindBox_BackEnd\\Models\\Models.csproj",
+      "projectPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\Models\\Models.csproj",
       "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-      "outputPath": "E:\\BlindBox\\BlindBox_BackEnd\\Models\\obj\\",
+      "outputPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\Models\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",

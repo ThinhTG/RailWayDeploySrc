@@ -12,6 +12,8 @@ namespace Services
         Task AddToCart(CartDTO cartDto);
        Task<IEnumerable<Cart>> GetCartByUserId(string userId);
         Task<bool> UpdateCartItemQuantity(Guid cartId, string userId, int quantity);
+        Task<bool> DeleteCartItem(Guid cartId);
+
 
 
     }

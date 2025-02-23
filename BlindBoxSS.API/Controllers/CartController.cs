@@ -72,5 +72,23 @@ namespace BlindBoxSS.API.Controllers
             }
         }
 
+        [HttpDelete("delete-cart/{cartId}")]
+        public async Task<IActionResult> DeleteCartItem(Guid cartId)
+        {
+            try
+            {
+                bool isDeleted = await _cartService.DeleteCartItem(cartId);
+                if (isDeleted)
+                    return Ok(new { message = "Cart item deleted successfully." });
+                else
+                    return NotFound(new { message = "Cart item not found." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred.", error = ex.Message });
+            }
+        }
+
+
     }
 }

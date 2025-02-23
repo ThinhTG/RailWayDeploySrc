@@ -5309,11 +5309,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\BlindBox\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
+      "projectUniqueName": "E:\\BlindBoxV2\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
       "projectName": "BlindBoxSS.API",
-      "projectPath": "E:\\BlindBox\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
+      "projectPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
       "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-      "outputPath": "E:\\BlindBox\\BlindBox_BackEnd\\BlindBoxSS.API\\obj\\",
+      "outputPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\BlindBoxSS.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5333,8 +5333,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\BlindBox\\BlindBox_BackEnd\\Services\\Services.csproj": {
-              "projectPath": "E:\\BlindBox\\BlindBox_BackEnd\\Services\\Services.csproj"
+            "E:\\BlindBoxV2\\BlindBox_BackEnd\\Services\\Services.csproj": {
+              "projectPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\Services\\Services.csproj"
             }
           }
         }

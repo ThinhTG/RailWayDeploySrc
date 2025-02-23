@@ -88,8 +88,18 @@ namespace Services
             return true;
         }
 
+        public async Task<bool> DeleteCartItem(Guid cartId)
+        {
+           
+            var cartRepository = _unitOfWork.GetRepository<Cart>();
+            var cartItem = await cartRepository.GetByIdAsync(cartId);
+            if (cartItem == null)
+                return false;
 
-
+            await cartRepository.DeleteAsync(cartId);
+            await _unitOfWork.SaveAsync();
+            return true;
+        }
 
     }
 

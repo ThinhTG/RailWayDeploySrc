@@ -4831,11 +4831,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\BlindBox\\BlindBox_BackEnd\\DAO\\DAO.csproj",
+      "projectUniqueName": "E:\\BlindBoxV2\\BlindBox_BackEnd\\DAO\\DAO.csproj",
       "projectName": "DAO",
-      "projectPath": "E:\\BlindBox\\BlindBox_BackEnd\\DAO\\DAO.csproj",
+      "projectPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\DAO\\DAO.csproj",
       "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-      "outputPath": "E:\\BlindBox\\BlindBox_BackEnd\\DAO\\obj\\",
+      "outputPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\DAO\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -4855,8 +4855,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\BlindBox\\BlindBox_BackEnd\\Models\\Models.csproj": {
-              "projectPath": "E:\\BlindBox\\BlindBox_BackEnd\\Models\\Models.csproj"
+            "E:\\BlindBoxV2\\BlindBox_BackEnd\\Models\\Models.csproj": {
+              "projectPath": "E:\\BlindBoxV2\\BlindBox_BackEnd\\Models\\Models.csproj"
             }
           }
         }

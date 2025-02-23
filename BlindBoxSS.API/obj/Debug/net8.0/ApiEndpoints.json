@@ -38,6 +38,22 @@
   },
   {
     "ContainingType": "BlindBoxSS.API.Controllers.CartController",
+    "Method": "DeleteCartItem",
+    "RelativePath": "api/Cart/delete-cart/{cartId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cartId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.CartController",
     "Method": "GetCartByUserId",
     "RelativePath": "api/Cart/get-cart/{userId}",
     "HttpMethod": "GET",
