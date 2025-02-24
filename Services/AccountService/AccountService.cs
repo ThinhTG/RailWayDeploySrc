@@ -335,9 +335,9 @@ namespace Services.AccountService
             using var sha256 = SHA256.Create();
             var refreshTokenHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(refreshToken));
             user.RefreshToken = Convert.ToBase64String(refreshTokenHash);
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2);  // Use UtcNow instead of Now
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2);  
 
-            // Update user information in database
+      
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)
             {
