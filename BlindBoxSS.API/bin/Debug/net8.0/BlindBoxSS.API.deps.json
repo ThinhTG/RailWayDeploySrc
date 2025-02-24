@@ -842,7 +842,17 @@
           }
         }
       },
-<<<<<<< HEAD
+      "payOS/1.0.9": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net6.0/payos-lib-backend-dotnet.dll": {
+            "assemblyVersion": "1.0.9.0",
+            "fileVersion": "1.0.9.0"
+          }
+        }
+      },
       "Pipelines.Sockets.Unofficial/2.2.8": {
         "dependencies": {
           "System.IO.Pipelines": "6.0.3"
@@ -863,16 +873,6 @@
           "lib/net6.0/StackExchange.Redis.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.7.27.49176"
-=======
-      "payOS/1.0.9": {
-        "dependencies": {
-          "Newtonsoft.Json": "13.0.3"
-        },
-        "runtime": {
-          "lib/net6.0/payos-lib-backend-dotnet.dll": {
-            "assemblyVersion": "1.0.9.0",
-            "fileVersion": "1.0.9.0"
->>>>>>> NguyenV2
           }
         }
       },
@@ -1699,7 +1699,13 @@
       "path": "newtonsoft.json/13.0.3",
       "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
     },
-<<<<<<< HEAD
+    "payOS/1.0.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-LPfIWXg0Oo8mPk8l3otrqtH4iQcjaG+ughDp2DS3gS52s7bs8eEtU+uXflu32GPDCFKksfFyAAOLUoPDva4/Gw==",
+      "path": "payos/1.0.9",
+      "hashPath": "payos.1.0.9.nupkg.sha512"
+    },
     "Pipelines.Sockets.Unofficial/2.2.8": {
       "type": "package",
       "serviceable": true,
@@ -1713,14 +1719,6 @@
       "sha512": "sha512-Uqc2OQHglqj9/FfGQ6RkKFkZfHySfZlfmbCl+hc+u2I/IqunfelQ7QJi7ZhvAJxUtu80pildVX6NPLdDaUffOw==",
       "path": "stackexchange.redis/2.7.27",
       "hashPath": "stackexchange.redis.2.7.27.nupkg.sha512"
-=======
-    "payOS/1.0.9": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-LPfIWXg0Oo8mPk8l3otrqtH4iQcjaG+ughDp2DS3gS52s7bs8eEtU+uXflu32GPDCFKksfFyAAOLUoPDva4/Gw==",
-      "path": "payos/1.0.9",
-      "hashPath": "payos.1.0.9.nupkg.sha512"
->>>>>>> NguyenV2
     },
     "Swashbuckle.AspNetCore/6.4.0": {
       "type": "package",

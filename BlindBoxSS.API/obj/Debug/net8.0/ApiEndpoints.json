@@ -1,5 +1,26 @@
 [
   {
+    "ContainingType": "BlindBoxSS.API.Controllers.AuthController",
+    "Method": "UpdateUser",
+    "RelativePath": "api/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "DAO.Contracts.UserRequestAndResponse\u002BUpdateUserRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "BlindBoxSS.API.Controllers.AdminController",
     "Method": "GetAllUsers",
     "RelativePath": "api/Admin/GetAllUsers",
@@ -117,27 +138,6 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "BlindBoxSS.API.Controllers.AuthController",
-    "Method": "UpdateUser",
-    "RelativePath": "api/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "DAO.Contracts.UserRequestAndResponse\u002BUpdateUserRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
   },
   {
     "ContainingType": "BlindBoxSS.API.Controllers.CartController",

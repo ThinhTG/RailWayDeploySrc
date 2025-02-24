@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BlindBoxSS.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+df2692011541b19b8c3535e8eb21bd63dc8b3a02")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f118122ca6e714001a395084ff7c19df44d25c5")]
 [assembly: System.Reflection.AssemblyProductAttribute("BlindBoxSS.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BlindBoxSS.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
