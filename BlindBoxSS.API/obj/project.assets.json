@@ -1267,6 +1267,22 @@
           }
         }
       },
+      "payOS/1.0.9": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "compile": {
+          "lib/net6.0/payos-lib-backend-dotnet.dll": {
+            "related": ".runtimeconfig.json"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/payos-lib-backend-dotnet.dll": {
+            "related": ".runtimeconfig.json"
+          }
+        }
+      },
       "Pipelines.Sockets.Unofficial/2.2.8": {
         "type": "package",
         "dependencies": {
@@ -2048,7 +2064,8 @@
         "dependencies": {
           "DAO": "1.0.0",
           "Microsoft.EntityFrameworkCore": "8.0.8",
-          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8"
+          "Microsoft.EntityFrameworkCore.SqlServer": "8.0.8",
+          "Models": "1.0.0"
         },
         "compile": {
           "bin/placeholder/Repositories.dll": {}
@@ -2063,7 +2080,8 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "8.0.8",
           "MimeKit": "4.10.0",
-          "Repositories": "1.0.0"
+          "Repositories": "1.0.0",
+          "payOS": "1.0.9"
         },
         "compile": {
           "bin/placeholder/Services.dll": {}
@@ -4169,6 +4187,20 @@
         "packageIcon.png"
       ]
     },
+    "payOS/1.0.9": {
+      "sha512": "LPfIWXg0Oo8mPk8l3otrqtH4iQcjaG+ughDp2DS3gS52s7bs8eEtU+uXflu32GPDCFKksfFyAAOLUoPDva4/Gw==",
+      "type": "package",
+      "path": "payos/1.0.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net6.0/payos-lib-backend-dotnet.dll",
+        "lib/net6.0/payos-lib-backend-dotnet.runtimeconfig.json",
+        "payos.1.0.9.nupkg.sha512",
+        "payos.nuspec"
+      ]
+    },
     "Pipelines.Sockets.Unofficial/2.2.8": {
       "sha512": "zG2FApP5zxSx6OcdJQLbZDk2AVlN2BNQD6MorwIfV6gVj0RRxWPEp2LXAxqDGZqeNV1Zp0BNPcNaey/GXmTdvQ==",
       "type": "package",
@@ -5410,6 +5442,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "DAO >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.Google >= 8.0.8",
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.8",
@@ -5449,6 +5482,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
+              "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+            },
             "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Services\\Services.csproj": {
               "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Services\\Services.csproj"
             }

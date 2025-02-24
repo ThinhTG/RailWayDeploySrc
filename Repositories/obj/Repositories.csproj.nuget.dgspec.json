@@ -228,6 +228,9 @@
             "projectReferences": {
               "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
                 "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+              },
+              "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj": {
+                "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj"
               }
             }
           }

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "L2/iw/88dlA=",
+  "dgSpecHash": "wh/fn4WgiPI=",
   "success": true,
   "projectFilePath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
   "expectedPackageFiles": [
@@ -67,6 +67,7 @@
     "C:\\Users\\thinh\\.nuget\\packages\\mimekit\\4.10.0\\mimekit.4.10.0.nupkg.sha512",
     "C:\\Users\\thinh\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\thinh\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\thinh\\.nuget\\packages\\payos\\1.0.9\\payos.1.0.9.nupkg.sha512",
     "C:\\Users\\thinh\\.nuget\\packages\\pipelines.sockets.unofficial\\2.2.8\\pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
     "C:\\Users\\thinh\\.nuget\\packages\\stackexchange.redis\\2.7.27\\stackexchange.redis.2.7.27.nupkg.sha512",
     "C:\\Users\\thinh\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",

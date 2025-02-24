@@ -284,7 +284,6 @@ namespace DAO.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
@@ -305,7 +304,6 @@ namespace DAO.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
@@ -329,7 +327,6 @@ namespace DAO.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
@@ -436,6 +433,93 @@ namespace DAO.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("Models.Order", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AccountId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeliveryAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("DiscountMoney")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PaymentConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("PhoneNumber")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("PriceTotal")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("AccountId1");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("Models.OrderDetail", b =>
+                {
+                    b.Property<int>("OrderDetailId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
+
+                    b.Property<int?>("BlindBoxId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("PackageId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderDetailId");
+
+                    b.HasIndex("BlindBoxId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("PackageId");
+
+                    b.ToTable("OrderDetail");
+                });
+
             modelBuilder.Entity("Models.Package", b =>
                 {
                     b.Property<int>("PackageId")
@@ -485,25 +569,105 @@ namespace DAO.Migrations
                     b.ToTable("PackageImages");
                 });
 
-            modelBuilder.Entity("Cart", b =>
+            modelBuilder.Entity("Models.Voucher", b =>
                 {
-                    b.HasOne("Models.BlindBox", "BlindBox")
-                        .WithMany()
-                        .HasForeignKey("BlindBoxId");
+                    b.Property<int>("VoucherId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.HasOne("Models.Package", "Package")
-                        .WithOne("Cart")
-                        .HasForeignKey("Cart", "PackageId");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoucherId"));
 
-                    b.HasOne("Models.ApplicationUser", "applicationUser")
-                        .WithMany()
-                        .HasForeignKey("applicationUserId");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Navigation("BlindBox");
+                    b.Property<decimal>("DiscountMoney")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Navigation("Package");
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
 
-                    b.Navigation("applicationUser");
+                    b.Property<decimal>("Money")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("VoucherId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Voucher");
+                });
+
+            modelBuilder.Entity("Models.Wallet", b =>
+                {
+                    b.Property<int>("WalletId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletId"));
+
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Balance")
+                        .HasColumnType("int");
+
+                    b.HasKey("WalletId");
+
+                    b.HasIndex("AccountId");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.ToTable("Wallet");
+                });
+
+            modelBuilder.Entity("Models.WalletTransaction", b =>
+                {
+                    b.Property<Guid>("WalletTransactionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionBalance")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TransactionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("WalletId")
+                        .HasColumnType("int");
+
+                    b.HasKey("WalletTransactionId");
+
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("WalletId");
+
+                    b.ToTable("WalletTransaction");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -557,6 +721,80 @@ namespace DAO.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.Cart", b =>
+                {
+                    b.HasOne("Models.Account", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("Models.CartDetail", b =>
+                {
+                    b.HasOne("Models.BlindBox", "BlindBox")
+                        .WithMany()
+                        .HasForeignKey("BlindBoxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Cart", "Cart")
+                        .WithMany("CartDetails")
+                        .HasForeignKey("CartId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlindBox");
+
+                    b.Navigation("Cart");
+
+                    b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("Models.Order", b =>
+                {
+                    b.HasOne("Models.ApplicationUser", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId1");
+
+                    b.Navigation("Account");
+                });
+
+            modelBuilder.Entity("Models.OrderDetail", b =>
+                {
+                    b.HasOne("Models.BlindBox", "BlindBox")
+                        .WithMany()
+                        .HasForeignKey("BlindBoxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Order", "Order")
+                        .WithMany("OrderDetails")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlindBox");
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Package");
+                });
+
             modelBuilder.Entity("Models.Package", b =>
                 {
                     b.HasOne("Models.Category", "Category")
@@ -579,9 +817,68 @@ namespace DAO.Migrations
                     b.Navigation("Package");
                 });
 
+            modelBuilder.Entity("Models.Voucher", b =>
+                {
+                    b.HasOne("Models.Order", "Order")
+                        .WithMany("Vouchers")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Models.Wallet", b =>
+                {
+                    b.HasOne("Models.ApplicationUser", "Account")
+                        .WithMany()
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("ApplicationUserId");
+
+                    b.Navigation("Account");
+
+                    b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("Models.WalletTransaction", b =>
+                {
+                    b.HasOne("Models.Order", "Order")
+                        .WithMany("WalletTransactions")
+                        .HasForeignKey("OrderId");
+
+                    b.HasOne("Models.Wallet", "Wallet")
+                        .WithMany("WalletTransactions")
+                        .HasForeignKey("WalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Wallet");
+                });
+
+            modelBuilder.Entity("Models.Cart", b =>
+                {
+                    b.Navigation("CartDetails");
+                });
+
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Navigation("Packages");
+                });
+
+            modelBuilder.Entity("Models.Order", b =>
+                {
+                    b.Navigation("OrderDetails");
+
+                    b.Navigation("Vouchers");
+
+                    b.Navigation("WalletTransactions");
                 });
 
             modelBuilder.Entity("Models.Package", b =>
@@ -589,6 +886,11 @@ namespace DAO.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Models.Wallet", b =>
+                {
+                    b.Navigation("WalletTransactions");
                 });
 #pragma warning restore 612, 618
         }

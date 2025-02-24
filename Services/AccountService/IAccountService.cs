@@ -26,6 +26,9 @@ namespace Services.AccountService
         //Task<bool> ConfirmEmailAsync(string userId, string token);
         Task<bool> ResendConfirmationEmailAsync(string email);
 
+        //Create Wallet
+        Task CreateWalletForUserAsync(string accountId);
+
         Task<IEnumerable<UserDTO>> GetAllAccountsAsync();
         Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request);
 

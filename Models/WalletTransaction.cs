@@ -8,24 +8,24 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int WalletTransactionId { get; set; }
+        public Guid WalletTransactionId { get; set; }
 
         [Required]
         public int WalletId { get; set; }
         [Required]
         public int Amount { get; set; }
         [Required]
-        public string TransactionType { get; set; }
+        public string TransactionType { get; set; } = string.Empty;
         [Required]
-        public string TransactionStatus { get; set; }
+        public string TransactionStatus { get; set; } = string.Empty;
         [Required]
-        public string TransactionDate { get; set; }
+        public string TransactionDate { get; set; } = string.Empty;
         [Required]
-        public string TransactionBalance { get; set; }
-        [Required]
+        public string TransactionBalance { get; set; } = string.Empty;
         public int? OrderId { get; set; }
 
         public virtual Wallet? Wallet { get; set; }
         public virtual Order? Order { get; set; }
     }
+
 }

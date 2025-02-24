@@ -1,5 +1,124 @@
 [
   {
+    "ContainingType": "BlindBoxSS.API.Controllers.AdminController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Admin/GetAllUsers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.BlindboxController",
+    "Method": "Create",
+    "RelativePath": "api/Blindbox",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "blindBox",
+        "Type": "Models.BlindBox",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Models.BlindBox",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.BlindboxController",
+    "Method": "GetById",
+    "RelativePath": "api/Blindbox/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "Models.BlindBox",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.BlindboxController",
+    "Method": "Update",
+    "RelativePath": "api/Blindbox/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "blindBox",
+        "Type": "Models.BlindBox",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.BlindboxController",
+    "Method": "Delete",
+    "RelativePath": "api/Blindbox/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.BlindboxController",
+    "Method": "GetAll",
+    "RelativePath": "api/Blindbox/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[Models.BlindBox, Models, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "BlindBoxSS.API.Controllers.AuthController",
     "Method": "UpdateUser",
     "RelativePath": "api/{id}",
@@ -164,6 +283,149 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "BlindBoxSS.API.Controllers.PackageController",
+    "Method": "AddPackage",
+    "RelativePath": "api/Package",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "package",
+        "Type": "Models.Package",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PackageController",
+    "Method": "GetPackageById",
+    "RelativePath": "api/Package/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PackageController",
+    "Method": "UpdatePackage",
+    "RelativePath": "api/Package/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "package",
+        "Type": "Models.Package",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PackageController",
+    "Method": "DeletePackage",
+    "RelativePath": "api/Package/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PackageController",
+    "Method": "GetAllPackages",
+    "RelativePath": "api/Package/getAll",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PaymentController",
+    "Method": "GetOrder",
+    "RelativePath": "api/Payment/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PaymentController",
+    "Method": "ConfirmWebhook",
+    "RelativePath": "api/Payment/confirm-webhook",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "Services.Request.ConfirmWebhook",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PaymentController",
+    "Method": "CreatePaymentLink",
+    "RelativePath": "api/Payment/createPayment",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "Services.Request.CreatePaymentLinkRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.PaymentController",
+    "Method": "PayOSTransferHandler",
+    "RelativePath": "api/Payment/payos_transfer_handler",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "body",
+        "Type": "Net.payOS.Types.WebhookType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "BlindBoxSS.API.Controllers.AuthController",
     "Method": "RefreshToken",
     "RelativePath": "api/refresh-token",
@@ -271,6 +533,69 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.WalletController",
+    "Method": "PaymentSuccess",
+    "RelativePath": "api/Wallet/addWallet",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "amount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.WalletController",
+    "Method": "GetWallet",
+    "RelativePath": "api/Wallet/getWallet",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "BlindBoxSS.API.Controllers.WalletController",
+    "Method": "Purchase",
+    "RelativePath": "api/Wallet/purchase",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "accountId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "amount",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

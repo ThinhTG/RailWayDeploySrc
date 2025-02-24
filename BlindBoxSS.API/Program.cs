@@ -1,7 +1,30 @@
 ﻿using BlindBoxSS.API.DI;
 using BlindBoxSS.API;
+using BlindBoxSS.API.Exceptions;
+using BlindBoxSS.API.Extensions;
+using BlindBoxSS.API;
+using DAO.Mapping;
+using DAO;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Models;
+using Net.payOS;
+using Services.AccountService;
+using Services.Email;
+using Services;
+using Repositories.WalletRepo;
+using BlindBoxSS.API.Services;
+using Repositories.Product;
+using Services.Product;
+using Services.Wallet;
+using Services.Payment;
+using System.Runtime.ConstrainedExecution;
 
 var builder = WebApplication.CreateBuilder(args);
+IConfiguration configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json")
+    .Build();
 
 // Đăng ký dịch vụ thông qua DI Installer
 builder.Services.InstallerServicesInAssembly(builder.Configuration);
@@ -21,7 +44,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-// Xử lý lỗi 403
+// Handle 403 errors
 app.Use(async (context, next) =>
 {
     await next();

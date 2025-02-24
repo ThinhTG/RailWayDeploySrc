@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Messaging;
+using Repositories;
 using DAO.Contracts;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -22,6 +23,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using static DAO.Contracts.UserRequestAndResponse;
+using Repositories.WalletRepo;
 
 namespace Services.AccountService
 {
@@ -32,14 +34,17 @@ namespace Services.AccountService
         private readonly IMapper _mapper;
         private readonly ILogger<AccountService> _logger;
         private readonly IEmailService _emailService;
+        private readonly IWalletRepository _walletRepository;
 
-        public AccountService(ITokenService tokenService, UserManager<ApplicationUser> userManager, IMapper mapper, ILogger<AccountService> logger, IEmailService emailService)
+
+        public AccountService(ITokenService tokenService, UserManager<ApplicationUser> userManager, IMapper mapper, ILogger<AccountService> logger, IEmailService emailService, IWalletRepository walletRepository)
         {
             _tokenService = tokenService;
             _userManager = userManager;
             _mapper = mapper;
             _logger = logger;
             _emailService = emailService;
+            _walletRepository = walletRepository;
         }
 
 
@@ -57,6 +62,7 @@ namespace Services.AccountService
             newUser.UserName = GenerateUserName(request.FirstName, request.LastName);
             newUser.EmailConfirmed = false;
             var result = await _userManager.CreateAsync(newUser, request.Password);
+            await CreateWalletForUserAsync(newUser.Id);
             await _userManager.AddToRoleAsync(newUser, "User");
             if (!result.Succeeded)
             {
@@ -71,6 +77,16 @@ namespace Services.AccountService
             newUser.CreateAt = DateTime.Now;
             newUser.UpdateAt = DateTime.Now;
             return _mapper.Map<UserResponse>(newUser);
+        }
+
+        public async Task CreateWalletForUserAsync(string accountId)
+        {
+            var wallet = new Models.Wallet
+            {
+                AccountId = accountId,
+                Balance = 0
+            };
+            await _walletRepository.CreateWallet(wallet);
         }
 
         private string GenerateUserName(string firstName, string lastName)
