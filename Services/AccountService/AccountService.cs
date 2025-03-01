@@ -1,29 +1,16 @@
 ﻿using AutoMapper;
-using Azure.Messaging;
-using Repositories;
-using DAO.Contracts;
 using Google.Apis.Auth;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
 using Models;
-using Repositories.UnitOfWork;
+using Repositories.Pagging;
+using Repositories.WalletRepo;
 using Services.Email;
 using Services.Request;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Web;
 using static DAO.Contracts.UserRequestAndResponse;
-using Repositories.WalletRepo;
 
 namespace Services.AccountService
 {
@@ -370,10 +357,11 @@ namespace Services.AccountService
             return userResponse;
         }
 
-        public async Task<IEnumerable<UserDTO>> GetAllAccountsAsync()
+        public async Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize)
         {
-            var users = await _userManager.Users.ToListAsync();
-            return users.Select(user => _mapper.Map<UserDTO>(user));
+            IQueryable<ApplicationUser> users =  _userManager.Users.AsQueryable();
+            IQueryable<UserDTO> listAccount =  users.Select(user => _mapper.Map<UserDTO>(user));
+            return await PaginatedList<UserDTO>.CreateAsync(listAccount,pageNumber,pageSize);
         }
         public async Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request)
         {

@@ -1,4 +1,5 @@
 ﻿using Models;
+using Repositories.Pagging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,7 @@ namespace Services.Product
         Task<BlindBox> AddAsync(BlindBox blindBox);
         Task<BlindBox> UpdateAsync(BlindBox blindBox);
         Task DeleteAsync(int id);
+
+        Task<PaginatedList<BlindBox>> GetAll(int pageNumber, int pageSize);
     }
 }

@@ -140,6 +140,27 @@
     ]
   },
   {
+    "ContainingType": "BlindBoxSS.API.Controllers.BlindboxController",
+    "Method": "GetAllBlindBoxes",
+    "RelativePath": "api/Blindbox/GetAll-paged",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "BlindBoxSS.API.Controllers.CartController",
     "Method": "AddToCart",
     "RelativePath": "api/Cart/add-to-cart",
@@ -247,7 +268,18 @@
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "pageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

@@ -1,4 +1,5 @@
-﻿using Services.Request;
+﻿using Repositories.Pagging;
+using Services.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace Services.AccountService
         //Create Wallet
         Task CreateWalletForUserAsync(string accountId);
 
-        Task<IEnumerable<UserDTO>> GetAllAccountsAsync();
+        Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize);
         Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request);
 
 

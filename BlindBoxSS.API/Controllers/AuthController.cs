@@ -273,12 +273,18 @@ namespace BlindBoxSS.API.Controllers
             return Ok(response);
 
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="pageNumber">trang so bn</param>
+        /// <param name="pageSize">so phan tu</param>
+        /// <returns></returns>
         [HttpGet("GetAll")]
-        [Authorize("AdminPolicy")]
-        public async Task<IActionResult> GetAllAccounts()
+        //[Authorize("AdminPolicy")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAllAccounts( int pageNumber, int pageSize)
         {
-            var accounts = await _accountService.GetAllAccountsAsync();
+            var accounts = await _accountService.GetAllAccountsAsync( pageNumber, pageSize);
             return Ok(accounts);
         }
 

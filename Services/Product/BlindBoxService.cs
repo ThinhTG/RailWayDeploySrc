@@ -1,4 +1,5 @@
 ﻿using Models;
+using Repositories.Pagging;
 using Repositories.Product;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,11 @@ namespace Services.Product
         {
             return await _repository.GetAllAsync();
         }
-
+        public async Task<PaginatedList<BlindBox>> GetAll(int pageNumber, int pageSize)
+        {
+            IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
+            return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
+        }
         public async Task<BlindBox> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);

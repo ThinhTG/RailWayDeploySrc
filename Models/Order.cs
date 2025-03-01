@@ -11,7 +11,7 @@ namespace Models
         public int OrderId { get; set; }
 
         [Required]
-        public int AccountId { get; set; }
+        public String AccountId { get; set; }
 
         [Required]
         public string OrderStatus { get; set; }

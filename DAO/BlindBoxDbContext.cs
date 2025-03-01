@@ -48,6 +48,26 @@ namespace DAO
                 new IdentityRole { Id = "2", Name = "User", NormalizedName = "USER" }
             );
 
+            // Order - ApplicationUser relationship
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Account)
+                .WithMany()
+                .HasForeignKey(o => o.AccountId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Decimal precision for money-related fields
+            modelBuilder.Entity<Order>()
+                .Property(o => o.Price)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.PriceTotal)
+                .HasColumnType("decimal(18,2)");
+
+            modelBuilder.Entity<Order>()
+                .Property(o => o.DiscountMoney)
+                .HasColumnType("decimal(18,2)");
+
 
         }
     }

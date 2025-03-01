@@ -11,5 +11,7 @@ namespace Repositories.Product
         Task<BlindBox> AddAsync(BlindBox blindBox);
         Task<BlindBox> UpdateAsync(BlindBox blindBox);
         Task DeleteAsync(int id);
+
+        IQueryable<BlindBox> GetAll();
     }
 }

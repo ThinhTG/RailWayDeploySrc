@@ -16,9 +16,9 @@ namespace BlindBoxSS.API.DI
             if (!redisConfiguration.Enable)
                 return;
 
-            services.AddSingleton<IConnectionMultiplexer>(_= ConnectionMultiplexer.Connect(redisConfiguration.ConnectionString));
-            services.AddStackExchangeRedisCache(option  => option.Configuration = redisConfiguration.ConnectionString);
-            services.AddSingleton<IResponseCacheService,ResponseCacheService>();
+            services.AddSingleton<IConnectionMultiplexer>(_ = ConnectionMultiplexer.Connect(redisConfiguration.ConnectionString));
+            services.AddStackExchangeRedisCache(option => option.Configuration = redisConfiguration.ConnectionString);
+            services.AddSingleton<IResponseCacheService, ResponseCacheService>();
         }
     }
 }

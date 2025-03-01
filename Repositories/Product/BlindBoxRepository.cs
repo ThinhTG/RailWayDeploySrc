@@ -19,6 +19,11 @@ namespace Repositories.Product
         {
             return await _context.Set<BlindBox>().ToListAsync();
         }
+        public IQueryable<BlindBox> GetAll()
+        {
+            return _context.BlindBoxes.AsQueryable();
+        }
+
 
         public async Task<BlindBox> GetByIdAsync(int id)
         {
