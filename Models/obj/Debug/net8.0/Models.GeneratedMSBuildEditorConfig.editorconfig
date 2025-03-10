@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Models
-build_property.ProjectDir = E:\BlindBoxV2\V2\BlindBox_BackEnd\Models\
+build_property.ProjectDir = D:\Ky7\SWD392\BackEnd\BlindBox_BackEnd\Models\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

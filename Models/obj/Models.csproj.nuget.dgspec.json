@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj": {}
+    "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj": {}
   },
   "projects": {
-    "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj": {
+    "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj",
+        "projectUniqueName": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj",
+        "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj",
         "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-        "outputPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\obj\\",
+        "outputPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",

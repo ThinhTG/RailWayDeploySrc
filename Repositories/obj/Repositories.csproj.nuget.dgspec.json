@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Repositories\\Repositories.csproj": {}
+    "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Repositories\\Repositories.csproj": {}
   },
   "projects": {
-    "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
+    "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj",
+        "projectUniqueName": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\DAO.csproj",
         "projectName": "DAO",
-        "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj",
+        "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\DAO.csproj",
         "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-        "outputPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\obj\\",
+        "outputPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -31,8 +31,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj": {
-                "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj"
+              "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj": {
+                "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj"
               }
             }
           }
@@ -88,14 +88,14 @@
         }
       }
     },
-    "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj": {
+    "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj",
+        "projectUniqueName": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj",
         "projectName": "Models",
-        "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj",
+        "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj",
         "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-        "outputPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\obj\\",
+        "outputPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -199,14 +199,14 @@
         }
       }
     },
-    "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Repositories\\Repositories.csproj": {
+    "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Repositories\\Repositories.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Repositories\\Repositories.csproj",
+        "projectUniqueName": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Repositories\\Repositories.csproj",
         "projectName": "Repositories",
-        "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Repositories\\Repositories.csproj",
+        "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Repositories\\Repositories.csproj",
         "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-        "outputPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Repositories\\obj\\",
+        "outputPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Repositories\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -226,11 +226,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
-                "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+              "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
+                "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\DAO.csproj"
               },
-              "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj": {
-                "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Models\\Models.csproj"
+              "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj": {
+                "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Models\\Models.csproj"
               }
             }
           }

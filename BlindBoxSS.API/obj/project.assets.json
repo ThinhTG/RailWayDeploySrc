@@ -5458,11 +5458,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
+      "projectUniqueName": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
       "projectName": "BlindBoxSS.API",
-      "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
+      "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\BlindBoxSS.API\\BlindBoxSS.API.csproj",
       "packagesPath": "C:\\Users\\thinh\\.nuget\\packages\\",
-      "outputPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\BlindBoxSS.API\\obj\\",
+      "outputPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\BlindBoxSS.API\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\thinh\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -5482,11 +5482,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
-              "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\DAO\\DAO.csproj"
+            "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\DAO.csproj": {
+              "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\DAO\\DAO.csproj"
             },
-            "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Services\\Services.csproj": {
-              "projectPath": "E:\\BlindBoxV2\\V2\\BlindBox_BackEnd\\Services\\Services.csproj"
+            "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Services\\Services.csproj": {
+              "projectPath": "D:\\Ky7\\SWD392\\BackEnd\\BlindBox_BackEnd\\Services\\Services.csproj"
             }
           }
         }
