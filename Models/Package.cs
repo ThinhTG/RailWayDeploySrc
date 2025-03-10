@@ -12,10 +12,10 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PackageId { get; set; }
+        public Guid PackageId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public int CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         [Required]
         public int Amount { get; set; }

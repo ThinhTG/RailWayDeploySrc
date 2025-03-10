@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Caching.Distributed;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using StackExchange.Redis;
@@ -41,5 +42,38 @@ namespace Services.Cache
                 AbsoluteExpirationRelativeToNow = timeOut
             });
         }
+
+    
+      
+
+        public async Task RemoveCacheResponseAsync(string partern)
+        {
+           if(string.IsNullOrEmpty(partern))
+                throw new ArgumentNullException("Value Can Not Be Null or WhiteSpace");
+
+           await foreach(var Key in GetKeyAsync(partern + "*"))
+            {
+                await _distributedCache.RemoveAsync(Key);
+            }
+
+        }
+
+        private async IAsyncEnumerable<string> GetKeyAsync(string parttern)
+        {
+            if (string.IsNullOrEmpty(parttern))
+            {
+                throw new ArgumentNullException("Value Can not be null orr White Space");
+            }
+            foreach(var endPoint in _connectionMultiplexer.GetEndPoints())
+            {
+                var server = _connectionMultiplexer.GetServer(endPoint);
+                foreach(var key in server.Keys(pattern : parttern))
+                {
+                    yield return key.ToString();
+                }
+            }
+        }
+
+
     }
 }

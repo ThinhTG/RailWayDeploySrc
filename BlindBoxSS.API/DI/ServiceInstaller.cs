@@ -8,6 +8,8 @@ using Repositories.WalletRepo;
 using Services.Payment;
 using Services.Product;
 using Services.Wallet;
+using Services.OrderS;
+using Repositories.OrderRep;
 
 namespace BlindBoxSS.API.DI
 {
@@ -29,6 +31,11 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IBlindBoxService, BlindBoxService>();
             services.AddScoped<IPackageRepository, PackageRepository>();
             services.AddScoped<IPackageService, PackageService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<IOrderDetailService, OrderDetailService>();
+            services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
+
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Services.Product
             IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
             return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
         }
-        public async Task<BlindBox> GetByIdAsync(int id)
+        public async Task<BlindBox> GetByIdAsync(Guid id)
         {
             return await _repository.GetByIdAsync(id);
         }
@@ -42,7 +42,7 @@ namespace Services.Product
             return await _repository.UpdateAsync(blindBox);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             await _repository.DeleteAsync(id);
         }

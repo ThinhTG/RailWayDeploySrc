@@ -11,7 +11,7 @@ namespace Models
         public Guid WalletTransactionId { get; set; }
 
         [Required]
-        public int WalletId { get; set; }
+        public Guid WalletId { get; set; }
         [Required]
         public int Amount { get; set; }
         [Required]

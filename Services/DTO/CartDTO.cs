@@ -9,8 +9,8 @@ namespace Services.DTO
     public class CartDTO
     {
             public string UserId { get; set; }
-            public int? BlindBoxId { get; set; }
-            public int? PackageId { get; set; }
+            public Guid? BlindBoxId { get; set; }
+            public Guid? PackageId { get; set; }
             public int Quantity { get; set; }
     }
 }

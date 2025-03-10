@@ -56,7 +56,7 @@ namespace Services.AccountService
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
                 throw new Exception($"Failed to create user: {errors}");
             }
-            // 🚀 Tạo token xác thực email
+            //  Tạo token xác thực email
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
 
             await  _emailService.SendConfirmationEmailAsync(newUser, token);

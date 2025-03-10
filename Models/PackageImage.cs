@@ -12,10 +12,10 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int PackageImageId { get; set; }
+        public Guid PackageImageId { get; set; }
 
         [Required]
-        public int PackageId { get; set; }
+        public Guid PackageId { get; set; }
 
         [Required]
         [StringLength(255)]

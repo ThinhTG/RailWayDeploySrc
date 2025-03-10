@@ -1,32 +1,51 @@
-﻿using DAO;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.AccountService;
+using static DAO.Contracts.UserRequestAndResponse;
 
 namespace BlindBoxSS.API.Controllers
 {
 
     [Route("api/[controller]")]
     [ApiController]
-    public class AdminController : Controller
+    public class AdminController : ControllerBase
     {
-        private readonly BlindBoxDbContext _context;
+         private readonly IAccountService _accountService;
 
-        public AdminController(BlindBoxDbContext context)
+        public AdminController(IAccountService accountService)
         {
-            _context = context;
+            _accountService = accountService;
         }
 
-        [Authorize(Roles = "admin")]
-        [HttpGet("GetAllUsers")]
-        public IActionResult GetAllUsers()
+
+        [HttpGet("GetAll")]
+        [Authorize("AdminPolicy")]
+        public async Task<IActionResult> GetAllAccounts(int pageNumber, int pageSize)
         {
-            // check if user is admin
-            if (!User.IsInRole("admin"))
+            var accounts = await _accountService.GetAllAccountsAsync(pageNumber, pageSize);
+            return Ok(accounts);
+        }
+
+        [HttpPut("{id}")]
+        [Authorize("AdminPolicy")]
+        public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request)
+        {
+            if (request == null)
             {
-                return BadRequest("You are not authorized to access this resource");
+                return BadRequest("Invalid request data.");
             }
-            var users = _context.Accounts.ToList();
-            return Ok(users);
+
+            try
+            {
+                var updatedUser = await _accountService.AdminUpdateAsync(id, request);
+                return Ok(updatedUser);
+            }
+            catch (Exception ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
         }
+
+
     }
 }

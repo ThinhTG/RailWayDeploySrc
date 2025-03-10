@@ -49,16 +49,29 @@ namespace BlindBoxSS.API.Attributes
 
         }
 
-        private static string GenerateCacheKeyFromRequest(HttpRequest request)
-        { 
-            var KeyBuilder = new StringBuilder();
-            KeyBuilder.Append($"request.Path");
-            foreach(var (key,value) in request.Query.OrderBy(x => x.Key))
+        //private string GenerateCacheKeyFromRequest(HttpRequest request)
+        //{
+        //    var keyBuilder = new StringBuilder();
+        //    keyBuilder.Append($"{request.Path}");
+        //    foreach (var (key, value) in request.Query.OrderBy(x => x.Key))
+        //    {
+        //        keyBuilder.Append($"|{key}-{value}");
+        //    }
+        //    return keyBuilder.ToString();
+        //}
+
+
+        private string GenerateCacheKeyFromRequest(HttpRequest request)
+        {
+            var keyBuilder = new StringBuilder();
+            keyBuilder.Append($"{request.Path}");
+
+            foreach (var (key, value) in request.Query.OrderBy(x => x.Key))
             {
-                KeyBuilder.Append($"|{key}-{value}");
+                keyBuilder.Append($"|{key}-{value}");
             }
 
-            return KeyBuilder.ToString();
+            return keyBuilder.ToString();
         }
     }
 }

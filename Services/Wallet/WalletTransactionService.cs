@@ -17,7 +17,7 @@ namespace Services.Wallet
             _walletTransactionRepository = walletTransactionRepository;
         }
 
-        public async Task AddWalletTransactionAsync(int walletId, int amount, string transactionType, string transactionStatus, string transactionDate, int transacionBalance, int? orderId)
+        public async Task AddWalletTransactionAsync(Guid walletId, int amount, string transactionType, string transactionStatus, string transactionDate, int transacionBalance, int? orderId)
         {
             WalletTransaction walletTransaction = new WalletTransaction
             {

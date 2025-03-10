@@ -23,7 +23,7 @@ namespace Repositories.Product
             return await _context.Set<Package>().ToListAsync();
         }
 
-        public async Task<Package?> GetPackageByIdAsync(int id)
+        public async Task<Package?> GetPackageByIdAsync(Guid id)
         {
             return await _context.Set<Package>().FindAsync(id);
         }
@@ -48,7 +48,7 @@ namespace Repositories.Product
             return existingPackage;
         }
 
-        public async Task<bool> DeletePackageAsync(int id)
+        public async Task<bool> DeletePackageAsync(Guid id)
         {
             var package = await _context.Set<Package>().FindAsync(id);
             if (package == null)

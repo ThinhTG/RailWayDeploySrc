@@ -1,10 +1,5 @@
 ﻿using Repositories.UnitOfWork;
 using Services.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services
 {
@@ -50,15 +45,18 @@ namespace Services
 
                 await _unitOfWork.SaveAsync();
             }
-                public async Task<IEnumerable<Cart>> GetCartByUserId(string userId)
-                {
+
+
+        
+        public async Task<IEnumerable<Cart>> GetCartByUserId(string userId)
+            {
                     var cartRepository = _unitOfWork.GetRepository<Cart>();
 
                     // Sử dụng phương thức FindListAsync để lấy danh sách giỏ hàng của người dùng
                     var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
 
                     return carts;
-                }
+           }
 
         public async Task<bool> UpdateCartItemQuantity(Guid cartId, string userId, int quantity)
         {

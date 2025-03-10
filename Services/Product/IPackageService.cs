@@ -10,9 +10,9 @@ namespace Services.Product
     public interface IPackageService
     {
         Task<IEnumerable<Package>> GetAllPackagesAsync();
-        Task<Package?> GetPackageByIdAsync(int id);
+        Task<Package?> GetPackageByIdAsync(Guid id);
         Task<Package> AddPackageAsync(Package package);
         Task<Package?> UpdatePackageAsync(Package package);
-        Task<bool> DeletePackageAsync(int id);
+        Task<bool> DeletePackageAsync(Guid id);
     }
 }

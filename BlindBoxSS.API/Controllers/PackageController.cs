@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Product;
 
@@ -6,6 +7,7 @@ namespace BlindBoxSS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PackageController : ControllerBase
     {
         private readonly IPackageService _packageService;
@@ -23,7 +25,7 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetPackageById(int id)
+        public async Task<IActionResult> GetPackageById(Guid id)
         {
             var package = await _packageService.GetPackageByIdAsync(id);
             if (package == null)
@@ -41,7 +43,7 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePackage(int id, [FromBody] Package package)
+        public async Task<IActionResult> UpdatePackage(Guid id, [FromBody] Package package)
         {
             if (id != package.PackageId)
             {
@@ -58,7 +60,7 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePackage(int id)
+        public async Task<IActionResult> DeletePackage(Guid id)
         {
             var result = await _packageService.DeletePackageAsync(id);
             if (!result)

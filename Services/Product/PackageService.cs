@@ -22,7 +22,7 @@ namespace Services.Product
             return await _packageRepository.GetAllPackagesAsync();
         }
 
-        public async Task<Package?> GetPackageByIdAsync(int id)
+        public async Task<Package?> GetPackageByIdAsync(Guid id)
         {
             return await _packageRepository.GetPackageByIdAsync(id);
         }
@@ -37,7 +37,7 @@ namespace Services.Product
             return await _packageRepository.UpdatePackageAsync(package);
         }
 
-        public async Task<bool> DeletePackageAsync(int id)
+        public async Task<bool> DeletePackageAsync(Guid id)
         {
             return await _packageRepository.DeletePackageAsync(id);
         }

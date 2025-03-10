@@ -8,7 +8,7 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int WalletId { get; set; }
+        public Guid WalletId { get; set; } = Guid.NewGuid();
 
         [Required]
         public string AccountId { get; set; }

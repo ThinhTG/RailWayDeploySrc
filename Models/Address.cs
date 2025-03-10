@@ -12,7 +12,7 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int AddressId { get; set; }
+        public string AddressId { get; set; }
 
         [Required]
         [StringLength(255)]

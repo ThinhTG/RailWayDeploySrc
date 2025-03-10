@@ -1,28 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BlindBoxSS.API.Attributes;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.Cache;
 using Services.Product;
 
 namespace BlindBoxSS.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class BlindboxController : ControllerBase
     {
         private readonly IBlindBoxService _service;
+        private readonly IResponseCacheService _responseCacheService;
 
-        public BlindboxController(IBlindBoxService service)
+        public BlindboxController(IBlindBoxService service, IResponseCacheService responseCacheService)
         {
             _service = service;
+            _responseCacheService = responseCacheService;
         }
 
         [HttpGet("getAll")]
-        public async Task<ActionResult<IEnumerable<BlindBox>>> GetAll()
+        public async Task<ActionResult> GetAll()
         {
             var blindBoxes = await _service.GetAllAsync();
             return Ok(blindBoxes);
         }
 
         [HttpGet("GetAll-paged")]
+        [CacheAttribute(1000)]
         public async Task<IActionResult> GetAllBlindBoxes(int pageNumber = 1, int pageSize = 10)
         {
             var result = await _service.GetAll(pageNumber, pageSize);
@@ -30,7 +37,7 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<BlindBox>> GetById(int id)
+        public async Task<ActionResult<BlindBox>> GetById(Guid id)
         {
             var blindBox = await _service.GetByIdAsync(id);
             if (blindBox == null)
@@ -48,7 +55,7 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, BlindBox blindBox)
+        public async Task<IActionResult> Update(Guid id, BlindBox blindBox)
         {
             if (id != blindBox.BlindBoxId)
             {
@@ -60,7 +67,7 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await _service.DeleteAsync(id);
             return NoContent();

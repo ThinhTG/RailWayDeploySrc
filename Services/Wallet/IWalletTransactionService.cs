@@ -9,6 +9,6 @@ namespace Services.Wallet
 {
     public interface IWalletTransactionService
     {
-        Task AddWalletTransactionAsync(int walletId, int amount, string transactionType, string transactionStatus, string transactionDate, int transacionBalance, int? orderId);
+        Task AddWalletTransactionAsync(Guid walletId, int amount, string transactionType, string transactionStatus, string transactionDate, int transacionBalance, int? orderId);
     }
 }

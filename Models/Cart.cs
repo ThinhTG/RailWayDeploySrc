@@ -7,10 +7,10 @@ public class Cart
     [Key]
     public Guid CartId { get; set; } = Guid.NewGuid();
 
-    public int? BlindBoxId { get; set; }
+    public Guid? BlindBoxId { get; set; }
     public BlindBox? BlindBox { get; set; }
 
-    public int? PackageId { get; set; }
+    public Guid? PackageId { get; set; }
     public Package? Package { get; set; }
 
     public int Quantity { get; set; }

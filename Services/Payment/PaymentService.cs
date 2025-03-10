@@ -14,7 +14,7 @@ public class PaymentService : IPaymentService
     public async Task<CreatePaymentResult> CreatePaymentLinkAsync(CreatePaymentLinkRequest request)
     {
         int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
-        ItemData item = new ItemData(request.productName, 1, request.price);
+        ItemData item = new ItemData(request.orderId, 1, request.price);
         List<ItemData> items = new List<ItemData> { item };
         PaymentData paymentData = new PaymentData(orderCode, request.price, request.description, items, request.cancelUrl, request.returnUrl);
 

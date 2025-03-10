@@ -8,10 +8,10 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int VoucherId { get; set; }
+        public Guid VoucherId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public int OrderId { get; set; }
+        public Guid OrderId { get; set; }
 
         [Required]
         public string Description { get; set; }

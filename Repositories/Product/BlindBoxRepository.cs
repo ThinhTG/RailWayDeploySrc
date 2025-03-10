@@ -25,7 +25,7 @@ namespace Repositories.Product
         }
 
 
-        public async Task<BlindBox> GetByIdAsync(int id)
+        public async Task<BlindBox> GetByIdAsync(Guid id)
         {
             return await _context.Set<BlindBox>().FindAsync(id);
         }
@@ -44,7 +44,7 @@ namespace Repositories.Product
             return blindBox;
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(Guid id)
         {
             var blindBox = await _context.Set<BlindBox>().FindAsync(id);
             if (blindBox != null)

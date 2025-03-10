@@ -12,10 +12,10 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int BlindBoxId { get; set; }
+        public Guid BlindBoxId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public int PackageId { get; set; }
+        public Guid PackageId { get; set; }
 
         [Required]
         [StringLength(255)]

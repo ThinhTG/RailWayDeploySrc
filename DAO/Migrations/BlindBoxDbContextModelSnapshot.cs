@@ -28,14 +28,14 @@ namespace DAO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("BlindBoxId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("BlindBoxId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PackageId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("PackageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -201,11 +201,9 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Address", b =>
                 {
-                    b.Property<int>("AddressId")
+                    b.Property<string>("AddressId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AddressLine1")
                         .IsRequired()
@@ -366,11 +364,9 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.BlindBox", b =>
                 {
-                    b.Property<int>("BlindBoxId")
+                    b.Property<Guid>("BlindBoxId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BlindBoxId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BlindBoxName")
                         .IsRequired()
@@ -389,8 +385,8 @@ namespace DAO.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("PackageId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PackageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<float?>("Percent")
                         .HasColumnType("real");
@@ -411,11 +407,9 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Category", b =>
                 {
-                    b.Property<int>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
@@ -441,10 +435,8 @@ namespace DAO.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"));
 
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("AccountId1")
+                    b.Property<string>("AccountId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedDate")
@@ -479,29 +471,27 @@ namespace DAO.Migrations
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("AccountId1");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Models.OrderDetail", b =>
                 {
-                    b.Property<int>("OrderDetailId")
+                    b.Property<Guid>("OrderDetailId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderDetailId"));
-
-                    b.Property<int?>("BlindBoxId")
+                    b.Property<Guid?>("BlindBoxId")
                         .IsRequired()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("PackageId")
+                    b.Property<Guid?>("PackageId")
                         .IsRequired()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
@@ -522,17 +512,15 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Package", b =>
                 {
-                    b.Property<int>("PackageId")
+                    b.Property<Guid>("PackageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Amount")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PackageStatus")
                         .IsRequired()
@@ -548,19 +536,17 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.PackageImage", b =>
                 {
-                    b.Property<int>("PackageImageId")
+                    b.Property<Guid>("PackageImageId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PackageImageId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("PackageId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("PackageId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("PackageImageId");
 
@@ -571,11 +557,9 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Voucher", b =>
                 {
-                    b.Property<int>("VoucherId")
+                    b.Property<Guid>("VoucherId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VoucherId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -590,7 +574,10 @@ namespace DAO.Migrations
                     b.Property<decimal>("Money")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("OrderId")
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("OrderId1")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -598,18 +585,16 @@ namespace DAO.Migrations
 
                     b.HasKey("VoucherId");
 
-                    b.HasIndex("OrderId");
+                    b.HasIndex("OrderId1");
 
                     b.ToTable("Voucher");
                 });
 
             modelBuilder.Entity("Models.Wallet", b =>
                 {
-                    b.Property<int>("WalletId")
+                    b.Property<Guid>("WalletId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WalletId"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccountId")
                         .IsRequired()
@@ -658,8 +643,8 @@ namespace DAO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WalletId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("WalletId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("WalletTransactionId");
 
@@ -668,6 +653,27 @@ namespace DAO.Migrations
                     b.HasIndex("WalletId");
 
                     b.ToTable("WalletTransaction");
+                });
+
+            modelBuilder.Entity("Cart", b =>
+                {
+                    b.HasOne("Models.BlindBox", "BlindBox")
+                        .WithMany()
+                        .HasForeignKey("BlindBoxId");
+
+                    b.HasOne("Models.Package", "Package")
+                        .WithOne("Cart")
+                        .HasForeignKey("Cart", "PackageId");
+
+                    b.HasOne("Models.ApplicationUser", "applicationUser")
+                        .WithMany()
+                        .HasForeignKey("applicationUserId");
+
+                    b.Navigation("BlindBox");
+
+                    b.Navigation("Package");
+
+                    b.Navigation("applicationUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -721,49 +727,13 @@ namespace DAO.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Models.Cart", b =>
-                {
-                    b.HasOne("Models.Account", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("Models.CartDetail", b =>
-                {
-                    b.HasOne("Models.BlindBox", "BlindBox")
-                        .WithMany()
-                        .HasForeignKey("BlindBoxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Cart", "Cart")
-                        .WithMany("CartDetails")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Package", "Package")
-                        .WithMany()
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BlindBox");
-
-                    b.Navigation("Cart");
-
-                    b.Navigation("Package");
-                });
-
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.HasOne("Models.ApplicationUser", "Account")
                         .WithMany()
-                        .HasForeignKey("AccountId1");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Account");
                 });
@@ -821,7 +791,7 @@ namespace DAO.Migrations
                 {
                     b.HasOne("Models.Order", "Order")
                         .WithMany("Vouchers")
-                        .HasForeignKey("OrderId")
+                        .HasForeignKey("OrderId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -860,11 +830,6 @@ namespace DAO.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Wallet");
-                });
-
-            modelBuilder.Entity("Models.Cart", b =>
-                {
-                    b.Navigation("CartDetails");
                 });
 
             modelBuilder.Entity("Models.Category", b =>
