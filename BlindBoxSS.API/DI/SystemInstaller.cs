@@ -11,6 +11,7 @@ using Repositories.UnitOfWork;
 using Services.AccountService;
 using Services.Email;
 using Services;
+using System.Reflection;
 
 namespace BlindBoxSS.API.DI
 {
@@ -63,6 +64,8 @@ namespace BlindBoxSS.API.DI
                            .AllowAnyHeader();
                 });
             });
+             
+       
 
             // Swagger Configuration
             services.AddSwaggerGen(c =>
@@ -73,6 +76,11 @@ namespace BlindBoxSS.API.DI
                     Version = "v1",
                     Description = "Services to BlindBox Sale Website"
                 });
+
+                // Thêm hỗ trợ XML Comments
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

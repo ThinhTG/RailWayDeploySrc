@@ -1,87 +1,85 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using BlindBoxSS.API.Services;
-using Microsoft.Extensions.Logging;
+﻿using BlindBoxSS.API.Services;
+using Microsoft.AspNetCore.Mvc;
 using Services.Wallet;
-using Models;
 
-namespace BlindBoxSS.API.Controllers
+[Route("api/wallets")]
+[ApiController]
+public class WalletController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class WalletController : ControllerBase
+    private readonly IWalletService _walletService;
+    private readonly IWalletTransactionService _walletTransactionService;
+    private readonly ILogger<WalletController> _logger;
+
+    public WalletController(
+        IWalletService walletService,
+        IWalletTransactionService walletTransactionService,
+        ILogger<WalletController> logger)
     {
-        private readonly IWalletService _walletService;
-        private readonly IWalletTransactionService _walletTransactionService;
-        private readonly ILogger<WalletController> _logger;
+        _walletService = walletService;
+        _walletTransactionService = walletTransactionService;
+        _logger = logger;
+    }
 
-        public WalletController(IWalletService walletService, IWalletTransactionService walletTransactionService,ILogger<WalletController> logger)
+    // Lấy thông tin ví của người dùng
+    [HttpGet("{accountId}")]
+    public async Task<IActionResult> GetWallet(string accountId)
+    {
+        if (string.IsNullOrEmpty(accountId))
+            return BadRequest(new { Message = "Invalid accountId." });
+
+        try
         {
-            _walletService = walletService;
-            _walletTransactionService = walletTransactionService;
-            _logger = logger;
+            var wallet = await _walletService.GetWalletByAccountId(accountId);
+            if (wallet == null)
+                return NotFound(new { Message = "Wallet not found." });
+
+            return Ok(wallet);
         }
-
-        [HttpGet("getWallet")]
-        public async Task<IActionResult> GetWallet([FromQuery] string accountId)
+        catch (Exception ex)
         {
-            if (string.IsNullOrEmpty(accountId))
-            {
-                return BadRequest(new { Message = "Invalid accountId." });
-            }
-            try
-            {
-                var wallet = await _walletService.GetWalletByAccountId(accountId);
-                return Ok(wallet);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while fetching wallet for accountId: {AccountId}", accountId);
-                return BadRequest(new { Message = "An error occurred while processing your request. Please try again later." });
-            }
+            _logger.LogError(ex, "Error fetching wallet for accountId: {AccountId}", accountId);
+            return StatusCode(500, new { Message = "Internal Server Error. Please try again later." });
         }
+    }
 
-        [HttpPost("addWallet")]
-        public async Task<IActionResult> PaymentSuccess([FromQuery] string accountId, [FromQuery] int amount)
+    // Nạp tiền vào ví
+    [HttpPost("{accountId}/deposit")]
+    public async Task<IActionResult> AddMoney(string accountId, [FromQuery] int amount)
+    {
+        if (string.IsNullOrEmpty(accountId) || amount <= 0)
+            return BadRequest(new { Message = "Invalid accountId or amount." });
+
+        try
         {
-            if (string.IsNullOrEmpty(accountId) || amount <= 0)
-            {
-                return BadRequest(new { Message = "Invalid accountId or amount." });
-            }
-
-            try
-            {
-                await _walletService.AddMoneyToWalletAsync(accountId, amount);
-                return Ok(new { Message = "Payment successful and wallet updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while adding money to wallet for accountId: {AccountId}", accountId);
-                return BadRequest(new { Message = "An error occurred while processing your request. Please try again later." });
-            }
+            await _walletService.AddMoneyToWalletAsync(accountId, amount);
+            return Ok(new { Message = "Deposit successful. Wallet updated." });
         }
-
-        [HttpPost("purchase")]
-        public async Task<IActionResult> Purchase([FromQuery] string accountId, [FromQuery] int amount, [FromQuery] int? orderId)
+        catch (Exception ex)
         {
-            if (string.IsNullOrEmpty(accountId) || amount <= 0)
-            {
-                return BadRequest(new { Message = "Invalid accountId or amount." });
-            }
+            _logger.LogError(ex, "Error adding money to wallet for accountId: {AccountId}", accountId);
+            return StatusCode(500, new { Message = "Internal Server Error. Please try again later." });
+        }
+    }
 
-            try
-            {
-                var result = await _walletService.UseWalletForPurchaseAsync(accountId, amount, orderId);
-                if (!result)
-                {
-                    return BadRequest(new { Message = "Payment failed." });
-                }
-                return Ok(new { Message = "Payment successful and wallet updated." });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error occurred while processing purchase for accountId: {AccountId}", accountId);
-                return BadRequest(new { Message = "An error occurred while processing your request. Please try again later." });
-            }
+    // Thanh toán từ ví
+    [HttpPost("{accountId}/purchase")]
+    public async Task<IActionResult> Purchase(string accountId, [FromQuery] int amount, [FromQuery] int? orderId)
+    {
+        if (string.IsNullOrEmpty(accountId) || amount <= 0)
+            return BadRequest(new { Message = "Invalid accountId or amount." });
+
+        try
+        {
+            var success = await _walletService.UseWalletForPurchaseAsync(accountId, amount, orderId);
+            if (!success)
+                return BadRequest(new { Message = "Insufficient balance or transaction failed." });
+
+            return Ok(new { Message = "Purchase successful. Wallet updated." });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error processing purchase for accountId: {AccountId}", accountId);
+            return StatusCode(500, new { Message = "Internal Server Error. Please try again later." });
         }
     }
 }

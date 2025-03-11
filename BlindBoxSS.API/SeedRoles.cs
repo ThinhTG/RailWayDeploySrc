@@ -12,7 +12,6 @@ namespace BlindBoxSS.API
 
             string[] roleNames = { "Admin", "User", "Manager" };
 
-            // Tạo role nếu chưa tồn tại
             foreach (var roleName in roleNames)
             {
                 if (!await roleManager.RoleExistsAsync(roleName))
@@ -21,7 +20,6 @@ namespace BlindBoxSS.API
                 }
             }
 
-            // Tạo tài khoản Admin mặc định nếu chưa có
             var adminEmail = "blindboxsaleswebsite123@gmail.com";
             var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
 
