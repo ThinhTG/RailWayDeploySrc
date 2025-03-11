@@ -169,3 +169,5 @@ D:\Ky7\SWD392\BackEnd\BlindBox_BackEnd\BlindBoxSS.API\obj\Debug\net8.0\refint\Bl
 D:\Ky7\SWD392\BackEnd\BlindBox_BackEnd\BlindBoxSS.API\obj\Debug\net8.0\BlindBoxSS.API.pdb
 D:\Ky7\SWD392\BackEnd\BlindBox_BackEnd\BlindBoxSS.API\obj\Debug\net8.0\BlindBoxSS.API.genruntimeconfig.cache
 D:\Ky7\SWD392\BackEnd\BlindBox_BackEnd\BlindBoxSS.API\obj\Debug\net8.0\ref\BlindBoxSS.API.dll
+D:\Ky7\SWD392\BackEnd\BlindBox_BackEnd\BlindBoxSS.API\bin\Debug\net8.0\BlindBoxSS.API.xml
+D:\Ky7\SWD392\BackEnd\BlindBox_BackEnd\BlindBoxSS.API\obj\Debug\net8.0\BlindBoxSS.API.xml

@@ -11,7 +11,7 @@ using static DAO.Contracts.UserRequestAndResponse;
 
 namespace BlindBoxSS.API.Controllers
 {
-    [Route("api/")]
+    [Route("api/Auth")]
     [Authorize]
     public class AuthController : ControllerBase
     {

@@ -3,72 +3,62 @@ using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Product;
 
-namespace BlindBoxSS.API.Controllers
+[Route("api/packages")]
+[ApiController]
+[Authorize]
+public class PackageController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class PackageController : ControllerBase
+    private readonly IPackageService _packageService;
+
+    public PackageController(IPackageService packageService)
     {
-        private readonly IPackageService _packageService;
+        _packageService = packageService;
+    }
 
-        public PackageController(IPackageService packageService)
-        {
-            _packageService = packageService;
-        }
+    // Lấy tất cả gói (Không cần "getAll")
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var packages = await _packageService.GetAllPackagesAsync();
+        return Ok(packages);
+    }
 
-        [HttpGet("getAll")]
-        public async Task<IActionResult> GetAllPackages()
-        {
-            var packages = await _packageService.GetAllPackagesAsync();
-            return Ok(packages);
-        }
+    // Lấy gói theo ID
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var package = await _packageService.GetPackageByIdAsync(id);
+        if (package == null) return NotFound();
+        return Ok(package);
+    }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetPackageById(Guid id)
-        {
-            var package = await _packageService.GetPackageByIdAsync(id);
-            if (package == null)
-            {
-                return NotFound();
-            }
-            return Ok(package);
-        }
+    // Tạo gói mới
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] Package package)
+    {
+        var createdPackage = await _packageService.AddPackageAsync(package);
+        return CreatedAtAction(nameof(GetById), new { id = createdPackage.PackageId }, createdPackage);
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> AddPackage([FromBody] Package package)
-        {
-            var createdPackage = await _packageService.AddPackageAsync(package);
-            return CreatedAtAction(nameof(GetPackageById), new { id = createdPackage.PackageId }, createdPackage);
-        }
+    // Cập nhật gói
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] Package package)
+    {
+        if (id != package.PackageId) return BadRequest();
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdatePackage(Guid id, [FromBody] Package package)
-        {
-            if (id != package.PackageId)
-            {
-                return BadRequest();
-            }
+        var updatedPackage = await _packageService.UpdatePackageAsync(package);
+        if (updatedPackage == null) return NotFound();
 
-            var updatedPackage = await _packageService.UpdatePackageAsync(package);
-            if (updatedPackage == null)
-            {
-                return NotFound();
-            }
+        return Ok(updatedPackage);
+    }
 
-            return Ok(updatedPackage);
-        }
+    // Xóa gói
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        var result = await _packageService.DeletePackageAsync(id);
+        if (!result) return NotFound();
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePackage(Guid id)
-        {
-            var result = await _packageService.DeletePackageAsync(id);
-            if (!result)
-            {
-                return NotFound();
-            }
-
-            return NoContent();
-        }
+        return NoContent();
     }
 }

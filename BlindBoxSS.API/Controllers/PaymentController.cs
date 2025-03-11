@@ -1,91 +1,88 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Net.payOS.Types;
-using Net.payOS;
 using Services.Payment;
 using Services.Request;
 
-namespace BlindBoxSS.API.Controllers
+[Route("api/payments")]
+[ApiController]
+public class PaymentController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class PaymentController : Controller
+    private readonly IPaymentService _paymentService;
+
+    public PaymentController(IPaymentService paymentService)
     {
-        private readonly IPaymentService _paymentService;
+        _paymentService = paymentService;
+    }
 
-        public PaymentController(IPaymentService paymentService)
+    // Tạo link thanh toán
+    [HttpPost("create")]
+    public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentLinkRequest body)
+    {
+        if (body == null) return BadRequest(new Response(-1, "Request body is null", null));
+
+        try
         {
-            _paymentService = paymentService;
+            var paymentLink = await _paymentService.CreatePaymentLinkAsync(body);
+            return Ok(new Response(0, "Success", paymentLink));
         }
-
-        // Update the CreatePaymentLink method to use the correct type
-        [HttpPost("createPayment")]
-        public async Task<IActionResult> CreatePaymentLink([FromBody] CreatePaymentLinkRequest body)
+        catch (Exception ex)
         {
-            if (body == null)
-            {
-                return BadRequest(new Response(-1, "Request body is null", null));
-            }
-
-            try
-            {
-                var createPayment = await _paymentService.CreatePaymentLinkAsync(body);
-                return Ok(new Response(0, "success", createPayment));
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                return Ok(new Response(-1, "fail", null));
-            }
+            Console.WriteLine(ex);
+            return StatusCode(500, new Response(-1, "Internal Server Error", null));
         }
+    }
 
-        [HttpGet("{orderId}")]
-        public async Task<IActionResult> GetOrder([FromRoute] int orderId)
+    // Lấy thông tin thanh toán theo orderId
+    [HttpGet("{orderId}")]
+    public async Task<IActionResult> GetPayment(int orderId)
+    {
+        try
         {
-            try
-            {
-                var paymentLinkInformation = await _paymentService.GetPaymentLinkInformationAsync(orderId);
-                return Ok(new Response(0, "Ok", paymentLinkInformation));
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                return Ok(new Response(-1, "fail", null));
-            }
+            var paymentInfo = await _paymentService.GetPaymentLinkInformationAsync(orderId);
+            return Ok(new Response(0, "Success", paymentInfo));
         }
-
-        [HttpPost("confirm-webhook")]
-        public async Task<IActionResult> ConfirmWebhook(ConfirmWebhook body)
+        catch (Exception ex)
         {
-            try
-            {
-                await _paymentService.ConfirmWebhookAsync(body.webhook_url);
-                return Ok(new Response(0, "Ok", null));
-            }
-            catch (Exception exception)
-            {
-                Console.WriteLine(exception);
-                return Ok(new Response(-1, "fail", null));
-            }
+            Console.WriteLine(ex);
+            return StatusCode(500, new Response(-1, "Internal Server Error", null));
         }
+    }
 
-        [HttpPost("payos_transfer_handler")]
-        public IActionResult PayOSTransferHandler(WebhookType body)
+    // Xác nhận Webhook
+    [HttpPost("webhook/confirm")]
+    public async Task<IActionResult> ConfirmWebhook([FromBody] ConfirmWebhook body)
+    {
+        try
         {
-            try
-            {
-                var data = _paymentService.VerifyPaymentWebhookData(body);
+            await _paymentService.ConfirmWebhookAsync(body.webhook_url);
+            return Ok(new Response(0, "Success", null));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return StatusCode(500, new Response(-1, "Internal Server Error", null));
+        }
+    }
 
-                if (data.description == "Ma giao dich thu nghiem" || data.description == "BlindBoxQR123")
-                {
-                    return Ok(new Response(0, "Ok", null));
-                }
-                return Ok(new Response(0, "Ok", null));
-            }
-            catch (Exception e)
+    // Xử lý Webhook từ PayOS
+    [HttpPost("webhook/handle-transfer")]
+    public IActionResult HandlePayOSTransfer([FromBody] WebhookType body)
+    {
+        try
+        {
+            var data = _paymentService.VerifyPaymentWebhookData(body);
+
+            if (data.description == "Ma giao dich thu nghiem" || data.description == "BlindBoxQR123")
             {
-                Console.WriteLine(e.Message);
-                return Ok(new Response(-1, "fail", null));
+                return Ok(new Response(0, "Success", null));
             }
+
+            return Ok(new Response(0, "Success", null));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return StatusCode(500, new Response(-1, "Internal Server Error", null));
         }
     }
 }
