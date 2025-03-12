@@ -11,7 +11,7 @@ namespace Models
         public Guid VoucherId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public Guid OrderId { get; set; }
+        public int OrderId { get; set; }
 
         [Required]
         public string Description { get; set; }

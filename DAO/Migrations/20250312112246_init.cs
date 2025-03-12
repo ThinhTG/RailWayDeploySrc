@@ -312,20 +312,19 @@ namespace DAO.Migrations
                 columns: table => new
                 {
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DiscountMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Money = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderId1 = table.Column<int>(type: "int", nullable: false)
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Voucher", x => x.VoucherId);
                     table.ForeignKey(
-                        name: "FK_Voucher_Order_OrderId1",
-                        column: x => x.OrderId1,
+                        name: "FK_Voucher_Order_OrderId",
+                        column: x => x.OrderId,
                         principalTable: "Order",
                         principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
@@ -541,9 +540,9 @@ namespace DAO.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Voucher_OrderId1",
+                name: "IX_Voucher_OrderId",
                 table: "Voucher",
-                column: "OrderId1");
+                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wallet_AccountId",

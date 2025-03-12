@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(BlindBoxDbContext))]
-    [Migration("20250310165652_init")]
+    [Migration("20250312112246_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -577,10 +577,7 @@ namespace DAO.Migrations
                     b.Property<decimal>("Money")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("OrderId1")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -588,7 +585,7 @@ namespace DAO.Migrations
 
                     b.HasKey("VoucherId");
 
-                    b.HasIndex("OrderId1");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Voucher");
                 });
@@ -794,7 +791,7 @@ namespace DAO.Migrations
                 {
                     b.HasOne("Models.Order", "Order")
                         .WithMany("Vouchers")
-                        .HasForeignKey("OrderId1")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
