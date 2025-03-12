@@ -31,12 +31,13 @@ app.UseCors("AllowAll");
 var scope = app.Services.CreateScope();
 await SeedRoles.InitializeRoles(scope.ServiceProvider);
 
-// Cấu hình Swagger cho môi trường Development
-if (app.Environment.IsDevelopment())
-{
+
+//// Cấu hình Swagger cho môi trường Development
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+
 
 // Handle 403 errors
 app.Use(async (context, next) =>
