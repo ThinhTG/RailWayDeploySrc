@@ -2,9 +2,9 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 3000
+EXPOSE 8080  
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS=http://+:3000  
+ENV ASPNETCORE_URLS=http://+:8080  
 
 # Stage 2: Build environment
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -24,10 +24,12 @@ RUN dotnet restore ./BlindBoxSS.API/BlindBoxSS.API.csproj
 COPY . .
 
 # Build the application
-RUN dotnet publish "BlindBoxSS.API/BlindBoxSS.API.csproj" -c Release -o /app/publish
+RUN dotnet publish "BlindBoxSS.API/BlindBoxSS.API.csproj" -c Release -o /app/publish --no-restore
 
 # Stage 3: Final runtime
 FROM base AS final
 WORKDIR /app
 COPY --from=build /app/publish .
+
+# Run application
 ENTRYPOINT ["dotnet", "BlindBoxSS.API.dll"]
