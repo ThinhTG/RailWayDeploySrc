@@ -1,31 +1,33 @@
-#See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
+# Stage 1: Base image (Runtime environment)
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-USER app
 WORKDIR /app
+EXPOSE 80
 EXPOSE 8080
-EXPOSE 8081
+ENV ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_URLS=http://+:8080
 
+# Stage 2: Build environment
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["KidPrograming/KidPrograming.csproj", "KidPrograming/"]
-COPY ["KidPrograming.Contract.Repositories/KidPrograming.Contract.Repositories.csproj", "KidPrograming.Contract.Repositories/"]
-COPY ["KidPrograming.Contract.Services/KidPrograming.Contract.Services.csproj", "KidPrograming.Contract.Services/"]
-COPY ["KidPrograming.Repositories/KidPrograming.Repositories.csproj", "KidPrograming.Repositories/"]
-COPY ["KidPrograming.Entity/KidPrograming.Entity.csproj", "KidPrograming.Entity/"]
-COPY ["KidPrograming.Core/KidPrograming.Core.csproj", "KidPrograming.Core/"]
-COPY ["KidPrograming.Services/KidPrograming.Services.csproj", "KidPrograming.Services/"]
-RUN dotnet restore "./KidPrograming/KidPrograming.csproj"
+
+# Copy only the necessary project files to restore dependencies (better caching)
+COPY BlindBoxSS.API/*.csproj ./BlindBoxSS.API/
+COPY Repositories/*.csproj ./Repositories/
+COPY DAO/*.csproj ./DAO/
+COPY Models/*.csproj ./Models/
+COPY Services/*.csproj ./Services/
+
+# Restore dependencies
+RUN dotnet restore ./BlindBoxSS.API/BlindBoxSS.API.csproj
+
+# Copy the entire source code after restoring dependencies
 COPY . .
-WORKDIR "/src/KidPrograming"
-RUN dotnet build "./KidPrograming.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
-FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./KidPrograming.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+# Build the application
+RUN dotnet publish "BlindBoxSS.API/BlindBoxSS.API.csproj" -c Release -o /app/publish
 
+# Stage 3: Final runtime
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "KidPrograming.dll"]
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "BlindBoxSS.API.dll"]
