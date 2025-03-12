@@ -2,9 +2,9 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 8080
+EXPOSE 3000
 ENV ASPNETCORE_ENVIRONMENT=Production
-ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_URLS=http://+:3000  
 
 # Stage 2: Build environment
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
