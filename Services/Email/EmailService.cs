@@ -56,7 +56,7 @@ namespace Services.Email
         {
 
             var encodedToken = Uri.EscapeDataString(token);
-            var confirmationLink = $"http://localhost:5000/api/confirm-email?userId={user.Id}&token={encodedToken}";
+            var confirmationLink = $"https://railwaydeploysrc-production.up.railway.app/api/Auth/confirm-email?userId={user.Id}&token={encodedToken}";
             var message = $"Vui lòng nhấp vào link để xác thực email: <a href='{confirmationLink}'>Xác nhận</a>";
             await SendEmailAsync(user.Email, "Xác thực email", message);
         }
