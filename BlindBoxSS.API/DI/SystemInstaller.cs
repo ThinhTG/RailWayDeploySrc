@@ -64,8 +64,8 @@ namespace BlindBoxSS.API.DI
                            .AllowAnyHeader();
                 });
             });
-             
-       
+
+
 
             // Swagger Configuration
             services.AddSwaggerGen(c =>
@@ -115,5 +115,5 @@ namespace BlindBoxSS.API.DI
             services.AddEndpointsApiExplorer();
         }
     }
-    
+
 }
