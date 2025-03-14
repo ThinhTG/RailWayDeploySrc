@@ -12,6 +12,8 @@ using Services.OrderS;
 using Repositories.OrderRep;
 using Repositories.CategoryRepo;
 using Services.CategoryS;
+using Repositories.VocherRepo;
+using Services.VocherS;
 
 namespace BlindBoxSS.API.DI
 {
@@ -39,6 +41,8 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IVocherRepository, VocherRepository>();
+            services.AddScoped<IVocherService, VocherService>();
         }
     }
 }

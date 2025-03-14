@@ -1,17 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Models
+namespace Services.DTO
 {
-    [Table("Voucher")]
-    public class Voucher
+    public class UpdateVoucherDTO
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid VoucherId { get; set; } = Guid.NewGuid();
-
-        
-        public int? OrderId { get; set; }
+      
 
         [Required]
         public string Description { get; set; }
@@ -28,6 +27,6 @@ namespace Models
         [Required]
         public DateTime EndDate { get; set; }
 
-        public virtual Order Order { get; set; }
+       
     }
 }
