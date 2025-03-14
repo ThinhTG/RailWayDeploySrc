@@ -10,6 +10,8 @@ using Services.Product;
 using Services.Wallet;
 using Services.OrderS;
 using Repositories.OrderRep;
+using Repositories.CategoryRepo;
+using Services.CategoryS;
 
 namespace BlindBoxSS.API.DI
 {
@@ -35,7 +37,8 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<IOrderDetailService, OrderDetailService>();
             services.AddScoped<IOrderDetailRepository, OrderDetailRepository>();
-
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
         }
     }
 }
