@@ -69,9 +69,9 @@ namespace DAO
                 .HasColumnType("decimal(18,2)");
 
             modelBuilder.Entity<Voucher>()
-    .HasOne(v => v.Order)
-    .WithMany(o => o.Vouchers)
-    .HasForeignKey(v => v.OrderId);
+             .HasOne(v => v.Order)
+             .WithMany(o => o.Vouchers);
+           
 
 
         }

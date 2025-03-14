@@ -18,8 +18,6 @@ namespace Models
         [Required]
         public int Balance { get; set; }
 
-        public virtual ApplicationUser? ApplicationUser { get; set; }
-
         public virtual ICollection<WalletTransaction> WalletTransactions { get; set; }
     }
 }
