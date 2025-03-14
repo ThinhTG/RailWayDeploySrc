@@ -68,11 +68,6 @@ namespace DAO
                 .Property(o => o.DiscountMoney)
                 .HasColumnType("decimal(18,2)");
 
-            modelBuilder.Entity<Voucher>()
-             .HasOne(v => v.Order)
-             .WithMany(o => o.Vouchers);
-           
-
 
         }
     }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BlindBoxSS.API.Services;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +22,6 @@ namespace Services.AccountService
         private readonly ILogger<AccountService> _logger;
         private readonly IEmailService _emailService;
         private readonly IWalletRepository _walletRepository;
-        
 
 
         public AccountService(ITokenService tokenService, UserManager<ApplicationUser> userManager, IMapper mapper, ILogger<AccountService> logger, IEmailService emailService, IWalletRepository walletRepository)
@@ -317,14 +315,15 @@ namespace Services.AccountService
                 if (!createResult.Succeeded)
                 {
                     var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
+                    _logger.LogError("User creation failed: {errors}", errors);
                     throw new Exception($"User creation failed: {errors}");
                 }
 
-                await CreateWalletForUserAsync(user.Id);
                 var roleResult = await _userManager.AddToRoleAsync(user, "User");
                 if (!roleResult.Succeeded)
                 {
                     var errors = string.Join(", ", roleResult.Errors.Select(e => e.Description));
+                    _logger.LogError("Role assignment failed: {errors}", errors);
                     throw new Exception($"Role assignment failed: {errors}");
                 }
             }

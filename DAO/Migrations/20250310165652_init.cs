@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAO.Migrations
 {
     /// <inheritdoc />
-    public partial class a : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -312,19 +312,20 @@ namespace DAO.Migrations
                 columns: table => new
                 {
                     VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DiscountMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Money = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    OrderId1 = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Voucher", x => x.VoucherId);
                     table.ForeignKey(
-                        name: "FK_Voucher_Order_OrderId",
-                        column: x => x.OrderId,
+                        name: "FK_Voucher_Order_OrderId1",
+                        column: x => x.OrderId1,
                         principalTable: "Order",
                         principalColumn: "OrderId",
                         onDelete: ReferentialAction.Cascade);
@@ -540,9 +541,9 @@ namespace DAO.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Voucher_OrderId",
+                name: "IX_Voucher_OrderId1",
                 table: "Voucher",
-                column: "OrderId");
+                column: "OrderId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wallet_AccountId",

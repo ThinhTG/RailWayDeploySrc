@@ -575,7 +575,6 @@ namespace DAO.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("OrderId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -789,9 +788,7 @@ namespace DAO.Migrations
                 {
                     b.HasOne("Models.Order", "Order")
                         .WithMany("Vouchers")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });
