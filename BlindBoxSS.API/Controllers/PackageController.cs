@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.DTO;
 using Services.Product;
 
 [Route("api/packages")]
@@ -48,9 +49,19 @@ public class PackageController : ControllerBase
 
     // Tạo gói mới
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] Package package)
+    public async Task<IActionResult> Create([FromBody] CreatePackageRequest package)
     {
-        var createdPackage = await _packageService.AddPackageAsync(package);
+        var package1 = new Package
+        {
+            CategoryId = package.CategoryId,
+            PackageName = package.PackageName,
+            PackagePrice = package.PackagePrice,
+            Description = package.Description,
+            Stock = package.Stock,
+            Amount = package.Amount,
+            PackageStatus = package.PackageStatus
+        };
+        var createdPackage = await _packageService.AddPackageAsync(package1);
         return CreatedAtAction(nameof(GetById), new { id = createdPackage.PackageId }, createdPackage);
     }
 

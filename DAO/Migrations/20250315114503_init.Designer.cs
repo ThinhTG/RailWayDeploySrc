@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(BlindBoxDbContext))]
-    [Migration("20250310165652_init")]
+    [Migration("20250315114503_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -486,14 +486,12 @@ namespace DAO.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("BlindBoxId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("PackageId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
@@ -525,10 +523,25 @@ namespace DAO.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("PackageName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("PackagePrice")
+                        .HasColumnType("decimal(19,0)");
+
                     b.Property<string>("PackageStatus")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
 
                     b.HasKey("PackageId");
 
@@ -577,10 +590,7 @@ namespace DAO.Migrations
                     b.Property<decimal>("Money")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("OrderId1")
+                    b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("StartDate")
@@ -588,7 +598,7 @@ namespace DAO.Migrations
 
                     b.HasKey("VoucherId");
 
-                    b.HasIndex("OrderId1");
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Voucher");
                 });
@@ -745,9 +755,7 @@ namespace DAO.Migrations
                 {
                     b.HasOne("Models.BlindBox", "BlindBox")
                         .WithMany()
-                        .HasForeignKey("BlindBoxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BlindBoxId");
 
                     b.HasOne("Models.Order", "Order")
                         .WithMany("OrderDetails")
@@ -757,9 +765,7 @@ namespace DAO.Migrations
 
                     b.HasOne("Models.Package", "Package")
                         .WithMany()
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PackageId");
 
                     b.Navigation("BlindBox");
 
@@ -794,9 +800,7 @@ namespace DAO.Migrations
                 {
                     b.HasOne("Models.Order", "Order")
                         .WithMany("Vouchers")
-                        .HasForeignKey("OrderId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderId");
 
                     b.Navigation("Order");
                 });

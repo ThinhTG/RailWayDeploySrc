@@ -29,7 +29,7 @@ public class OrderController : ControllerBase
         return Ok(result);
     }
 
-    
+
     /// <summary>
     /// Lấy một đơn hàng theo  OrderID
     /// </summary>
@@ -99,5 +99,21 @@ public class OrderController : ControllerBase
     {
         await _orderService.DeleteAsync(id);
         return NoContent();
+    }
+
+    // Cập nhật đơn hàng
+    [HttpPost("{orderId}/orderdetails")]
+    public async Task<ActionResult<Order>> CreateOrderDetails(int orderId, [FromBody] List<OrderDetail> orderDetails)
+    {
+        var order = await _orderService.GetByIdAsync(orderId);
+        if (order == null) return NotFound();
+
+        foreach (var orderDetail in orderDetails)
+        {
+            order.OrderDetails.Add(orderDetail);
+        }
+
+        await _orderService.UpdateAsync(order);
+        return Ok(order);
     }
 }

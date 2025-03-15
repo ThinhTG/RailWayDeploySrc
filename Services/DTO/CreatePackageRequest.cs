@@ -6,14 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Models
+namespace Services.DTO
 {
-    public class Package
+    public class CreatePackageRequest
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid PackageId { get; set; } = Guid.NewGuid();
-
         [Required]
         public Guid CategoryId { get; set; }
 
@@ -32,18 +28,10 @@ namespace Models
         public int Stock { get; set; }
 
         [Required]
-        public int Amount { get; set; }
+        public int Amount { get; set; } = 0;
 
         [Required]
         [StringLength(50)]
         public string PackageStatus { get; set; }
-
-        public virtual Category? Category { get; set; }
-
-        public virtual ICollection<PackageImage>? Images { get; set; }
-
-        public virtual Cart? Cart { get; set; }
-
-       
     }
 }

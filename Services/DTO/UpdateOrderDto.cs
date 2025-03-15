@@ -10,9 +10,9 @@ namespace Models
 {
     public class UpdateOrderDto
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid OrderId { get; set; }
+        //[Key]
+        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        //public Guid OrderId { get; set; }
 
         [Required]
         public string AccountId { get; set; }

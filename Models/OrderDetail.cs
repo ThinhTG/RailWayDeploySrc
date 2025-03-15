@@ -13,10 +13,8 @@ namespace Models
         [Required]
         public int OrderId { get; set; }
 
-        [Required]
         public Guid? BlindBoxId { get; set; }
 
-        [Required]
         public Guid? PackageId { get; set; }
 
         [Required]

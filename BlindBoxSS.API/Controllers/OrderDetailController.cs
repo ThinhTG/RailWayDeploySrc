@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.DTO;
 using Services.OrderS;
 
 [Route("api/order-details")]
@@ -32,8 +33,16 @@ public class OrderDetailController : ControllerBase
 
     // Thêm chi tiết đơn hàng mới
     [HttpPost]
-    public async Task<ActionResult<OrderDetail>> Create([FromBody] OrderDetail orderDetail)
+    public async Task<ActionResult<OrderDetail>> Create([FromBody] CreateOrderDetailRequest orderDetailRequest)
     {
+        var orderDetail = new OrderDetail
+        {
+            OrderId = orderDetailRequest.OrderId,
+            PackageId = orderDetailRequest.PackageId,
+            BlindBoxId = orderDetailRequest.BlindBoxId,
+            Quantity = orderDetailRequest.Quantity,
+            Price = orderDetailRequest.Price
+        };
         var createdOrderDetail = await _orderDetailService.AddOrderDetailAsync(orderDetail);
         return CreatedAtAction(nameof(GetById), new { id = createdOrderDetail.OrderDetailId }, createdOrderDetail);
     }

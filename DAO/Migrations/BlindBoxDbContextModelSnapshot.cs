@@ -483,14 +483,12 @@ namespace DAO.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("BlindBoxId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("PackageId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Price")
@@ -522,10 +520,25 @@ namespace DAO.Migrations
                     b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("PackageName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("PackagePrice")
+                        .HasColumnType("decimal(19,0)");
+
                     b.Property<string>("PackageStatus")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Stock")
+                        .HasColumnType("int");
 
                     b.HasKey("PackageId");
 
@@ -739,9 +752,7 @@ namespace DAO.Migrations
                 {
                     b.HasOne("Models.BlindBox", "BlindBox")
                         .WithMany()
-                        .HasForeignKey("BlindBoxId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BlindBoxId");
 
                     b.HasOne("Models.Order", "Order")
                         .WithMany("OrderDetails")
@@ -751,9 +762,7 @@ namespace DAO.Migrations
 
                     b.HasOne("Models.Package", "Package")
                         .WithMany()
-                        .HasForeignKey("PackageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PackageId");
 
                     b.Navigation("BlindBox");
 
