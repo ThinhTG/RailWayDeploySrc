@@ -17,7 +17,6 @@ public class PaymentService : IPaymentService
         ItemData item = new ItemData(request.orderId, 1, request.price);
         List<ItemData> items = new List<ItemData> { item };
         PaymentData paymentData = new PaymentData(orderCode, request.price, request.description, items, request.cancelUrl, request.returnUrl);
-
         return await _payOS.createPaymentLink(paymentData);
     }
 

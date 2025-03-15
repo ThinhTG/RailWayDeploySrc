@@ -11,5 +11,7 @@ namespace Repositories.OrderRep
         Task<Order> UpdateAsync(Order order);
         Task DeleteAsync(int id);
         IQueryable<Order> GetAll();
+
+        IQueryable<Order> GetByAccountId(string id);
     }
 }

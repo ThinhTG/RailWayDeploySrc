@@ -47,5 +47,12 @@ namespace Services.OrderS
         {
             return await _orderRepository.UpdateAsync(order);
         }
+
+        public async Task<PaginatedList<Order>> GetByAccountId(string accountId, int pageNumber, int pageSize)
+        {
+            IQueryable<Order> orders = _orderRepository.GetByAccountId(accountId).AsQueryable();
+
+            return await PaginatedList<Order>.CreateAsync(orders, pageNumber, pageSize);
+        }
     }
 }

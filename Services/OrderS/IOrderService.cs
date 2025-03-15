@@ -17,5 +17,7 @@ namespace Services.OrderS
         Task<Order> UpdateAsync(Order order);
         Task DeleteAsync(int id);
         Task<PaginatedList<Order>> GetAll(int pageNumber, int pageSize);
+
+        Task<PaginatedList<Order>> GetByAccountId(string accountId,int pageNumber,int pageSize);
     }
 }

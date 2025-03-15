@@ -29,7 +29,12 @@ public class OrderController : ControllerBase
         return Ok(result);
     }
 
-    // Lấy một đơn hàng theo ID
+    
+    /// <summary>
+    /// Lấy một đơn hàng theo  OrderID
+    /// </summary>
+    /// <param name="id">OrderId</param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<Order>> GetById(int id)
     {
@@ -37,6 +42,22 @@ public class OrderController : ControllerBase
         if (order == null) return NotFound();
         return Ok(order);
     }
+
+
+    /// <summary>
+    /// lấy danh sách đơn hàng theo AccountId
+    /// </summary>
+    /// <param name="accountId">AccountId</param>
+    /// <param name="pageNumber">Số Trang</param>
+    /// <param name="pageSize">Số Đơn hàng trong 1 trang</param>
+    /// <returns></returns>
+    [HttpGet("account/{accountId}")]
+    public async Task<ActionResult<IEnumerable<Order>>> GetByAccountId(string accountId, int pageNumber = 1, int pageSize = 10)
+    {
+        var orders = await _orderService.GetByAccountId(accountId, pageNumber, pageSize);
+        return Ok(orders);
+    }
+
 
     // Tạo đơn hàng mới
     [HttpPost]

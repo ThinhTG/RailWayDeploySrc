@@ -319,6 +319,7 @@ namespace Services.AccountService
                     throw new Exception($"User creation failed: {errors}");
                 }
 
+                await CreateWalletForUserAsync(user.Id);
                 var roleResult = await _userManager.AddToRoleAsync(user, "User");
                 if (!roleResult.Succeeded)
                 {

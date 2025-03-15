@@ -52,5 +52,10 @@ namespace Repositories.OrderRep
             await _context.SaveChangesAsync();
             return order;
         }
+
+        public IQueryable<Order> GetByAccountId(string id)
+        {
+            return _context.Orders.Where(o => o.AccountId == id);
+        }
     }
 }
