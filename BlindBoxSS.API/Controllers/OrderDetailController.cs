@@ -22,13 +22,34 @@ public class OrderDetailController : ControllerBase
         return Ok(orderDetails);
     }
 
-    // Lấy chi tiết đơn hàng theo ID
+
+    /// <summary>
+    /// Lấy chi tiết đơn hàng theo Detail ID
+    /// </summary>
+    /// <param name="id">order detail Id</param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<ActionResult<OrderDetail>> GetById(Guid id)
     {
         var orderDetail = await _orderDetailService.GetOrderDetailByIdAsync(id);
         if (orderDetail == null) return NotFound();
         return Ok(orderDetail);
+    }
+
+    /// <summary>
+    /// Lấy OrderDetails theo OrderId
+    /// </summary>
+    /// <param name="orderId">OrderId</param>
+    /// <returns>List Order Details </returns>
+    [HttpGet("order/{orderId}")]
+    public async Task<ActionResult<IEnumerable<OrderDetail>>> GetByOrderId(int orderId)
+    {
+        var orderDetails = await _orderDetailService.GetOrderDetailsByOrderIdAsync(orderId);
+        if (orderDetails == null || orderDetails.Count() == 0)
+        {
+            return NotFound();
+        }
+        return Ok(orderDetails);
     }
 
     // Thêm chi tiết đơn hàng mới

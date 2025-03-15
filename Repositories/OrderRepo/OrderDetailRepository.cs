@@ -58,9 +58,10 @@ namespace Repositories.OrderRep
             return true;
         }
 
-
-
-
-
+        public async Task<IEnumerable<OrderDetail>> GetOrderDetailsByOrderIdAsync(int orderId)
+        {
+            var OrderDetails = await _context.Set<OrderDetail>().Where(x => x.OrderId == orderId).ToListAsync();
+            return OrderDetails;
+        }
     }
 }

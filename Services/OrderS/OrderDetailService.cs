@@ -41,5 +41,10 @@ namespace Services.OrderS
             return await _orderDetailRepository.UpdateOrderDetailAsync(orderDetail);
 
         }
+
+        public async Task<IEnumerable<OrderDetail>> GetOrderDetailsByOrderIdAsync(int orderId)
+        {
+            return await _orderDetailRepository.GetOrderDetailsByOrderIdAsync(orderId);
+        }
     }
 }
