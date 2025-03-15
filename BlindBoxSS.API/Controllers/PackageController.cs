@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BlindBoxSS.API.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Product;
@@ -21,6 +22,19 @@ public class PackageController : ControllerBase
     {
         var packages = await _packageService.GetAllPackagesAsync();
         return Ok(packages);
+    }
+    /// <summary>
+    ///  Lấy danh sách blindboxes có phân trang
+    /// </summary>
+    /// <param name="pageNumber">Số Trang</param>
+    /// <param name="pageSize">Số lượng BlindBox trên mỗi trang</param>
+    /// <returns>Danh sách BlindBox </returns>
+    [HttpGet("paged")]
+    [CacheAttribute(1000)]
+    public async Task<IActionResult> GetPaged(int pageNumber = 1, int pageSize = 10)
+    {
+        var result = await _packageService.GetAll(pageNumber, pageSize);
+        return Ok(result);
     }
 
     // Lấy gói theo ID

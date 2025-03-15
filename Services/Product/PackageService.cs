@@ -1,4 +1,5 @@
 ﻿using Models;
+using Repositories.Pagging;
 using Repositories.Product;
 using System;
 using System.Collections.Generic;
@@ -40,6 +41,13 @@ namespace Services.Product
         public async Task<bool> DeletePackageAsync(Guid id)
         {
             return await _packageRepository.DeletePackageAsync(id);
+        }
+
+        public async Task<PaginatedList<Package>> GetAll(int pageNumber, int pageSize)
+        {
+            IQueryable<Package> packages = _packageRepository.GetAll().AsQueryable();
+           
+            return await PaginatedList<Package>.CreateAsync(packages, pageNumber, pageSize);
         }
     }
 }

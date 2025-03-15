@@ -60,5 +60,10 @@ namespace Repositories.Product
             await _context.SaveChangesAsync();
             return true;
         }
+      
+        public IQueryable<Package> GetAll()
+        {
+            return _context.Packages.AsQueryable();
+        }
     }
 }

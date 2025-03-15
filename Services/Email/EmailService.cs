@@ -56,7 +56,7 @@ namespace Services.Email
         {
 
             var encodedToken = Uri.EscapeDataString(token);
-            var confirmationLink = $"http://localhost:5000/api/confirm-email?userId={user.Id}&token={encodedToken}";
+            var confirmationLink = $"https://railwaydeploysrc-production.up.railway.app/api/Auth/confirm-email?userId={user.Id}&token={encodedToken}";
             var message = $"Vui lòng nhấp vào link để xác thực email: <a href='{confirmationLink}'>Xác nhận</a>";
             await SendEmailAsync(user.Email, "Xác thực email", message);
         }
@@ -64,7 +64,7 @@ namespace Services.Email
         public async Task ResendConfirmationEmailAsync(ApplicationUser user, string token)
         {
             var encodedToken = Uri.EscapeDataString(token);
-            var confirmationLink = $"http://localhost:5000/api/confirm-email?userId={user.Id}&token={encodedToken}";
+            var confirmationLink = $"https://railwaydeploysrc-production.up.railway.app/api/Auth/confirm-email?userId={user.Id}&token={encodedToken}";
             var message = $"Bạn đã yêu cầu xác thực lại email. Nhấp vào link sau để xác nhận: <a href='{confirmationLink}'>Xác nhận</a>";
 
             await SendEmailAsync(user.Email, "Xác thực lại email", message);
