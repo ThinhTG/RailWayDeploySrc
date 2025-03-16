@@ -1,5 +1,6 @@
 ﻿using BlindBoxSS.API;
 using BlindBoxSS.API.DI;
+using BlindBoxSS.API.Exceptions;
 using Net.payOS;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,9 @@ PayOS payOS = new PayOS(configuration["PaymentEnvironment:PAYOS_CLIENT_ID"] ?? t
                     configuration["PaymentEnvironment:PAYOS_API_KEY"] ?? throw new Exception("Cannot find payment environment"),
                     configuration["PaymentEnvironment:PAYOS_CHECKSUM_KEY"] ?? throw new Exception("Cannot find payment environment"));
 builder.Services.AddSingleton(payOS);
+
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Đăng ký dịch vụ thông qua DI Installer
 builder.Services.InstallerServicesInAssembly(builder.Configuration);
@@ -30,8 +34,8 @@ var scope = app.Services.CreateScope();
 await SeedRoles.InitializeRoles(scope.ServiceProvider);
 
 
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 
 // Handle 403 errors
@@ -45,6 +49,7 @@ app.Use(async (context, next) =>
     }
 });
 
+app.UseExceptionHandler(_ => { });
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();

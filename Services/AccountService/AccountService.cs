@@ -1,13 +1,17 @@
 ﻿using AutoMapper;
+using DAO.Contracts;
 using Google.Apis.Auth;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Models;
 using Repositories.Pagging;
+using Repositories.UnitOfWork;
 using Repositories.WalletRepo;
 using Services.Email;
 using Services.Request;
+using System.Security.Authentication;
 using System.Security.Cryptography;
 using System.Text;
 using static DAO.Contracts.UserRequestAndResponse;
@@ -22,9 +26,10 @@ namespace Services.AccountService
         private readonly ILogger<AccountService> _logger;
         private readonly IEmailService _emailService;
         private readonly IWalletRepository _walletRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public AccountService(ITokenService tokenService, UserManager<ApplicationUser> userManager, IMapper mapper, ILogger<AccountService> logger, IEmailService emailService, IWalletRepository walletRepository)
+        public AccountService(ITokenService tokenService, UserManager<ApplicationUser> userManager, IMapper mapper, ILogger<AccountService> logger, IEmailService emailService, IWalletRepository walletRepository, IUnitOfWork unitOfWork)
         {
             _tokenService = tokenService;
             _userManager = userManager;
@@ -32,16 +37,19 @@ namespace Services.AccountService
             _logger = logger;
             _emailService = emailService;
             _walletRepository = walletRepository;
+            _unitOfWork = unitOfWork;
         }
 
 
         public async Task<UserResponse> RegisterAsync(UserRegisterRequest request)
         {
+            request.Validate();
             var existingUser = await _userManager.FindByEmailAsync(request.Email);
             if (existingUser != null)
             {
-                throw new Exception("Email already exists");
+                throw new InvalidOperationException("Email already exists");
             }
+
 
             var newUser = _mapper.Map<ApplicationUser>(request);
 
@@ -59,7 +67,7 @@ namespace Services.AccountService
             //  Tạo token xác thực email
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(newUser);
 
-            await  _emailService.SendConfirmationEmailAsync(newUser, token);
+            await _emailService.SendConfirmationEmailAsync(newUser, token);
             await _tokenService.GenerateToken(newUser);
             newUser.CreateAt = DateTime.Now;
             newUser.UpdateAt = DateTime.Now;
@@ -97,15 +105,13 @@ namespace Services.AccountService
         {
             if (request == null)
             {
-                _logger.LogError("Login request is null");
                 throw new ArgumentNullException(nameof(request));
             }
 
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                _logger.LogError("Invalid email or password");
-                throw new Exception("Invalid email or password");
+                throw new UnauthorizedAccessException("Invalid email or password");
             }
 
             if (!user.EmailConfirmed)
@@ -132,7 +138,6 @@ namespace Services.AccountService
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                _logger.LogError("Failed to update user: {errors}", errors);
                 throw new Exception($"Failed to update user: {errors}");
             }
 
@@ -150,10 +155,8 @@ namespace Services.AccountService
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                _logger.LogError("User not found");
                 throw new Exception("User not found");
             }
-            _logger.LogInformation("User found");
             return _mapper.Map<UserResponse>(user);
         }
 
@@ -170,14 +173,12 @@ namespace Services.AccountService
             var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == hashedRefreshToken);
             if (user == null)
             {
-                _logger.LogError("Invalid refresh token");
                 throw new Exception("Invalid refresh token");
             }
 
             // Validate the refresh token expiry time
             if (user.RefreshTokenExpiryTime < DateTime.Now)
             {
-                _logger.LogWarning("Refresh token expired for user ID: {UserId}", user.Id);
                 throw new Exception("Refresh token expired");
             }
 
@@ -191,8 +192,6 @@ namespace Services.AccountService
 
         public async Task<RevokeRefreshTokenResponse> RevokeRefreshToken(RefreshTokenRequest refreshTokenRemoveRequest)
         {
-            _logger.LogInformation("Revoking refresh token");
-
             try
             {
                 // Hash the refresh token
@@ -204,14 +203,12 @@ namespace Services.AccountService
                 var user = await _userManager.Users.FirstOrDefaultAsync(u => u.RefreshToken == hashedRefreshToken);
                 if (user == null)
                 {
-                    _logger.LogError("Invalid refresh token");
                     throw new Exception("Invalid refresh token");
                 }
 
                 // Validate the refresh token expiry time
                 if (user.RefreshTokenExpiryTime < DateTime.Now)
                 {
-                    _logger.LogWarning("Refresh token expired for user ID: {UserId}", user.Id);
                     throw new Exception("Refresh token expired");
                 }
 
@@ -223,13 +220,11 @@ namespace Services.AccountService
                 var result = await _userManager.UpdateAsync(user);
                 if (!result.Succeeded)
                 {
-                    _logger.LogError("Failed to update user");
                     return new RevokeRefreshTokenResponse
                     {
                         Message = "Failed to revoke refresh token"
                     };
                 }
-                _logger.LogInformation("Refresh token revoked successfully");
                 return new RevokeRefreshTokenResponse
                 {
                     Message = "Refresh token revoked successfully"
@@ -237,7 +232,6 @@ namespace Services.AccountService
             }
             catch (Exception ex)
             {
-                _logger.LogError("Failed to revoke refresh token: {ex}", ex.Message);
                 throw new Exception("Failed to revoke refresh token");
             }
         }
@@ -247,8 +241,7 @@ namespace Services.AccountService
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                _logger.LogError("User not found");
-                throw new Exception("User not found");
+                throw new KeyNotFoundException("User not found");
             }
 
             user.UpdateAt = DateTime.Now;
@@ -266,8 +259,7 @@ namespace Services.AccountService
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                _logger.LogError("User not found");
-                throw new Exception("User not found");
+                throw new KeyNotFoundException("User not found");
             }
             await _userManager.DeleteAsync(user);
         }
@@ -315,7 +307,6 @@ namespace Services.AccountService
                 if (!createResult.Succeeded)
                 {
                     var errors = string.Join(", ", createResult.Errors.Select(e => e.Description));
-                    _logger.LogError("User creation failed: {errors}", errors);
                     throw new Exception($"User creation failed: {errors}");
                 }
 
@@ -339,9 +330,9 @@ namespace Services.AccountService
             using var sha256 = SHA256.Create();
             var refreshTokenHash = sha256.ComputeHash(Encoding.UTF8.GetBytes(refreshToken));
             user.RefreshToken = Convert.ToBase64String(refreshTokenHash);
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2);  
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(2);
 
-      
+
             var updateResult = await _userManager.UpdateAsync(user);
             if (!updateResult.Succeeded)
             {
@@ -360,16 +351,48 @@ namespace Services.AccountService
 
         public async Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize)
         {
-            IQueryable<ApplicationUser> users =  _userManager.Users.AsQueryable();
-            IQueryable<UserDTO> listAccount =  users.Select(user => _mapper.Map<UserDTO>(user));
-            return await PaginatedList<UserDTO>.CreateAsync(listAccount,pageNumber,pageSize);
+            var users = await _userManager.Users.ToListAsync(); // Lấy danh sách User trước
+
+            var listAccount = new List<UserDTO>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                string firstRole = roles.FirstOrDefault()!;
+                var userDto = _mapper.Map<UserDTO>(user);
+                userDto.Role = firstRole;
+                listAccount.Add(userDto);
+            }
+
+            return  PaginatedList<UserDTO>.Create(listAccount, pageNumber, pageSize);
         }
+
+
+        //public async Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize)
+        //{
+        //    IQueryable<ApplicationUser> usersQuery = _userManager.Users.AsQueryable();
+
+        //    IQueryable<UserDTO> userWithRolesQuery = from user in usersQuery.AsQueryable() // Đảm bảo IQueryable
+        //                                             select new UserDTO
+        //                                             {
+        //                                                 Email = user.Email,
+        //                                                 Gender = user.Gender,
+        //                                                 PhoneNumber = user.PhoneNumber,
+        //                                                 CreateAt = user.CreateAt,
+        //                                                 UpdateAt = user.UpdateAt,
+        //                                                 Address = user.Address,
+        //                                                 Role =await _userManager.GetRolesAsync(user)
+        //                                             };
+
+        //    return await PaginatedList<UserDTO>.CreateAsync(userWithRolesQuery.AsNoTracking(), pageNumber, pageSize);
+
+        //}
+
         public async Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
             {
-                _logger.LogError("User not found");
                 throw new Exception("User not found");
             }
 
@@ -383,8 +406,56 @@ namespace Services.AccountService
             return _mapper.Map<UserDTO>(user);
         }
 
+        /// <summary>
+        /// Xác nhận email của người dùng dựa vào token và userId.
+        /// </summary>
+        public async Task<bool> ConfirmEmailAsync(string userId, string token)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return false;
 
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            return result.Succeeded;
+        }
 
+        /// <summary>
+        /// Gửi lại email xác nhận tài khoản.
+        /// </summary>
+        public async Task<bool> ResendConfirmEmailAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null || await _userManager.IsEmailConfirmedAsync(user))
+                return false;
+
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            await _emailService.ResendConfirmationEmailAsync(user, token);
+            return true;
+        }
+
+        /// <summary>
+        /// Gửi email để người dùng đặt lại mật khẩu.
+        /// </summary>
+        public async Task<bool> ForgotPasswordAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return false;
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _emailService.SendResetPasswordEmailAsync(user, token);
+            return true;
+        }
+
+        /// <summary>
+        /// Đặt lại mật khẩu mới cho người dùng.
+        /// </summary>
+        public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return false;
+
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            return result.Succeeded;
+        }
     }
 
 }

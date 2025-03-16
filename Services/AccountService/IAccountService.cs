@@ -33,6 +33,11 @@ namespace Services.AccountService
         Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize);
         Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request);
 
+        Task<bool> ConfirmEmailAsync(string userId, string token);
+        Task<bool> ResendConfirmEmailAsync(string email);
+        Task<bool> ForgotPasswordAsync(string email);
+        Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
+
 
     }
 }
