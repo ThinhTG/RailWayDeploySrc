@@ -29,5 +29,7 @@ namespace Models
 
         public virtual Order? Order { get; set; }
 
+        //public virtual Review? Review { get; set; }
+
     }
 }

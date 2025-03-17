@@ -34,9 +34,10 @@ namespace DAO.Contracts
                 }
 
                 // Check số điện thoại hợp lệ (Việt Nam: 10 số, bắt đầu từ 0)
-                if (string.IsNullOrEmpty(PhoneNumber) || !Regex.IsMatch(PhoneNumber, @"^0\d{9}$"))
+                 //|| !Regex.IsMatch(PhoneNumber, @"^0\d{9}$"
+                if (string.IsNullOrEmpty(PhoneNumber))
                 {
-                    throw new BadHttpRequestException("Số điện thoại không hợp lệ (phải có 10 số và bắt đầu từ 0)");
+                    throw new BadHttpRequestException("Số điện thoại không hợp lệ");
                 }
 
                 // Check Password: tối thiểu 6 ký tự, 1 chữ hoa, 1 số, 1 ký tự đặc biệt

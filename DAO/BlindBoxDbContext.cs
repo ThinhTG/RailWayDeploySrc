@@ -37,6 +37,8 @@ namespace DAO
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -68,7 +70,30 @@ namespace DAO
                 .Property(o => o.DiscountMoney)
                 .HasColumnType("decimal(18,2)");
 
+            // Thiết lập khóa chính cho bảng Review
+            modelBuilder.Entity<Review>()
+                .HasKey(r => r.ReviewId);
 
+            //// ✅ Quan hệ: OrderDetail - Review (1-1)
+            //modelBuilder.Entity<Review>()
+            //    .HasOne(r => r.OrderDetail)
+            //    .WithOne(od => od.Review)
+            //    .HasForeignKey<OrderDetail>(od => od.ReviewId)
+            //    .OnDelete(DeleteBehavior.Cascade);
+
+            //// ✅ Quan hệ: Account - Review (1-n)
+            //modelBuilder.Entity<Review>()
+            //    .HasOne(r => r.Account)
+            //    .WithMany(a => a.Reviews)
+            //    .HasForeignKey(r => r.AccountId)
+            //    .OnDelete(DeleteBehavior.Restrict);
+
+            //// ✅ Quan hệ: BlindBox - Review (1-n)
+            //modelBuilder.Entity<Review>()
+            //    .HasOne(r => r.BlindBox)
+            //    .WithMany(p => p.Reviews)
+            //    .HasForeignKey(r => r.ProductId)
+            //    .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

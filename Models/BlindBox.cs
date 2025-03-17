@@ -42,5 +42,8 @@ namespace Models
         [Required]
         [StringLength(50)]
         public string BlindBoxStatus { get; set; }
+
+        //public virtual Review? Review { get; set; }
+
     }
 }
