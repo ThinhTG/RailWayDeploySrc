@@ -577,59 +577,6 @@ namespace DAO.Migrations
                     b.ToTable("PackageImages");
                 });
 
-            modelBuilder.Entity("Models.Review", b =>
-                {
-                    b.Property<string>("ReviewId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("AccountId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("BlindBoxId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("OrderDetailId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OrderDetailId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PackageId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ReviewStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ReviewId");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("BlindBoxId");
-
-                    b.HasIndex("OrderDetailId1");
-
-                    b.HasIndex("PackageId");
-
-                    b.ToTable("Reviews");
-                });
-
             modelBuilder.Entity("Models.Voucher", b =>
                 {
                     b.Property<Guid>("VoucherId")
@@ -851,37 +798,6 @@ namespace DAO.Migrations
                         .HasForeignKey("PackageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Package");
-                });
-
-            modelBuilder.Entity("Models.Review", b =>
-                {
-                    b.HasOne("Models.ApplicationUser", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.BlindBox", "BlindBox")
-                        .WithMany()
-                        .HasForeignKey("BlindBoxId");
-
-                    b.HasOne("Models.OrderDetail", "OrderDetail")
-                        .WithMany()
-                        .HasForeignKey("OrderDetailId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Package", "Package")
-                        .WithMany()
-                        .HasForeignKey("PackageId");
-
-                    b.Navigation("Account");
-
-                    b.Navigation("BlindBox");
-
-                    b.Navigation("OrderDetail");
 
                     b.Navigation("Package");
                 });

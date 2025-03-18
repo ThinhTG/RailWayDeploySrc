@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(BlindBoxDbContext))]
-    [Migration("20250315114503_init")]
+    [Migration("20250318050448_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -287,6 +287,9 @@ namespace DAO.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("AvatarURL")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -351,6 +354,9 @@ namespace DAO.Migrations
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int?>("orderCode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -455,6 +461,9 @@ namespace DAO.Migrations
                     b.Property<string>("Note")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OrderCode")
+                        .HasColumnType("int");
 
                     b.Property<string>("OrderStatus")
                         .IsRequired()

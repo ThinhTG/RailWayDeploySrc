@@ -37,7 +37,7 @@ namespace DAO
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }
-        public DbSet<Review> Reviews { get; set; }
+        //public DbSet<Review> Reviews { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -71,8 +71,8 @@ namespace DAO
                 .HasColumnType("decimal(18,2)");
 
             // Thiết lập khóa chính cho bảng Review
-            modelBuilder.Entity<Review>()
-                .HasKey(r => r.ReviewId);
+            //modelBuilder.Entity<Review>()
+            //    .HasKey(r => r.ReviewId);
 
             //// ✅ Quan hệ: OrderDetail - Review (1-1)
             //modelBuilder.Entity<Review>()
