@@ -37,7 +37,8 @@ namespace DAO
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }
-        //public DbSet<Review> Reviews { get; set; }
+
+        public DbSet<Review> Reviews { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
