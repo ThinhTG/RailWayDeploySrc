@@ -37,7 +37,7 @@ namespace DAO
         public DbSet<OrderDetail> OrderDetails { get; set; }
 
         public DbSet<Voucher> Vouchers { get; set; }
-        public DbSet<Review> Reviews { get; set; }
+        //public DbSet<Review> Reviews { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -70,30 +70,44 @@ namespace DAO
                 .Property(o => o.DiscountMoney)
                 .HasColumnType("decimal(18,2)");
 
-            // Thiết lập khóa chính cho bảng Review
+            // Package - Category relationship
+            modelBuilder.Entity<Package>()
+                .HasOne(o => o.Category)
+                .WithMany()
+                .HasForeignKey(o => o.CategoryId);
+
+            modelBuilder.Entity<BlindBox>()
+           .HasOne(b => b.Package)
+           .WithMany()
+           .HasForeignKey(b => b.PackageId)
+           .OnDelete(DeleteBehavior.NoAction); // Loại bỏ ON DELETE CASCADE
+
+            modelBuilder.Entity<BlindBox>()
+                .HasOne(b => b.Category)
+                .WithMany()
+                .HasForeignKey(b => b.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction); // Loại bỏ ON DELETE CASCADE
+
+
+            // Thiết lập khóa chính cho Review
             modelBuilder.Entity<Review>()
                 .HasKey(r => r.ReviewId);
 
-            //// ✅ Quan hệ: OrderDetail - Review (1-1)
-            //modelBuilder.Entity<Review>()
-            //    .HasOne(r => r.OrderDetail)
-            //    .WithOne(od => od.Review)
-            //    .HasForeignKey<OrderDetail>(od => od.ReviewId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            // ✅ Quan hệ: OrderDetail - Review (1-1)
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.OrderDetail)
+                .WithOne(od => od.Review)
+                .HasForeignKey<OrderDetail>(od => od.OrderDetailId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-            //// ✅ Quan hệ: Account - Review (1-n)
-            //modelBuilder.Entity<Review>()
-            //    .HasOne(r => r.Account)
-            //    .WithMany(a => a.Reviews)
-            //    .HasForeignKey(r => r.AccountId)
-            //    .OnDelete(DeleteBehavior.Restrict);
+            // ✅ Quan hệ: Account - Review (1-n)
+            modelBuilder.Entity<Review>()
+                .HasOne(r => r.Account)
+                .WithMany(a => a.Reviews)
+                .HasForeignKey(r => r.AccountId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-            //// ✅ Quan hệ: BlindBox - Review (1-n)
-            //modelBuilder.Entity<Review>()
-            //    .HasOne(r => r.BlindBox)
-            //    .WithMany(p => p.Reviews)
-            //    .HasForeignKey(r => r.ProductId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+        
         }
     }
 }

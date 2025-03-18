@@ -205,6 +205,10 @@ namespace DAO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("AddressLine1")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -241,7 +245,12 @@ namespace DAO.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("applicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("AddressId");
+
+                    b.HasIndex("applicationUserId");
 
                     b.ToTable("Address");
                 });
@@ -339,6 +348,9 @@ namespace DAO.Migrations
                     b.Property<DateTime?>("RefreshTokenExpiryTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -384,6 +396,12 @@ namespace DAO.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryId1")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -392,6 +410,9 @@ namespace DAO.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<Guid>("PackageId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PackageId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<float?>("Percent")
@@ -407,6 +428,14 @@ namespace DAO.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("BlindBoxId");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("CategoryId1");
+
+                    b.HasIndex("PackageId");
+
+                    b.HasIndex("PackageId1");
 
                     b.ToTable("BlindBoxes");
                 });
@@ -506,6 +535,9 @@ namespace DAO.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("OrderDetailId");
 
                     b.HasIndex("BlindBoxId");
@@ -527,6 +559,9 @@ namespace DAO.Migrations
                         .HasColumnType("int");
 
                     b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -552,6 +587,8 @@ namespace DAO.Migrations
                     b.HasKey("PackageId");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("CategoryId1");
 
                     b.ToTable("Packages");
                 });
@@ -579,15 +616,13 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Review", b =>
                 {
-                    b.Property<string>("ReviewId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("ReviewId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccountId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
-
-                    b.Property<Guid?>("BlindBoxId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comment")
                         .IsRequired()
@@ -599,12 +634,6 @@ namespace DAO.Migrations
                     b.Property<string>("OrderDetailId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("OrderDetailId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("PackageId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ProductId")
                         .IsRequired()
@@ -621,13 +650,7 @@ namespace DAO.Migrations
 
                     b.HasIndex("AccountId");
 
-                    b.HasIndex("BlindBoxId");
-
-                    b.HasIndex("OrderDetailId1");
-
-                    b.HasIndex("PackageId");
-
-                    b.ToTable("Reviews");
+                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("Models.Voucher", b =>
@@ -799,6 +822,42 @@ namespace DAO.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Models.Address", b =>
+                {
+                    b.HasOne("Models.ApplicationUser", "applicationUser")
+                        .WithMany()
+                        .HasForeignKey("applicationUserId");
+
+                    b.Navigation("applicationUser");
+                });
+
+            modelBuilder.Entity("Models.BlindBox", b =>
+                {
+                    b.HasOne("Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Models.Category", null)
+                        .WithMany("BlindBoxes")
+                        .HasForeignKey("CategoryId1");
+
+                    b.HasOne("Models.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Models.Package", null)
+                        .WithMany("BlindBoxes")
+                        .HasForeignKey("PackageId1");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Package");
+                });
+
             modelBuilder.Entity("Models.Order", b =>
                 {
                     b.HasOne("Models.ApplicationUser", "Account")
@@ -816,6 +875,12 @@ namespace DAO.Migrations
                         .WithMany()
                         .HasForeignKey("BlindBoxId");
 
+                    b.HasOne("Models.Review", "Review")
+                        .WithOne("OrderDetail")
+                        .HasForeignKey("Models.OrderDetail", "OrderDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Models.Order", "Order")
                         .WithMany("OrderDetails")
                         .HasForeignKey("OrderId")
@@ -831,15 +896,21 @@ namespace DAO.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Package");
+
+                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("Models.Package", b =>
                 {
                     b.HasOne("Models.Category", "Category")
-                        .WithMany("Packages")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("Models.Category", null)
+                        .WithMany("Packages")
+                        .HasForeignKey("CategoryId1");
 
                     b.Navigation("Category");
                 });
@@ -858,32 +929,12 @@ namespace DAO.Migrations
             modelBuilder.Entity("Models.Review", b =>
                 {
                     b.HasOne("Models.ApplicationUser", "Account")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Models.BlindBox", "BlindBox")
-                        .WithMany()
-                        .HasForeignKey("BlindBoxId");
-
-                    b.HasOne("Models.OrderDetail", "OrderDetail")
-                        .WithMany()
-                        .HasForeignKey("OrderDetailId1")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.Package", "Package")
-                        .WithMany()
-                        .HasForeignKey("PackageId");
 
                     b.Navigation("Account");
-
-                    b.Navigation("BlindBox");
-
-                    b.Navigation("OrderDetail");
-
-                    b.Navigation("Package");
                 });
 
             modelBuilder.Entity("Models.Voucher", b =>
@@ -929,8 +980,15 @@ namespace DAO.Migrations
                     b.Navigation("Wallet");
                 });
 
+            modelBuilder.Entity("Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Reviews");
+                });
+
             modelBuilder.Entity("Models.Category", b =>
                 {
+                    b.Navigation("BlindBoxes");
+
                     b.Navigation("Packages");
                 });
 
@@ -945,9 +1003,17 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Package", b =>
                 {
+                    b.Navigation("BlindBoxes");
+
                     b.Navigation("Cart");
 
                     b.Navigation("Images");
+                });
+
+            modelBuilder.Entity("Models.Review", b =>
+                {
+                    b.Navigation("OrderDetail")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Wallet", b =>

@@ -1,6 +1,7 @@
 ﻿using DAO;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Repositories.Pagging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -53,5 +54,9 @@ namespace Repositories.Product
                 await _context.SaveChangesAsync();
             }
         }
+
+     
+
+   
     }
 }

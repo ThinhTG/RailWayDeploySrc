@@ -44,6 +44,9 @@ namespace Models
 
         public virtual Cart? Cart { get; set; }
 
+        public virtual ICollection<BlindBox>? BlindBoxes { get; set; }
+
+
         //public virtual Review? Review { get; set; }
 
 

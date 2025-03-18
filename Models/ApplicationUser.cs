@@ -8,6 +8,12 @@ namespace Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
 
+        public Guid? ReviewId { get; set; }
+
+        public virtual ICollection<Review>? Reviews { get; set; }
+
+
+
         //public string Gender { get; set; }
         //public string PhoneNumber { get; set; } 
         //public string Address { get; set; } 
@@ -24,6 +30,8 @@ namespace Models
         public DateTime UpdateAt { get; set; }
 
         public int? orderCode { get; set; }
+
+        
 
     }
 }

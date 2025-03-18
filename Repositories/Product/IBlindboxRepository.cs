@@ -1,4 +1,5 @@
 ﻿using Models;
+using Repositories.Pagging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,5 +14,6 @@ namespace Repositories.Product
         Task DeleteAsync(Guid id);
 
         IQueryable<BlindBox> GetAll();
+     
     }
 }

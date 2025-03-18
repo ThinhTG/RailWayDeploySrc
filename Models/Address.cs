@@ -15,6 +15,9 @@ namespace Models
         public string AddressId { get; set; }
 
         [Required]
+        public string AccountId { get; set; }
+
+        [Required]
         [StringLength(255)]
         public string AddressLine1 { get; set; }
 
@@ -44,6 +47,6 @@ namespace Models
         [Required]
         public DateTime UpdatedAt { get; set; }
 
-        //public virtual ApplicationUser? applicationUser { get; set; }
+        public virtual ApplicationUser? applicationUser { get; set; }
     }
 }
