@@ -49,6 +49,41 @@ public class PaymentController : ControllerBase
         }
     }
 
+    // Tạo link thanh toán
+    [HttpPost("createPaymentMB")]
+    public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentLinkRequestMB body)
+    {
+        if (body == null) return BadRequest(new Response(-1, "Request body is null", null));
+
+        try
+        {
+            var paymentLink = await _paymentService.CreatePaymentLinkMBAsync(body);
+            return Ok(new Response(0, "Success", paymentLink));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return StatusCode(500, new Response(-1, "Internal Server Error", null));
+        }
+    }
+
+    [HttpPost("createDepositMB")]
+    public async Task<IActionResult> CreateDeposit([FromBody] CreatePaymentLinkRequestMBV2 body)
+    {
+        if (body == null) return BadRequest(new Response(-1, "Request body is null", null));
+
+        try
+        {
+            var paymentLink = await _paymentService.CreatePaymentLinkDepositMBAsync(body);
+            return Ok(new Response(0, "Success", paymentLink));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return StatusCode(500, new Response(-1, "Internal Server Error", null));
+        }
+    }
+
     // Lấy thông tin thanh toán theo orderCode
     [HttpGet("{orderCode}")]
     public async Task<IActionResult> GetPayment(int orderCode)
