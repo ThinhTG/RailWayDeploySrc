@@ -67,7 +67,7 @@ namespace BlindBoxSS.API.Controllers
         {
             bool isConfirmed = await _accountService.ConfirmEmailAsync(userId, token);
             if (isConfirmed)
-                return Ok("Email xác nhận thành công!");
+                return Redirect("http://localhost:3000/welcome");   // deploy sửa lại
             return BadRequest("Xác nhận email thất bại.");
         }
 
