@@ -7,7 +7,6 @@ using Services.Product;
 
 [Route("api/packages")]
 [ApiController]
-[Authorize]
 public class PackageController : ControllerBase
 {
     private readonly IPackageService _packageService;
@@ -25,11 +24,11 @@ public class PackageController : ControllerBase
         return Ok(packages);
     }
     /// <summary>
-    ///  Lấy danh sách blindboxes có phân trang
+    ///  Lấy danh sách Packages có phân trang
     /// </summary>
     /// <param name="pageNumber">Số Trang</param>
-    /// <param name="pageSize">Số lượng BlindBox trên mỗi trang</param>
-    /// <returns>Danh sách BlindBox </returns>
+    /// <param name="pageSize">Số lượng Package trên mỗi trang</param>
+    /// <returns>Danh sách Packge </returns>
     [HttpGet("paged")]
     [CacheAttribute(1000)]
     public async Task<IActionResult> GetPaged(int pageNumber = 1, int pageSize = 10)
