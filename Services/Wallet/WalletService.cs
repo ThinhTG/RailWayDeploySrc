@@ -1,6 +1,10 @@
-﻿using Models;
+﻿using Microsoft.Extensions.Configuration;
+using Models;
 using Repositories.WalletRepo;
+using Services.Payment;
 using Services.Wallet;
+using System.Globalization;
+using TimeZoneConverter;
 
 namespace BlindBoxSS.API.Services
 {
@@ -8,11 +12,15 @@ namespace BlindBoxSS.API.Services
     {
         private readonly IWalletRepository _walletRepository;
         private readonly IWalletTransactionService _walletTransactionService;
+        private readonly IPaymentService _paymentService;
+        private readonly IConfiguration _configuration;
 
-        public WalletService(IWalletRepository walletRepository, IWalletTransactionService walletTransactionService)
+        public WalletService(IWalletRepository walletRepository, IWalletTransactionService walletTransactionService,IConfiguration configuration, IPaymentService paymentService)
         {
             _walletRepository = walletRepository;
             _walletTransactionService = walletTransactionService;
+            _paymentService = paymentService;
+            _configuration = configuration;
         }
 
         public async Task<Wallet> GetWalletByAccountId(string accountId)
@@ -26,19 +34,46 @@ namespace BlindBoxSS.API.Services
             return wallet;
         }
 
-        public async Task AddMoneyToWalletAsync(string accountId, int amount)
+        public async Task AddMoneyToWalletAsync(string accountId, int amount,int orderCode)
         {
+            var dateFormat = _configuration["TransactionSettings:DateFormat"] ?? "yyyy-MM-ddTHH:mm:ssZ";
+            bool useUTC = bool.TryParse(_configuration["TransactionSettings:UseUTC"], out bool utc) && utc;
+            var timeZoneId = _configuration["TransactionSettings:TimeZone"] ?? "UTC";
+            DateTime transactionDatetime = DateTime.UtcNow; // Default to UTC
+
             var wallet = await _walletRepository.GetWalletByAccountIdAsync(accountId);
             if (wallet == null)
             {
                 throw new Exception("Wallet not found");
             }
 
-            wallet.Balance += amount;
-            await _walletRepository.UpdateWalletAsync(wallet);
+            //check payment status
+            var checkingPayment = await _paymentService.GetPaymentLinkInformationAsync(orderCode);
+                if (checkingPayment.status == "PAID")
+            {
+                wallet.Balance += amount;
+                await _walletRepository.UpdateWalletAsync(wallet);
+            }
+           
+
+            if (!useUTC)
+            {
+                try
+                {
+                    // Convert UTC time to specified TimeZone
+                    TimeZoneInfo timeZone = TZConvert.GetTimeZoneInfo(timeZoneId);
+                    transactionDatetime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+                }
+                catch (TimeZoneNotFoundException)
+                {
+                    throw new Exception("Invalid TimeZone");
+                }
+            }
+
             try
             {
-                await _walletTransactionService.AddWalletTransactionAsync(wallet.WalletId, amount, "deposit", "success", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"), wallet.Balance, null);
+                
+                await _walletTransactionService.AddWalletTransactionAsync(wallet.WalletId, amount, "deposit", "success", transactionDatetime.ToString(dateFormat, CultureInfo.InvariantCulture), wallet.Balance, null);
             }
             catch (Exception ex) {
                 throw new Exception(ex.Message);
@@ -47,6 +82,11 @@ namespace BlindBoxSS.API.Services
 
         public async Task<bool> UseWalletForPurchaseAsync(string accountId, int amount, int? orderId)
         {
+            var dateFormat = _configuration["TransactionSettings:DateFormat"] ?? "yyyy-MM-ddTHH:mm:ssZ";
+            bool useUTC = bool.TryParse(_configuration["TransactionSettings:UseUTC"], out bool utc) && utc;
+            var timeZoneId = _configuration["TransactionSettings:TimeZone"] ?? "UTC";
+            DateTime transactionDatetime = DateTime.UtcNow; // Default to UTC
+
             var wallet = await _walletRepository.GetWalletByAccountIdAsync(accountId);
             if (wallet == null)
             {
@@ -59,18 +99,32 @@ namespace BlindBoxSS.API.Services
             wallet.Balance -= amount;
             await _walletRepository.UpdateWalletAsync(wallet);
 
+            if (!useUTC)
+            {
+                try
+                {
+                    // Convert UTC time to specified TimeZone
+                    TimeZoneInfo timeZone = TZConvert.GetTimeZoneInfo(timeZoneId);
+                    transactionDatetime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+                }
+                catch (TimeZoneNotFoundException)
+                {
+                    throw new Exception("Invalid TimeZone");
+                }
+            }
+
             var walletTransaction = new WalletTransaction
             {
                 WalletId = wallet.WalletId,
                 Amount = amount,
                 TransactionType = "Debit",
                 TransactionStatus = "Success",
-                TransactionDate = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                TransactionDate = transactionDatetime.ToString(dateFormat, CultureInfo.InvariantCulture),
                 TransactionBalance = wallet.Balance.ToString(),
                 OrderId = orderId
             };
 
-            await _walletTransactionService.AddWalletTransactionAsync(wallet.WalletId, amount, "purchase", "success", DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ssZ"), wallet.Balance, orderId);
+            await _walletTransactionService.AddWalletTransactionAsync(wallet.WalletId, amount, "purchase", "success", transactionDatetime.ToString(dateFormat, CultureInfo.InvariantCulture), wallet.Balance, orderId);
             return true;
         }
     }

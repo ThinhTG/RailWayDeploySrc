@@ -44,14 +44,14 @@ public class WalletController : ControllerBase
 
     // Nạp tiền vào ví
     [HttpPost("{accountId}/deposit")]
-    public async Task<IActionResult> AddMoney(string accountId, [FromQuery] int amount)
+    public async Task<IActionResult> AddMoney(string accountId, [FromQuery] int amount, int orderCode)
     {
         if (string.IsNullOrEmpty(accountId) || amount <= 0)
             return BadRequest(new { Message = "Invalid accountId or amount." });
 
         try
         {
-            await _walletService.AddMoneyToWalletAsync(accountId, amount);
+            await _walletService.AddMoneyToWalletAsync(accountId, amount, orderCode);
             return Ok(new { Message = "Deposit successful. Wallet updated." });
         }
         catch (Exception ex)

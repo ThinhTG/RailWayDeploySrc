@@ -8,7 +8,7 @@ namespace Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int OrderId { get; set; } 
+        public int OrderId { get; set; }
 
         [Required]
         public String AccountId { get; set; }
@@ -36,6 +36,8 @@ namespace Models
 
         [Required]
         public int PhoneNumber { get; set; }
+
+        public int? OrderCode { get; set; }
 
         [Required]
         public decimal DiscountMoney { get; set; }

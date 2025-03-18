@@ -15,7 +15,7 @@ public class PaymentController : ControllerBase
     }
 
     // Tạo link thanh toán
-    [HttpPost("create")]
+    [HttpPost("createPayment")]
     public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentLinkRequest body)
     {
         if (body == null) return BadRequest(new Response(-1, "Request body is null", null));
@@ -32,13 +32,30 @@ public class PaymentController : ControllerBase
         }
     }
 
-    // Lấy thông tin thanh toán theo orderId
-    [HttpGet("{orderId}")]
-    public async Task<IActionResult> GetPayment(int orderId)
+    [HttpPost("createDeposit")]
+    public async Task<IActionResult> CreateDeposit([FromBody] CreatePaymentLinkRequestV2 body)
+    {
+        if (body == null) return BadRequest(new Response(-1, "Request body is null", null));
+
+        try
+        {
+            var paymentLink = await _paymentService.CreatePaymentLinkDepositAsync(body);
+            return Ok(new Response(0, "Success", paymentLink));
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            return StatusCode(500, new Response(-1, "Internal Server Error", null));
+        }
+    }
+
+    // Lấy thông tin thanh toán theo orderCode
+    [HttpGet("{orderCode}")]
+    public async Task<IActionResult> GetPayment(int orderCode)
     {
         try
         {
-            var paymentInfo = await _paymentService.GetPaymentLinkInformationAsync(orderId);
+            var paymentInfo = await _paymentService.GetPaymentLinkInformationAsync(orderCode);
             return Ok(new Response(0, "Success", paymentInfo));
         }
         catch (Exception ex)

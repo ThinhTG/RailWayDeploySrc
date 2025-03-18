@@ -3,21 +3,22 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
 {
-    public class PackageImage
+    public class BlindBoxImage
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid PackageImageId { get; set; }
+        public Guid BlindBoxImageId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public Guid PackageId { get; set; }
+        public Guid BlindBoxId { get; set; }
 
         [Required]
         [StringLength(255)]
         public string ImageUrl { get; set; }
 
         [Required]
-        [ForeignKey("PackageId")]
-        public virtual Package? Package { get; set; }
+        [ForeignKey("BlindBoxId")]
+        public virtual BlindBox? BlindBox { get; set; }
+
     }
 }

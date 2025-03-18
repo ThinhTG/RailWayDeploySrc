@@ -38,6 +38,6 @@ namespace Services.AccountService
         Task<bool> ForgotPasswordAsync(string email);
         Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
 
-
+        Task<UserResponse> UpdateAsync(Guid parseID, UpdateOrderCodeRequest newacount);
     }
 }

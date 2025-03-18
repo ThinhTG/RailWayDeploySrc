@@ -255,6 +255,22 @@ namespace Services.AccountService
             return _mapper.Map<UserResponse>(user);
         }
 
+        public async Task<UserResponse> UpdateAsync(Guid id, UpdateOrderCodeRequest request)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+            {
+                _logger.LogError("User not found");
+                throw new Exception("User not found");
+            }
+
+            user.UpdateAt = DateTime.Now;
+            user.orderCode = request.orderCode;
+
+            await _userManager.UpdateAsync(user);
+            return _mapper.Map<UserResponse>(user);
+        }
+
         public async Task DeleteAsync(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());

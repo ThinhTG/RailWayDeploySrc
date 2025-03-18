@@ -11,7 +11,8 @@ namespace Services.Payment
     public interface IPaymentService
     {
         Task<CreatePaymentResult> CreatePaymentLinkAsync(CreatePaymentLinkRequest request);
-        Task<PaymentLinkInformation> GetPaymentLinkInformationAsync(int orderId);
+        Task<CreatePaymentResult> CreatePaymentLinkDepositAsync(CreatePaymentLinkRequestV2 request);
+        Task<PaymentLinkInformation> GetPaymentLinkInformationAsync(int orderCode);
         Task ConfirmWebhookAsync(string webhookUrl);
         WebhookData VerifyPaymentWebhookData(WebhookType webhookType);
     }

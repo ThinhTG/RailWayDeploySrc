@@ -34,7 +34,7 @@ namespace DAO.Contracts
                 }
 
                 // Check số điện thoại hợp lệ (Việt Nam: 10 số, bắt đầu từ 0)
-                 //|| !Regex.IsMatch(PhoneNumber, @"^0\d{9}$"
+                //|| !Regex.IsMatch(PhoneNumber, @"^0\d{9}$"
                 if (string.IsNullOrEmpty(PhoneNumber))
                 {
                     throw new BadHttpRequestException("Số điện thoại không hợp lệ");
@@ -94,6 +94,7 @@ namespace DAO.Contracts
             public string? RefreshToken { get; set; }
 
             public string Address { get; set; }
+            public int? orderCode { get; set; }
 
 
         }
@@ -105,7 +106,7 @@ namespace DAO.Contracts
             public string Gender { get; set; }
 
             public string FullName { get; set; }
-            public string? PhoneNumber { get; set; } 
+            public string? PhoneNumber { get; set; }
             public DateTime CreateAt { get; set; }
             public DateTime UpdateAt { get; set; }
             public string Address { get; set; }
@@ -153,5 +154,11 @@ namespace DAO.Contracts
         {
             public string RefreshToken { get; set; }
         }
+
+        public class UpdateOrderCodeRequest
+        {
+            public int? orderCode { get; set; }
+        }
+
     }
 }
