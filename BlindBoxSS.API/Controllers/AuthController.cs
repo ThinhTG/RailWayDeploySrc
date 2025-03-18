@@ -60,6 +60,7 @@ namespace BlindBoxSS.API.Controllers
             return Ok();
         }
 
+        [HttpGet("confirm-email")]
         [HttpPost("confirm-email")]
         [AllowAnonymous]
         public async Task<IActionResult> ConfirmEmail([FromQuery] string userId, [FromQuery] string token)

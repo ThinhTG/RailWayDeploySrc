@@ -60,7 +60,6 @@ namespace Services.Email
             var message = $"Vui lòng nhấp vào link để xác thực email: <a href='{confirmationLink}'>Xác nhận</a>";
             await SendEmailAsync(user.Email, "Xác thực email", message);
         }
-
         public async Task ResendConfirmationEmailAsync(ApplicationUser user, string token)
         {
             var encodedToken = Uri.EscapeDataString(token);

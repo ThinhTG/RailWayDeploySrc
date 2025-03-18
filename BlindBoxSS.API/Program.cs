@@ -13,6 +13,7 @@ PayOS payOS = new PayOS(configuration["PaymentEnvironment:PAYOS_CLIENT_ID"] ?? t
 builder.Services.AddSingleton(payOS);
 
 
+
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 // Đăng ký dịch vụ thông qua DI Installer
@@ -48,6 +49,8 @@ app.Use(async (context, next) =>
         await context.Response.WriteAsync("{ \"message\": \"You don't have permission for this action. Please login with an Admin account.\" }");
     }
 });
+
+
 
 app.UseExceptionHandler(_ => { });
 app.UseHttpsRedirection();
