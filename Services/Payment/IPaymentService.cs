@@ -12,6 +12,8 @@ namespace Services.Payment
     {
         Task<CreatePaymentResult> CreatePaymentLinkAsync(CreatePaymentLinkRequest request);
         Task<CreatePaymentResult> CreatePaymentLinkDepositAsync(CreatePaymentLinkRequestV2 request);
+        Task<CreatePaymentResult> CreatePaymentLinkMBAsync(CreatePaymentLinkRequestMB request);
+        Task<CreatePaymentResult> CreatePaymentLinkDepositMBAsync(CreatePaymentLinkRequestMBV2 request);
         Task<PaymentLinkInformation> GetPaymentLinkInformationAsync(int orderCode);
         Task ConfirmWebhookAsync(string webhookUrl);
         WebhookData VerifyPaymentWebhookData(WebhookType webhookType);

@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using Repositories.Pagging;
 using Repositories.Product;
 using System;
@@ -46,5 +47,36 @@ namespace Services.Product
         {
             await _repository.DeleteAsync(id);
         }
+
+        public async Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
+        {
+            IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchByCategory))
+            {
+                blindBoxes = blindBoxes
+                    .Include(b => b.Category)
+                    .Where(b => b.Category.CategoryName.Contains(searchByCategory));
+            }
+
+            if (!string.IsNullOrEmpty(searchByName))
+            {
+                blindBoxes = blindBoxes.Where(b => b.BlindBoxName.Contains(searchByName));
+            }
+
+            if (minPrice.HasValue)
+            {
+                blindBoxes = blindBoxes.Where(b => b.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                blindBoxes = blindBoxes.Where(b => b.Price <= maxPrice.Value);
+            }
+
+            return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
+        }
+
+      
     }
 }

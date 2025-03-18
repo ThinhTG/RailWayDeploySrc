@@ -8,7 +8,7 @@ namespace Models
 {
     public class Review
     {
-        public string ReviewId { get; set; }
+        public Guid ReviewId { get; set; }
         public string ProductId { get; set; }
         public string OrderDetailId { get; set; }
         public string AccountId { get; set; }
@@ -18,11 +18,11 @@ namespace Models
         public string ReviewStatus { get; set; }
 
         // Quan hệ navigation
-        public OrderDetail OrderDetail { get; set; }
-        public ApplicationUser Account { get; set; }
-        public BlindBox? BlindBox { get; set; }
+        public virtual OrderDetail OrderDetail { get; set; }
+        public virtual ApplicationUser Account { get; set; }
+        //public virtual BlindBox? BlindBox { get; set; }
 
-        public Package? Package { get; set; }
+        //public virtual Package? Package { get; set; }
     }
 
 }
