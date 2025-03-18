@@ -111,12 +111,13 @@ namespace Services.AccountService
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user == null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                throw new UnauthorizedAccessException("Invalid email or password");
+                throw new ArgumentException("Invalid email or password");
             }
 
             if (!user.EmailConfirmed)
             {
-                return null;
+                //return null;
+                throw new AuthenticationException("Email is not confirmed");
             }
 
             // Generate access token
