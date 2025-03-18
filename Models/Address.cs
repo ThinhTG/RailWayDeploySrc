@@ -8,12 +8,14 @@ using System.Threading.Tasks;
 
 namespace Models
 {
+    [Table("Address")]
     public class Address
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string AddressId { get; set; }
-
+        public Guid AddressId { get; set; } = Guid.NewGuid();
+        [Required]
+        public string AccountId { get; set; }
         [Required]
         public string AccountId { get; set; }
 

@@ -14,6 +14,8 @@ using Repositories.CategoryRepo;
 using Services.CategoryS;
 using Repositories.VocherRepo;
 using Services.VocherS;
+using Repositories.AddressRepo;
+using Services.AddressS;
 
 namespace BlindBoxSS.API.DI
 {
@@ -43,6 +45,8 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IVocherRepository, VocherRepository>();
             services.AddScoped<IVocherService, VocherService>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAddressService, AddressService>();
         }
     }
 }
