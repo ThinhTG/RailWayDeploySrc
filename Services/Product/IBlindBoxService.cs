@@ -17,5 +17,7 @@ namespace Services.Product
         Task DeleteAsync(Guid id);
 
         Task<PaginatedList<BlindBox>> GetAll(int pageNumber, int pageSize);
+
+        Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize);
     }
 }

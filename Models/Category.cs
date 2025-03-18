@@ -26,5 +26,7 @@ namespace Models
 
         public virtual ICollection<Package>? Packages { get; set; }
 
+        public virtual ICollection<BlindBox>? BlindBoxes { get; set; }
+
     }
 }

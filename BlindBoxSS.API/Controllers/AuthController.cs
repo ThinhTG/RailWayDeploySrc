@@ -100,5 +100,7 @@ namespace BlindBoxSS.API.Controllers
         {
             return Ok(await _accountService.LoginGoogle(request));
         }
+
+        
     }
 }

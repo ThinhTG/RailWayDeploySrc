@@ -17,6 +17,14 @@ namespace Models
         [Required]
         public Guid PackageId { get; set; }
 
+        public virtual Package Package { get; set; }    
+
+
+        [Required]
+        public Guid CategoryId { get; set; }
+
+        public virtual Category Category { get; set; }
+
         [Required]
         [StringLength(255)]
         public string BlindBoxName { get; set; }

@@ -25,7 +25,7 @@ public class BlindBoxController : ControllerBase
         return Ok(blindBoxes);
     }
 
-  
+
     /// <summary>
     ///  Lấy danh sách blindboxes có phân trang
     /// </summary>
@@ -34,9 +34,9 @@ public class BlindBoxController : ControllerBase
     /// <returns>Danh sách BlindBox </returns>
     [HttpGet("paged")]
     [CacheAttribute(1000)]
-    public async Task<IActionResult> GetPaged(int pageNumber = 1, int pageSize = 10)
+    public async Task<IActionResult> GetPaged(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
     {
-        var result = await _service.GetAll(pageNumber, pageSize);
+        var result = await _service.GetAllFilter(searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
         return Ok(result);
     }
 

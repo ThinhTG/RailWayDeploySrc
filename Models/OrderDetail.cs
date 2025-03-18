@@ -13,6 +13,8 @@ namespace Models
         [Required]
         public int OrderId { get; set; }
 
+        public Guid? ReviewId { get; set; }
+
         public Guid? BlindBoxId { get; set; }
 
         public Guid? PackageId { get; set; }
@@ -29,7 +31,7 @@ namespace Models
 
         public virtual Order? Order { get; set; }
 
-        //public virtual Review? Review { get; set; }
+        public virtual Review? Review { get; set; }
 
     }
 }
