@@ -30,7 +30,6 @@ public class PackageController : ControllerBase
     /// <param name="pageSize">Số lượng Package trên mỗi trang</param>
     /// <returns>Danh sách Packge </returns>
     [HttpGet("paged")]
-    [CacheAttribute(1000)]
     public async Task<IActionResult> GetPaged(int pageNumber = 1, int pageSize = 10)
     {
         var result = await _packageService.GetAll(pageNumber, pageSize);
