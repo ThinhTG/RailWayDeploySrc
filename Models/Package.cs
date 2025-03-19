@@ -40,8 +40,6 @@ namespace Models
         public virtual Cart? Cart { get; set; }
 
         public virtual ICollection<BlindBox>? BlindBoxes { get; set; }
-
-        public Guid? OrderDetailId { get; set; }
         public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }
