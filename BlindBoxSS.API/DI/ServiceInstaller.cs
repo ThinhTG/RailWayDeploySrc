@@ -52,7 +52,6 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IAddressService, AddressService>();
-
         }
     }
 }

@@ -455,7 +455,7 @@ namespace Services.AccountService
         public async Task<bool> ForgotPasswordAsync(string email)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null) return false;
+            if (user == null) throw new KeyNotFoundException("User not found");
 
             var token = await _userManager.GeneratePasswordResetTokenAsync(user);
             await _emailService.SendResetPasswordEmailAsync(user, token);
@@ -468,7 +468,7 @@ namespace Services.AccountService
         public async Task<bool> ResetPasswordAsync(string email, string token, string newPassword)
         {
             var user = await _userManager.FindByEmailAsync(email);
-            if (user == null) return false;
+            if (user == null) throw new KeyNotFoundException("User not found");
 
             var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
             return result.Succeeded;

@@ -15,7 +15,7 @@ namespace Services.Product
         Task<Package> AddPackageAsync(Package package);
         Task<Package?> UpdatePackageAsync(Package package);
         Task<bool> DeletePackageAsync(Guid id);
-
-        Task<PaginatedList<Package>> GetAll(int pageNumber, int pageSize);
+        Task<IEnumerable<Package>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice);
+        Task<PaginatedList<Package>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize);
     }
 }

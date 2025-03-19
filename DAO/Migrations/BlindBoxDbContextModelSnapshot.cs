@@ -201,9 +201,9 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Address", b =>
                 {
-                    b.Property<string>("AddressId")
+                    b.Property<Guid>("AddressId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccountId")
                         .IsRequired()
@@ -540,7 +540,9 @@ namespace DAO.Migrations
 
                     b.HasKey("OrderDetailId");
 
-                    b.HasIndex("BlindBoxId");
+                    b.HasIndex("BlindBoxId")
+                        .IsUnique()
+                        .HasFilter("[BlindBoxId] IS NOT NULL");
 
                     b.HasIndex("OrderId");
 
@@ -567,6 +569,9 @@ namespace DAO.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.Property<Guid?>("OrderDetailId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("PackageName")
                         .IsRequired()
@@ -631,13 +636,8 @@ namespace DAO.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderDetailId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("OrderDetailId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -872,8 +872,9 @@ namespace DAO.Migrations
             modelBuilder.Entity("Models.OrderDetail", b =>
                 {
                     b.HasOne("Models.BlindBox", "BlindBox")
-                        .WithMany()
-                        .HasForeignKey("BlindBoxId");
+                        .WithOne("OrderDetail")
+                        .HasForeignKey("Models.OrderDetail", "BlindBoxId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Models.Review", "Review")
                         .WithOne("OrderDetail")
@@ -888,7 +889,7 @@ namespace DAO.Migrations
                         .IsRequired();
 
                     b.HasOne("Models.Package", "Package")
-                        .WithMany()
+                        .WithMany("OrderDetails")
                         .HasForeignKey("PackageId");
 
                     b.Navigation("BlindBox");
@@ -985,6 +986,12 @@ namespace DAO.Migrations
                     b.Navigation("Reviews");
                 });
 
+            modelBuilder.Entity("Models.BlindBox", b =>
+                {
+                    b.Navigation("OrderDetail")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Navigation("BlindBoxes");
@@ -1008,6 +1015,8 @@ namespace DAO.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Images");
+
+                    b.Navigation("OrderDetails");
                 });
 
             modelBuilder.Entity("Models.Review", b =>

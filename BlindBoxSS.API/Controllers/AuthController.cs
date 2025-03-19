@@ -84,7 +84,7 @@ namespace BlindBoxSS.API.Controllers
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
             await _accountService.ForgotPasswordAsync(request.Email);
-            return Ok();
+            return Ok("Send Email Successfull, please check your email to reset Password");
         }
 
         [HttpPost("reset-password")]
