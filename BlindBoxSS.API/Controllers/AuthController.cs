@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Services.AccountService;
+using Services.DTO;
 using Services.Request;
 using static DAO.Contracts.UserRequestAndResponse;
 
@@ -101,6 +103,21 @@ namespace BlindBoxSS.API.Controllers
             return Ok(await _accountService.LoginGoogle(request));
         }
 
-        
+
+        /// <summary>
+        /// Update Ảnh Đại diện
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPut("update-avatar")]
+        public async Task<IActionResult> UpdateAvatar([FromBody] UpdateAvatarDTO model)
+        {
+            var isUpdated = await _accountService.UpdateAvatarAsync(model.AccountId,model.AvatarURL);
+            if (isUpdated == null) return NotFound("User not found");
+
+            return Ok(new { message = "Avatar updated successfully" });
+        }
+
+
     }
 }
