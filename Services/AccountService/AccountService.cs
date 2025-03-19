@@ -146,6 +146,7 @@ namespace Services.AccountService
             userResponse.AccessToken = token;
             userResponse.RefreshToken = refreshToken;
             userResponse.Address = user.Address;
+            userResponse.AvatarURL = user.AvatarURL;
 
             return userResponse;
         }

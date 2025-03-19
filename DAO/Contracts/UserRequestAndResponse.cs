@@ -87,6 +87,7 @@ namespace DAO.Contracts
             public string Email { get; set; }
             public string Gender { get; set; }
 
+            public string? AvatarURL { get; set; }
             public string? PhoneNumber { get; set; } // Thêm số điện thoại
             public DateTime CreateAt { get; set; }
             public DateTime UpdateAt { get; set; }
