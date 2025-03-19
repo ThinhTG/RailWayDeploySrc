@@ -13,12 +13,10 @@ namespace Models
         [Required]
         public string AccountId { get; set; }
 
-        public virtual ApplicationUser? Account { get; set; }
-
         [Required]
-        public int Balance { get; set; }
+        public decimal Balance { get; set; }
 
-        public virtual ApplicationUser? ApplicationUser { get; set; }
+        public virtual ICollection<ApplicationUser>? ApplicationUser { get; set; }
 
         public virtual ICollection<WalletTransaction> WalletTransactions { get; set; }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Models;
+using Repositories.WalletRepo;
 
 namespace BlindBoxSS.API
 {
@@ -41,6 +42,14 @@ namespace BlindBoxSS.API
                 };
 
                 var result = await userManager.CreateAsync(adminUser, "Admin@123");
+                //create wallet for user
+                var wallet = new Wallet
+                {
+                    WalletId = Guid.NewGuid(),
+                    AccountId = adminUser.Id,
+                    Balance = 0
+                };
+                await serviceProvider.GetRequiredService<IWalletRepository>().CreateWallet(wallet);
 
                 if (!result.Succeeded)
                 {

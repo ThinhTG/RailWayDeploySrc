@@ -13,7 +13,7 @@ namespace Models
         [Required]
         public Guid WalletId { get; set; }
         [Required]
-        public int Amount { get; set; }
+        public decimal Amount { get; set; }
         [Required]
         public string TransactionType { get; set; } = string.Empty;
         [Required]

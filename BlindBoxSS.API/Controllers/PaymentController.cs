@@ -100,41 +100,41 @@ public class PaymentController : ControllerBase
         }
     }
 
-    // Xác nhận Webhook
-    [HttpPost("webhook/confirm")]
-    public async Task<IActionResult> ConfirmWebhook([FromBody] ConfirmWebhook body)
-    {
-        try
-        {
-            await _paymentService.ConfirmWebhookAsync(body.webhook_url);
-            return Ok(new Response(0, "Success", null));
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            return StatusCode(500, new Response(-1, "Internal Server Error", null));
-        }
-    }
+    //// Xác nhận Webhook
+    //[HttpPost("webhook/confirm")]
+    //public async Task<IActionResult> ConfirmWebhook([FromBody] ConfirmWebhook body)
+    //{
+    //    try
+    //    {
+    //        await _paymentService.ConfirmWebhookAsync(body.webhook_url);
+    //        return Ok(new Response(0, "Success", null));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Console.WriteLine(ex);
+    //        return StatusCode(500, new Response(-1, "Internal Server Error", null));
+    //    }
+    //}
 
-    // Xử lý Webhook từ PayOS
-    [HttpPost("webhook/handle-transfer")]
-    public IActionResult HandlePayOSTransfer([FromBody] WebhookType body)
-    {
-        try
-        {
-            var data = _paymentService.VerifyPaymentWebhookData(body);
+    //// Xử lý Webhook từ PayOS
+    //[HttpPost("webhook/handle-transfer")]
+    //public IActionResult HandlePayOSTransfer([FromBody] WebhookType body)
+    //{
+    //    try
+    //    {
+    //        var data = _paymentService.VerifyPaymentWebhookData(body);
 
-            if (data.description == "Ma giao dich thu nghiem" || data.description == "BlindBoxQR123")
-            {
-                return Ok(new Response(0, "Success", null));
-            }
+    //        if (data.description == "Ma giao dich thu nghiem" || data.description == "BlindBoxQR123")
+    //        {
+    //            return Ok(new Response(0, "Success", null));
+    //        }
 
-            return Ok(new Response(0, "Success", null));
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            return StatusCode(500, new Response(-1, "Internal Server Error", null));
-        }
-    }
+    //        return Ok(new Response(0, "Success", null));
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Console.WriteLine(ex);
+    //        return StatusCode(500, new Response(-1, "Internal Server Error", null));
+    //    }
+    //}
 }

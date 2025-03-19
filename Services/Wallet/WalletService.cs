@@ -23,6 +23,19 @@ namespace BlindBoxSS.API.Services
             _configuration = configuration;
         }
 
+        public async Task<Wallet> CreateWallet(Wallet wallet)
+        {
+            try
+            {
+                var newWallet = await _walletRepository.CreateWallet(wallet);
+                return newWallet;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<Wallet> GetWalletByAccountId(string accountId)
         {
             var wallet = await _walletRepository.GetWalletByAccountIdAsync(accountId);
@@ -34,7 +47,7 @@ namespace BlindBoxSS.API.Services
             return wallet;
         }
 
-        public async Task AddMoneyToWalletAsync(string accountId, int amount,int orderCode)
+        public async Task AddMoneyToWalletAsync(string accountId, decimal amount,int orderCode)
         {
             var dateFormat = _configuration["TransactionSettings:DateFormat"] ?? "yyyy-MM-ddTHH:mm:ssZ";
             bool useUTC = bool.TryParse(_configuration["TransactionSettings:UseUTC"], out bool utc) && utc;
@@ -80,7 +93,7 @@ namespace BlindBoxSS.API.Services
             }
         }
 
-        public async Task<bool> UseWalletForPurchaseAsync(string accountId, int amount, int? orderId)
+        public async Task<bool> UseWalletForPurchaseAsync(string accountId, decimal amount, int? orderId)
         {
             var dateFormat = _configuration["TransactionSettings:DateFormat"] ?? "yyyy-MM-ddTHH:mm:ssZ";
             bool useUTC = bool.TryParse(_configuration["TransactionSettings:UseUTC"], out bool utc) && utc;
