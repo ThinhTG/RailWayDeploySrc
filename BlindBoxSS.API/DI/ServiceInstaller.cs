@@ -16,6 +16,9 @@ using Repositories.VocherRepo;
 using Services.VocherS;
 using Repositories.ReviewRepo;
 using Services.ReviewService;
+using Repositories.AddressRepo;
+using Services.AddressS;
+
 
 namespace BlindBoxSS.API.DI
 {
@@ -47,6 +50,9 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IVocherService, VocherService>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IReviewService, ReviewService>();
+            services.AddScoped<IAddressRepository, AddressRepository>();
+            services.AddScoped<IAddressService, AddressService>();
+
         }
     }
 }

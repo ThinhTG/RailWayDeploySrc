@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Models;
 using Repositories.Pagging;
 using Services.DTO;
 using System;
@@ -17,5 +18,7 @@ namespace Services.VocherS
         Task<Voucher?> UpdateVoucherAsync(Guid id, UpdateVoucherDTO updateVoucherDto);
         Task DeleteVoucherAsync(Guid id);
         Task<PaginatedList<Voucher>> GetAll(int pageNumber, int pageSize);
+
+        Task<Results<Ok<List<VoucherResponse>>, NotFound>> GetAvailableVouchersAsync(decimal TotalPrice);
     }
 }

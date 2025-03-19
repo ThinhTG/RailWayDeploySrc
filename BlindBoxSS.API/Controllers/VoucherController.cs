@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.DTO;
@@ -16,6 +17,20 @@ namespace BlindBoxSS.API.Controllers
         {
             _voucherService = voucherService;
         }
+
+        /// <summary>
+        /// Lấy toàn bộ voucher còn sai dc
+        /// </summary>
+        [HttpGet("available vocher")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<Results<Ok<List<VoucherResponse>>, NotFound>> GetAvailableVouchers([FromQuery] decimal totalPrice)
+        {
+            return await _voucherService.GetAvailableVouchersAsync(totalPrice);
+        }
+
+
+
         /// <summary>
         /// Lấy toàn bộ voucher
         /// </summary>

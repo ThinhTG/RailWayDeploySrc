@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.CategoryRepo;
 using Repositories.Pagging;
@@ -129,5 +131,33 @@ namespace Services.VocherS
             await _vocherRepository.UpdateAsync(voucher);
             return voucher;
         }
+
+        public async Task<Results<Ok<List<VoucherResponse>>, NotFound>> GetAvailableVouchersAsync(decimal TotalPrice)
+        {
+            if (TotalPrice < 0)
+            {
+                return TypedResults.NotFound();
+            }
+
+            var vouchersQuery = _vocherRepository.GetAll();
+
+            var availableVouchers = await vouchersQuery
+                .Where(v => v.StartDate <= DateTime.UtcNow && v.EndDate > DateTime.UtcNow && TotalPrice >= v.Money)
+                .Select(v => new VoucherResponse
+                {
+                    VoucherId = v.VoucherId,
+                    Description = v.Description,
+                    DiscountMoney = v.DiscountMoney,
+                    TotalPrice = v.Money,
+                    EndDate = v.EndDate
+                })
+                .ToListAsync();
+
+            return availableVouchers.Any() ? TypedResults.Ok(availableVouchers) : TypedResults.NotFound();
+        }
+
+
+
+
     }
 }
