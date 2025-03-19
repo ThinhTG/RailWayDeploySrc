@@ -33,7 +33,6 @@ public class BlindBoxController : ControllerBase
     /// <param name="pageSize">Số lượng BlindBox trên mỗi trang</param>
     /// <returns>Danh sách BlindBox </returns>
     [HttpGet("paged")]
-    [CacheAttribute(1000)]
     public async Task<IActionResult> GetPaged(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
     {
         var result = await _service.GetAllFilter(searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
