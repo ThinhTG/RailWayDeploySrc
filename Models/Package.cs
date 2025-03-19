@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Models
 {
@@ -46,10 +41,7 @@ namespace Models
 
         public virtual ICollection<BlindBox>? BlindBoxes { get; set; }
 
-
-        //public virtual Review? Review { get; set; }
-
-
-
+        public Guid? OrderDetailId { get; set; }
+        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     }
 }

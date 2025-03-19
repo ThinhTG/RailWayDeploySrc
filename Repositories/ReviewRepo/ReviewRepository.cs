@@ -48,7 +48,7 @@ namespace Repositories.ReviewRepo
         {
             return await _DbContext.Reviews
                 .Include(r => r.OrderDetail)
-                .Where(o => o.ProductId.Equals(blindBoxId))
+                .Where(o => o.OrderDetail.BlindBoxId.Equals(blindBoxId))
                 .ToListAsync();
         }
 

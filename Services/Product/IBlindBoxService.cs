@@ -10,7 +10,7 @@ namespace Services.Product
 {
     public interface IBlindBoxService
     {
-        Task<IEnumerable<BlindBox>> GetAllAsync();
+        Task<IEnumerable<BlindBox>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice);
         Task<BlindBox> GetByIdAsync(Guid id);
         Task<BlindBox> AddAsync(BlindBox blindBox);
         Task<BlindBox> UpdateAsync(BlindBox blindBox);

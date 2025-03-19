@@ -17,21 +17,32 @@ public class BlindBoxController : ControllerBase
         _responseCacheService = responseCacheService;
     }
 
-    // Lấy danh sách tất cả blindboxes 
+    /// <summary>
+    /// Get All BlindBoxes Search (Mobile)
+    /// </summary>
+    /// <param name="searchByCategory">Category NAME</param>
+    /// <param name="searchByName">BlindBox Name</param>
+    /// <param name="minPrice">giá tiền tối thiểu</param>
+    /// <param name="maxPrice">giá tiền tối đa</param>
+    /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult> GetAll()
+    public async Task<ActionResult> GetAll(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice)
     {
-        var blindBoxes = await _service.GetAllAsync();
+        var blindBoxes = await _service.GetAllAsync(searchByCategory, searchByName, minPrice, maxPrice);
         return Ok(blindBoxes);
     }
 
 
     /// <summary>
-    ///  Lấy danh sách blindboxes có phân trang
+    /// lấy All BlindBox Search (Web)
     /// </summary>
-    /// <param name="pageNumber">Số Trang</param>
-    /// <param name="pageSize">Số lượng BlindBox trên mỗi trang</param>
-    /// <returns>Danh sách BlindBox </returns>
+    /// <param name="searchByCategory">Category Name</param>
+    /// <param name="searchByName">BlindBox Name</param>
+    /// <param name="minPrice">Price tối thiểu</param>
+    /// <param name="maxPrice">Price tối đa </param>
+    /// <param name="pageNumber">số trang</param>
+    /// <param name="pageSize">số Blindbox</param>
+    /// <returns></returns>
     [HttpGet("paged")]
     public async Task<IActionResult> GetPaged(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
     {
