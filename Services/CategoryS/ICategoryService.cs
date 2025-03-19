@@ -17,5 +17,7 @@ namespace Services.CategoryS
         Task<Category?> UpdateCategoryAsync(Guid id, UpdateCategoryDTO updateDto);
         Task DeleteCategoryAsync(Guid id);
         Task<PaginatedList<Category>> GetAll(int pageNumber, int pageSize);
+
+        Task<Category> AddCategoryImage(Guid id, string Url);
     }
 }

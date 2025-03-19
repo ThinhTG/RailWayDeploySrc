@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(BlindBoxDbContext))]
-    [Migration("20250319092313_init")]
-    partial class init
+    [Migration("20250319181005_updateandnew")]
+    partial class updateandnew
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -367,6 +367,9 @@ namespace DAO.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<Guid?>("WalletId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int?>("orderCode")
                         .HasColumnType("int");
 
@@ -379,6 +382,8 @@ namespace DAO.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("WalletId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -449,6 +454,10 @@ namespace DAO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CategoryImage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("CategoryName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -456,6 +465,10 @@ namespace DAO.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("TypeSell")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -573,9 +586,6 @@ namespace DAO.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid?>("OrderDetailId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("PackageName")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -678,8 +688,14 @@ namespace DAO.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("VoucherCode")
+                        .HasColumnType("int");
 
                     b.HasKey("VoucherId");
 
@@ -696,19 +712,12 @@ namespace DAO.Migrations
 
                     b.Property<string>("AccountId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("Balance")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Balance")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("WalletId");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.ToTable("Wallet");
                 });
@@ -719,8 +728,8 @@ namespace DAO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
@@ -832,6 +841,13 @@ namespace DAO.Migrations
                         .HasForeignKey("applicationUserId");
 
                     b.Navigation("applicationUser");
+                });
+
+            modelBuilder.Entity("Models.ApplicationUser", b =>
+                {
+                    b.HasOne("Models.Wallet", null)
+                        .WithMany("ApplicationUser")
+                        .HasForeignKey("WalletId");
                 });
 
             modelBuilder.Entity("Models.BlindBox", b =>
@@ -950,23 +966,6 @@ namespace DAO.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("Models.Wallet", b =>
-                {
-                    b.HasOne("Models.ApplicationUser", "Account")
-                        .WithMany()
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
-                    b.Navigation("Account");
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("Models.WalletTransaction", b =>
                 {
                     b.HasOne("Models.Order", "Order")
@@ -1030,6 +1029,8 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.Wallet", b =>
                 {
+                    b.Navigation("ApplicationUser");
+
                     b.Navigation("WalletTransactions");
                 });
 #pragma warning restore 612, 618

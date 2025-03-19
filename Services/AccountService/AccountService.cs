@@ -59,6 +59,7 @@ namespace Services.AccountService
             var result = await _userManager.CreateAsync(newUser, request.Password);
             await CreateWalletForUserAsync(newUser.Id);
             await _userManager.AddToRoleAsync(newUser, "User");
+
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
@@ -78,6 +79,7 @@ namespace Services.AccountService
         {
             var wallet = new Models.Wallet
             {
+                WalletId = Guid.NewGuid(),
                 AccountId = accountId,
                 Balance = 0
             };
@@ -136,6 +138,9 @@ namespace Services.AccountService
 
             // Update user information in database
             var result = await _userManager.UpdateAsync(user);
+            //create wallet for user login with google
+            await CreateWalletForUserAsync(user.Id);
+
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));

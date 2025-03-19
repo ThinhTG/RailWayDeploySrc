@@ -10,7 +10,8 @@ namespace Services.DTO
 {
     public class UpdateVoucherDTO
     {
-      
+        [Required]
+        public int Quantity { get; set; }
 
         [Required]
         public string Description { get; set; }
