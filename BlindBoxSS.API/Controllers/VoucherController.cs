@@ -19,17 +19,17 @@ namespace BlindBoxSS.API.Controllers
         }
 
         /// <summary>
-        /// Lấy toàn bộ voucher còn sai dc
+        /// Lấy danh sách voucher có thể sử dụng
         /// </summary>
-        [HttpGet("available vocher")]
+        /// <param name="totalPrice">Total Price của Order</param>
+        /// <returns>các Voucher còn hạn sử dụng và đủ điều kiện</returns>
+        [HttpGet("available-vocher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Results<Ok<List<VoucherResponse>>, NotFound>> GetAvailableVouchers([FromQuery] decimal totalPrice)
         {
             return await _voucherService.GetAvailableVouchersAsync(totalPrice);
         }
-
-
 
         /// <summary>
         /// Lấy toàn bộ voucher
@@ -41,9 +41,13 @@ namespace BlindBoxSS.API.Controllers
             return Ok(vouchers);
         }
 
+
         /// <summary>
-        /// Lấy danh sách voucher có phân trang
+        /// Lấy Tất Cả Voucher Phân Trang
         /// </summary>
+        /// <param name="pageNumber"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
         [HttpGet("paged")]
         public async Task<IActionResult> GetPaged(int pageNumber = 1, int pageSize = 10)
         {
