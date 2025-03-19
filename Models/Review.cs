@@ -3,7 +3,6 @@
     public class Review
     {
         public Guid ReviewId { get; set; } = Guid.NewGuid();
-        public string ProductId { get; set; }
         public string OrderDetailId { get; set; }
         public string AccountId { get; set; }
         public int Rating { get; set; }

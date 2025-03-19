@@ -77,6 +77,33 @@ namespace Services.Product
             return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
         }
 
-      
+        public async Task<IEnumerable<BlindBox>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice)
+        {
+            IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchByCategory))
+            {
+                blindBoxes = blindBoxes
+                    .Include(b => b.Category)
+                    .Where(b => b.Category.CategoryName.Contains(searchByCategory));
+            }
+
+            if (!string.IsNullOrEmpty(searchByName))
+            {
+                blindBoxes = blindBoxes.Where(b => b.BlindBoxName.Contains(searchByName));
+            }
+
+            if (minPrice.HasValue)
+            {
+                blindBoxes = blindBoxes.Where(b => b.Price >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                blindBoxes = blindBoxes.Where(b => b.Price <= maxPrice.Value);
+            }
+
+            return await blindBoxes.ToListAsync();
+        }
     }
 }

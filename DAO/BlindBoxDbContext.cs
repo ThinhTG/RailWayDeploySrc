@@ -108,7 +108,16 @@ namespace DAO
                 .HasForeignKey(r => r.AccountId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-        
+            modelBuilder.Entity<OrderDetail>()
+             .HasOne(od => od.BlindBox)
+                 .WithOne(b => b.OrderDetail)
+                 .HasForeignKey<OrderDetail>(od => od.BlindBoxId) // Định rõ bên phụ thuộc
+                 .OnDelete(DeleteBehavior.Cascade); // Chọn hành vi khi xóa BlindBox
+
+
+
+
+
         }
     }
 }
