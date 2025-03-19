@@ -1,4 +1,5 @@
 ﻿using Repositories.Pagging;
+using Services.DTO;
 using Services.Request;
 using System;
 using System.Collections.Generic;
@@ -39,5 +40,7 @@ namespace Services.AccountService
         Task<bool> ResetPasswordAsync(string email, string token, string newPassword);
 
         Task<UserResponse> UpdateAsync(Guid parseID, UpdateOrderCodeRequest newacount);
+
+        Task<bool> UpdateAvatarAsync(string userId, string avatarUrl);
     }
 }

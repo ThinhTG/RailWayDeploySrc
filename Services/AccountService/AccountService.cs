@@ -474,6 +474,18 @@ namespace Services.AccountService
             var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
             return result.Succeeded;
         }
+
+        public async Task<bool> UpdateAvatarAsync(string userId, string avatarUrl)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null) return false;
+
+            user.AvatarURL = avatarUrl;
+            user.UpdateAt = DateTime.UtcNow;
+
+            var result = await _userManager.UpdateAsync(user);
+            return result.Succeeded;
+        }
     }
 
 }
