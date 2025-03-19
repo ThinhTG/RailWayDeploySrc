@@ -44,7 +44,7 @@ public class BlindBoxController : ControllerBase
     /// <param name="pageSize">số Blindbox</param>
     /// <returns></returns>
     [HttpGet("paged")]
-    public async Task<IActionResult> GetPaged(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
+    public async Task<IActionResult> GetPaged(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber=1, int pageSize = 6)
     {
         var result = await _service.GetAllFilter(searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
         return Ok(result);

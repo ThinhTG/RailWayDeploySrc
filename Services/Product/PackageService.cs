@@ -1,11 +1,7 @@
-﻿using Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using Repositories.Pagging;
 using Repositories.Product;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Product
 {
@@ -47,6 +43,64 @@ namespace Services.Product
         {
             IQueryable<Package> packages = _packageRepository.GetAll().AsQueryable();
            
+            return await PaginatedList<Package>.CreateAsync(packages, pageNumber, pageSize);
+        }
+
+        public async Task<IEnumerable<Package>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice)
+        {
+            IQueryable<Package> packages = _packageRepository.GetAll().AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchByCategory))
+            {
+                packages = packages
+                    .Include(b => b.Category)
+                    .Where(b => b.Category.CategoryName.Contains(searchByCategory));
+            }
+
+            if (!string.IsNullOrEmpty(searchByName))
+            {
+                packages = packages.Where(b => b.PackageName.Contains(searchByName));
+            }
+
+            if (minPrice.HasValue)
+            {
+                packages = packages.Where(b => b.PackagePrice >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                packages = packages.Where(b => b.PackagePrice <= maxPrice.Value);
+            }
+
+            return await packages.ToListAsync();
+        }
+
+        public async Task<PaginatedList<Package>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
+        {
+            IQueryable<Package> packages = _packageRepository.GetAll().AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchByCategory))
+            {
+                packages = packages
+                    .Include(b => b.Category)
+                    .Where(b => b.Category != null && b.Category.CategoryName.Contains(searchByCategory));
+            }
+
+            if (!string.IsNullOrEmpty(searchByName))
+            {
+                packages = packages.Where(b => b.PackageName.Contains(searchByName));
+            }
+
+            if (minPrice.HasValue)
+            {
+                packages = packages.Where(b => b.PackagePrice >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                packages = packages.Where(b => b.PackagePrice <= maxPrice.Value);
+            }
+
             return await PaginatedList<Package>.CreateAsync(packages, pageNumber, pageSize);
         }
     }

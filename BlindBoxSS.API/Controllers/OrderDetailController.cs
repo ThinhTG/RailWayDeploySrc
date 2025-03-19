@@ -128,7 +128,6 @@ public class OrderDetailController : ControllerBase
                 OrderId = orderDetailRequest.OrderId,
                 PackageId = orderDetailRequest.PackageId,
                 BlindBoxId = orderDetailRequest.BlindBoxId,
-                ReviewId = orderDetailRequest.ReviewId ?? null,
                 Quantity = orderDetailRequest.Quantity,
                 Price = orderDetailRequest.Price,
             };

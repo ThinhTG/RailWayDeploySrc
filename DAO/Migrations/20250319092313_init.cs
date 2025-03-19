@@ -116,7 +116,7 @@ namespace DAO.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    AddressId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressLine1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     AddressLine2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
@@ -254,12 +254,11 @@ namespace DAO.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Review",
+                name: "Reviews",
                 columns: table => new
                 {
                     ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderDetailId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -268,9 +267,9 @@ namespace DAO.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Review", x => x.ReviewId);
+                    table.PrimaryKey("PK_Reviews", x => x.ReviewId);
                     table.ForeignKey(
-                        name: "FK_Review_AspNetUsers_AccountId",
+                        name: "FK_Reviews_AspNetUsers_AccountId",
                         column: x => x.AccountId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -314,6 +313,7 @@ namespace DAO.Migrations
                     Stock = table.Column<int>(type: "int", nullable: false),
                     Amount = table.Column<int>(type: "int", nullable: false),
                     PackageStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    OrderDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -496,7 +496,8 @@ namespace DAO.Migrations
                         name: "FK_OrderDetail_BlindBoxes_BlindBoxId",
                         column: x => x.BlindBoxId,
                         principalTable: "BlindBoxes",
-                        principalColumn: "BlindBoxId");
+                        principalColumn: "BlindBoxId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_OrderDetail_Order_OrderId",
                         column: x => x.OrderId,
@@ -509,9 +510,9 @@ namespace DAO.Migrations
                         principalTable: "Packages",
                         principalColumn: "PackageId");
                     table.ForeignKey(
-                        name: "FK_OrderDetail_Review_OrderDetailId",
+                        name: "FK_OrderDetail_Reviews_OrderDetailId",
                         column: x => x.OrderDetailId,
-                        principalTable: "Review",
+                        principalTable: "Reviews",
                         principalColumn: "ReviewId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -614,7 +615,9 @@ namespace DAO.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_BlindBoxId",
                 table: "OrderDetail",
-                column: "BlindBoxId");
+                column: "BlindBoxId",
+                unique: true,
+                filter: "[BlindBoxId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_OrderId",
@@ -642,8 +645,8 @@ namespace DAO.Migrations
                 column: "CategoryId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_AccountId",
-                table: "Review",
+                name: "IX_Reviews_AccountId",
+                table: "Reviews",
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
@@ -718,7 +721,7 @@ namespace DAO.Migrations
                 name: "BlindBoxes");
 
             migrationBuilder.DropTable(
-                name: "Review");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Order");
