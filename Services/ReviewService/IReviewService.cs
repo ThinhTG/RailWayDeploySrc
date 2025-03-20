@@ -7,7 +7,7 @@ namespace Services.ReviewService
     {
         Task<IEnumerable<ReviewResponse>> GetReviewsByOrderDetailIdAsync(Guid orderDetailId);
         Task<ReviewResponse> GetReviewByIdAsync(Guid reviewId);
-        Task<bool> CreateReviewAsync(ReviewRequest review);
+        Task<ReviewResponse> CreateReviewAsync(ReviewRequest review);
         Task<bool> ApproveReviewAsync(Guid reviewId);
 
         //Task<IEnumerable<ReviewResponse>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId);

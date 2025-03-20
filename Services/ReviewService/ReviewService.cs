@@ -29,16 +29,23 @@ namespace Services.ReviewService
             return _mapper.Map<Review, ReviewResponse>(review);
         }
 
-        public async Task<bool> CreateReviewAsync(ReviewRequest review)
+        public async Task<ReviewResponse> CreateReviewAsync(ReviewRequest review)
         {
-            if (review == null || string.IsNullOrEmpty(review.OrderDetailId))
+            if (review == null || review.OrderDetailId == Guid.Empty)
                 throw new ArgumentNullException("Review or OrderDetailId is null");
 
-           var newReview = _mapper.Map<ReviewRequest, Review>(review);
+            var existingReview = await _reviewRepository.GetReviewsByOrderDetailIdAsync(review.OrderDetailId);
+
+            if (existingReview != null)
+            {
+                throw new InvalidOperationException("Review for this OrderDetailId already exists.");
+            }
+
+            var newReview = _mapper.Map<ReviewRequest, Review>(review);
 
             await _reviewRepository.AddReviewAsync(newReview);
             await _reviewRepository.SaveChangesAsync();
-            return true;
+            return _mapper.Map<Review, ReviewResponse>(newReview);
         }
 
         public async Task<bool> ApproveReviewAsync(Guid reviewId)

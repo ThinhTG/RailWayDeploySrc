@@ -51,9 +51,10 @@ namespace BlindBoxSS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReview([FromBody] ReviewRequest review)
         {
-            var success = await _reviewService.CreateReviewAsync(review);
-            if (!success) return BadRequest("Không thể tạo đánh giá!");
-            return Ok("Review đã được tạo và đang chờ duyệt!");
+
+            var NewReview = await _reviewService.CreateReviewAsync(review);
+            if (NewReview == null) return BadRequest("Không thể tạo đánh giá!");
+            return Ok(NewReview);
         }
 
 
