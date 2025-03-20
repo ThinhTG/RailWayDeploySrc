@@ -44,11 +44,32 @@ namespace Repositories.ReviewRepo
             await _DbContext.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<Review>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId)
+        // ✅ Lấy tất cả Review
+        public async Task<IEnumerable<Review>> GetAllReviewsAsync()
         {
             return await _DbContext.Reviews
                 .Include(r => r.OrderDetail)
-                .Where(o => o.OrderDetail.BlindBoxId.Equals(blindBoxId))
+                .Include(r => r.Account)
+                .ToListAsync();
+        }
+
+        // ✅ Lấy Review theo BlindBoxId
+        public async Task<IEnumerable<Review>> GetAllReviewsByBlindBoxIdAsync(Guid blindBoxId)
+        {
+            return await _DbContext.Reviews
+                .Include(r => r.OrderDetail)
+                .ThenInclude(od => od.BlindBox)
+                .Where(r => r.OrderDetail.BlindBoxId == blindBoxId)
+                .ToListAsync();
+        }
+
+        // ✅ Lấy Review theo PackageId
+        public async Task<IEnumerable<Review>> GetAllReviewsByPackageIdAsync(Guid packageId)
+        {
+            return await _DbContext.Reviews
+                .Include(r => r.OrderDetail)
+                .ThenInclude(od => od.Package)
+                .Where(r => r.OrderDetail.PackageId == packageId)
                 .ToListAsync();
         }
 

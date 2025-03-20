@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DAO.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.ReviewRepo;
 
@@ -50,11 +51,30 @@ namespace Services.ReviewService
             return true;
         }
 
-       
-              public async Task<IEnumerable<ReviewResponse>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId)
+
+        //public async Task<IEnumerable<ReviewResponse>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId)
+        //{
+        //    var reviews = await _reviewRepository.GetReviewsByBlindBoxIdAsync(blindBoxId);
+        //    return _mapper.Map<IEnumerable<Review>, IEnumerable<ReviewResponse>>(reviews);
+        //}
+
+        // ✅ Lấy tất cả Review
+        public async Task<IEnumerable<Review>> GetAllReviewsAsync()
         {
-            var reviews = await _reviewRepository.GetReviewsByBlindBoxIdAsync(blindBoxId);
-            return _mapper.Map<IEnumerable<Review>, IEnumerable<ReviewResponse>>(reviews);
+            return await _reviewRepository.GetAllReviewsAsync();
         }
+
+        // ✅ Lấy Review theo BlindBoxId
+        public async Task<IEnumerable<Review>> GetAllReviewsByBlindBoxIdAsync(Guid blindBoxId)
+        {
+            return await _reviewRepository.GetAllReviewsByBlindBoxIdAsync(blindBoxId);
+        }
+
+        // ✅ Lấy Review theo PackageId
+        public async Task<IEnumerable<Review>> GetAllReviewsByPackageIdAsync(Guid packageId)
+        {
+            return await _reviewRepository.GetAllReviewsByPackageIdAsync(packageId);
+        }
+
     }
 }
