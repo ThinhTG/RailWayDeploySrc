@@ -445,6 +445,27 @@ namespace DAO.Migrations
                     b.ToTable("BlindBoxes");
                 });
 
+            modelBuilder.Entity("Models.BlindBoxImage", b =>
+                {
+                    b.Property<Guid>("BlindBoxImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BlindBoxId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("BlindBoxImageId");
+
+                    b.HasIndex("BlindBoxId");
+
+                    b.ToTable("BlindBoxImages");
+                });
+
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
@@ -873,6 +894,17 @@ namespace DAO.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("Models.BlindBoxImage", b =>
+                {
+                    b.HasOne("Models.BlindBox", "BlindBox")
+                        .WithMany()
+                        .HasForeignKey("BlindBoxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlindBox");
                 });
 
             modelBuilder.Entity("Models.Order", b =>

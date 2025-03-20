@@ -55,6 +55,21 @@ namespace Services.Product
             }
         }
 
+        //get list package image by packageId
+        public async Task<IEnumerable<PackageImage>> GetPackageImagesByPackageId(Guid packageId)
+        {
+            var packageImageRepo = _unitOfWork.GetRepository<PackageImage>();
+            var packageImages = await packageImageRepo.FindListAsync(b => b.PackageId == packageId);
+            if (packageImages == null)
+            {
+                throw new Exception("error get package image");
+            }
+            else
+            {
+                return packageImages;
+            }
+        }
+
         public async Task<Package?> FindPackageByImageId(Guid packageImageId)
         {
             var packageImage = await _unitOfWork.GetRepository<PackageImage>().FindOneAsync(pi => pi.PackageImageId == packageImageId);

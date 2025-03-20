@@ -18,6 +18,8 @@ namespace DAO
 
         public DbSet<BlindBox> BlindBoxes { get; set; }
 
+        public DbSet<BlindBoxImage> BlindBoxImages { get; set; }
+
         public DbSet<Category> Category { get; set; }
 
         public DbSet<Cart> Carts { get; set; }
