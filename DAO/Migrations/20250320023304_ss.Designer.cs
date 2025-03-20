@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(BlindBoxDbContext))]
-    [Migration("20250319181005_updateandnew")]
-    partial class updateandnew
+    [Migration("20250320023304_ss")]
+    partial class ss
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -448,6 +448,27 @@ namespace DAO.Migrations
                     b.ToTable("BlindBoxes");
                 });
 
+            modelBuilder.Entity("Models.BlindBoxImage", b =>
+                {
+                    b.Property<Guid>("BlindBoxImageId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BlindBoxId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.HasKey("BlindBoxImageId");
+
+                    b.HasIndex("BlindBoxId");
+
+                    b.ToTable("BlindBoxImages");
+                });
+
             modelBuilder.Entity("Models.Category", b =>
                 {
                     b.Property<Guid>("CategoryId")
@@ -694,8 +715,9 @@ namespace DAO.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("VoucherCode")
-                        .HasColumnType("int");
+                    b.Property<string>("VoucherCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("VoucherId");
 
@@ -875,6 +897,17 @@ namespace DAO.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("Models.BlindBoxImage", b =>
+                {
+                    b.HasOne("Models.BlindBox", "BlindBox")
+                        .WithMany()
+                        .HasForeignKey("BlindBoxId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("BlindBox");
                 });
 
             modelBuilder.Entity("Models.Order", b =>

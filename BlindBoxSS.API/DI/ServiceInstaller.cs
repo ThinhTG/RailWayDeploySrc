@@ -31,8 +31,8 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<ICartService, CartService>();
-           services.AddScoped<IPaymentService, PaymentService>();
-           services.AddScoped<IWalletRepository, WalletRepository>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IWalletRepository, WalletRepository>();
             services.AddScoped<IWalletTransactionRepository, WalletTransactionRepository>();
             services.AddScoped<IWalletService, WalletService>();
             services.AddScoped<IWalletTransactionService, WalletTransactionService>();
@@ -52,6 +52,8 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IAddressRepository, AddressRepository>();
             services.AddScoped<IAddressService, AddressService>();
+            services.AddScoped<IBlindBoxImageService, BlindBoxImageService>();
+            services.AddScoped<IPackageImageService, PackageImageService>();
         }
     }
 }
