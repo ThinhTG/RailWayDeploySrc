@@ -9,7 +9,6 @@
         public string Comment { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public string ReviewStatus { get; set; } = "Pending";
-
         // Quan hệ navigation
         public virtual OrderDetail OrderDetail { get; set; }
         public virtual ApplicationUser Account { get; set; }
