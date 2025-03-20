@@ -1,4 +1,5 @@
 ﻿using DAO;
+using DAO.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Pagging;
@@ -57,6 +58,9 @@ namespace Repositories.Product
 
      
 
-   
+     public  async Task<IEnumerable<BlindBox>> GetAllMobileAsync()
+        {
+            return await _context.Set<BlindBox>().ToListAsync();
+        }
     }
 }

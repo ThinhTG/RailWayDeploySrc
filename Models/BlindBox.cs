@@ -54,5 +54,7 @@ namespace Models
 
         [JsonIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+        public virtual ICollection<BlindBoxImage> BlindBoxImages { get; set; } = new List<BlindBoxImage>();
     }
 }
