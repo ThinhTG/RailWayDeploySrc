@@ -24,6 +24,11 @@ namespace Services.Product
             return await _packageRepository.GetPackageByIdAsync(id);
         }
 
+        public async Task<List<Package>> GetPackageByTypeSell(string typeSell)
+        {
+            return await _packageRepository.GetPackageByTypeSell(typeSell);
+        }
+
         public async Task<Package> AddPackageAsync(Package package)
         {
             return await _packageRepository.AddPackageAsync(package);

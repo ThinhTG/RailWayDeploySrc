@@ -25,6 +25,14 @@ public class PackageController : ControllerBase
         return Ok(package);
     }
 
+    // lấy list package theo typeSell
+    [HttpGet("typeSell/{typeSell}")]
+    public async Task<ActionResult<List<Package>>> GetPackageByTypeSell(string typeSell)
+    {
+        var packages = await _packageService.GetPackageByTypeSell(typeSell);
+        return Ok(packages);
+    }
+
     // Tạo gói mới
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePackageRequest package)
@@ -33,6 +41,7 @@ public class PackageController : ControllerBase
         {
             CategoryId = package.CategoryId,
             PackageName = package.PackageName,
+            TypeSell = package.TypeSell,
             PackagePrice = package.PackagePrice,
             Description = package.Description,
             Stock = package.Stock,

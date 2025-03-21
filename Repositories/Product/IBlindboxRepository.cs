@@ -14,6 +14,7 @@ namespace Repositories.Product
         Task DeleteAsync(Guid id);
 
         IQueryable<BlindBox> GetAll();
-     
+        Task<List<BlindBox>> GetBlindBoxByTypeSell(string typeSell);
+
     }
 }

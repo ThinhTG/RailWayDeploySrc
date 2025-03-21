@@ -18,6 +18,9 @@ namespace Services.DTO
         public string PackageName { get; set; }
 
         [Required]
+        public string TypeSell { get; set; }
+
+        [Required]
         [Column(TypeName = "decimal(19,0)")]
         public decimal PackagePrice { get; set; }
 

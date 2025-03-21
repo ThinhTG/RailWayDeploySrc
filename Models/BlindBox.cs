@@ -30,6 +30,12 @@ namespace Models
         public string BlindBoxName { get; set; }
 
         [Required]
+        public string TypeSell { get; set; }
+
+        [Required]
+        public string Size { get; set; }
+
+        [Required]
         [Column(TypeName = "decimal(19,0)")]
         public decimal Price { get; set; }
 

@@ -19,5 +19,7 @@ namespace Services.Product
         Task<PaginatedList<BlindBox>> GetAll(int pageNumber, int pageSize);
 
         Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize);
+
+        Task<List<BlindBox>> GetBlindboxeByTypeSell(string typeSell);
     }
 }

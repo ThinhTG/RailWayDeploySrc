@@ -62,6 +62,14 @@ public class BlindBoxController : ControllerBase
         return Ok(blindBox);
     }
 
+    // lấy list blindbox theo typeSell
+    [HttpGet("typeSell/{typeSell}")]
+    public async Task<ActionResult<List<BlindBox>>> GetBlindboxeByTypeSell(string typeSell)
+    {
+        var blindBoxes = await _service.GetBlindboxeByTypeSell(typeSell);
+        return Ok(blindBoxes);
+    }
+
     // Tạo một blindbox mới
     [HttpPost]
     public async Task<ActionResult<BlindBox>> Create(BlindBox blindBox)

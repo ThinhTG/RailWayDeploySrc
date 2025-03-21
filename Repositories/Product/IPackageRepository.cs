@@ -16,6 +16,7 @@ namespace Repositories.Product
         Task<bool> DeletePackageAsync(Guid id);
 
         IQueryable<Package> GetAll();
+        Task<List<Package>> GetPackageByTypeSell(string typeSell);
 
     }
 }
