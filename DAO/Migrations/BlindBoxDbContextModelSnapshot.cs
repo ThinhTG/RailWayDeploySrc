@@ -234,6 +234,16 @@ namespace DAO.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
+                    b.Property<string>("NameReceiver")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("PostalCode")
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
@@ -458,6 +468,9 @@ namespace DAO.Migrations
                     b.Property<Guid>("BlindBoxId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("DisplayBlindboxId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -633,6 +646,9 @@ namespace DAO.Migrations
                     b.Property<Guid>("PackageImageId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DisplayPackageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
