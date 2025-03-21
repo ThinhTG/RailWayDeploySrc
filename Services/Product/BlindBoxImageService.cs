@@ -30,7 +30,9 @@ namespace Services.Product
                 BlindBoxId = blindBoxImage.BlindBoxId,
                 BlindBoxImageId = Guid.NewGuid(),
                 ImageUrl = blindBoxImage.ImageUrl,
+                DisplayBlindboxId= blindBoxImage.DisplayBlindboxId,
                 BlindBox = blindbox.GetById(blindBoxImage.BlindBoxId)
+
             };
 
             blindboxImageRepo.Insert(newBlindBoxImage);
