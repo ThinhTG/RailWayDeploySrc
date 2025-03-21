@@ -4,6 +4,7 @@ using DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(BlindBoxDbContext))]
-    partial class BlindBoxDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250321034606_newfielddb")]
+    partial class newfielddb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -233,16 +236,6 @@ namespace DAO.Migrations
 
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
-
-                    b.Property<string>("NameReceiver")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("PostalCode")
                         .HasMaxLength(20)
@@ -472,9 +465,6 @@ namespace DAO.Migrations
                     b.Property<Guid>("BlindBoxId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DisplayBlindboxId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -590,9 +580,14 @@ namespace DAO.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("OrderDetailId");
 
-                    b.HasIndex("BlindBoxId");
+                    b.HasIndex("BlindBoxId")
+                        .IsUnique()
+                        .HasFilter("[BlindBoxId] IS NOT NULL");
 
                     b.HasIndex("OrderId");
 
@@ -655,9 +650,6 @@ namespace DAO.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("DisplayPackageId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -703,9 +695,6 @@ namespace DAO.Migrations
                     b.HasKey("ReviewId");
 
                     b.HasIndex("AccountId");
-
-                    b.HasIndex("OrderDetailId")
-                        .IsUnique();
 
                     b.ToTable("Reviews");
                 });
@@ -925,7 +914,7 @@ namespace DAO.Migrations
             modelBuilder.Entity("Models.BlindBoxImage", b =>
                 {
                     b.HasOne("Models.BlindBox", "BlindBox")
-                        .WithMany("BlindBoxImages")
+                        .WithMany()
                         .HasForeignKey("BlindBoxId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -947,9 +936,15 @@ namespace DAO.Migrations
             modelBuilder.Entity("Models.OrderDetail", b =>
                 {
                     b.HasOne("Models.BlindBox", "BlindBox")
-                        .WithMany("OrderDetails")
-                        .HasForeignKey("BlindBoxId")
+                        .WithOne("OrderDetail")
+                        .HasForeignKey("Models.OrderDetail", "BlindBoxId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Models.Review", "Review")
+                        .WithOne("OrderDetail")
+                        .HasForeignKey("Models.OrderDetail", "OrderDetailId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Models.Order", "Order")
                         .WithMany("OrderDetails")
@@ -966,6 +961,8 @@ namespace DAO.Migrations
                     b.Navigation("Order");
 
                     b.Navigation("Package");
+
+                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("Models.Package", b =>
@@ -1002,15 +999,7 @@ namespace DAO.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Models.OrderDetail", "OrderDetail")
-                        .WithOne()
-                        .HasForeignKey("Models.Review", "OrderDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Account");
-
-                    b.Navigation("OrderDetail");
                 });
 
             modelBuilder.Entity("Models.Voucher", b =>
@@ -1046,9 +1035,8 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.BlindBox", b =>
                 {
-                    b.Navigation("BlindBoxImages");
-
-                    b.Navigation("OrderDetails");
+                    b.Navigation("OrderDetail")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Category", b =>
@@ -1076,6 +1064,12 @@ namespace DAO.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("OrderDetails");
+                });
+
+            modelBuilder.Entity("Models.Review", b =>
+                {
+                    b.Navigation("OrderDetail")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Models.Wallet", b =>

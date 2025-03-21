@@ -28,6 +28,11 @@ namespace Repositories.Product
             return await _context.Set<Package>().FindAsync(id);
         }
 
+        public async Task<List<Package>> GetPackageByTypeSell(string typeSell)
+        {
+            return await _context.Packages.Where(p => p.TypeSell == typeSell).ToListAsync();
+        }
+
         public async Task<Package> AddPackageAsync(Package package)
         {
             _context.Set<Package>().Add(package);

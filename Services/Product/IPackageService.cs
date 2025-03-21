@@ -18,6 +18,10 @@ namespace Services.Product
         Task<IEnumerable<Package>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice);
         Task<PaginatedList<Package>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize);
 
+        Task<List<Package>> GetPackageByTypeSell(string typeSell);
+
+
       Task<BlindBox> GetRandomBlindBoxFromPackage(Guid packageId);
+
     }
 }

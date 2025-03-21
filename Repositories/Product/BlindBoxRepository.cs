@@ -26,6 +26,14 @@ namespace Repositories.Product
             return _context.BlindBoxes.AsQueryable();
         }
 
+        public async Task<List<BlindBox>> GetBlindBoxByTypeSell(string typeSell)
+        {
+            //var blindbox = await _context.BlindBoxes.Where(b => b.TypeSell == typeSell).FirstOrDefaultAsync();
+            return await _context.BlindBoxes
+                .Where(b => b.TypeSell == typeSell && b.Package.TypeSell == typeSell)
+                .Include(b => b.Package)
+                .ToListAsync();
+        }
 
         public async Task<BlindBox> GetByIdAsync(Guid id)
         {
@@ -55,6 +63,12 @@ namespace Repositories.Product
                 await _context.SaveChangesAsync();
             }
         }
+        //public async Task<List<BlindBox>> GetBlindBoxesWithPackageByTypeSell(string typeSell)
+        //{
+        //    return await _context.BlindBoxes
+        //        .Where(b => b.TypeSell == typeSell && b.Package.TypeSell == typeSell)
+        //        .ToListAsync();
+        //}
 
      
 

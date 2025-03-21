@@ -38,6 +38,11 @@ namespace Services.Product
             return await _repository.GetByIdAsync(id);
         }
 
+        public async Task<List<BlindBox>> GetBlindboxeByTypeSell(string typeSell)
+        {
+            return await _repository.GetBlindBoxByTypeSell(typeSell);
+        }
+
         public async Task<BlindBox> AddAsync(BlindBox blindBox)
         {
             return await _repository.AddAsync(blindBox);

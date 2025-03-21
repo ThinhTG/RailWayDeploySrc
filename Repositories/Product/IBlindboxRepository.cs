@@ -17,7 +17,8 @@ namespace Repositories.Product
         Task<IEnumerable<BlindBox>> GetAllMobileAsync();
         IQueryable<BlindBox> GetAll();
 
-       
+        Task<List<BlindBox>> GetBlindBoxByTypeSell(string typeSell);
+
 
     }
 }
