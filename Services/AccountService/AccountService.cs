@@ -412,7 +412,7 @@ namespace Services.AccountService
 
         //}
 
-        public async Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request)
+        public async Task<UserResponse> AdminUpdateAsync(Guid id, AdminUpdateRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
@@ -423,13 +423,17 @@ namespace Services.AccountService
             user.UpdateAt = DateTime.Now;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
-            user.Email = request.Email;
             user.Gender = request.Gender;
             user.PhoneNumber = request.PhoneNumber;
             user.Address = request.Address;
 
+            // Update user role
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            await _userManager.AddToRoleAsync(user, request.Role);
+
             await _userManager.UpdateAsync(user);
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<UserResponse>(user);
         }
 
         /// <summary>

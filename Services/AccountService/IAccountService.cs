@@ -32,7 +32,7 @@ namespace Services.AccountService
         Task CreateWalletForUserAsync(string accountId);
 
         Task<PaginatedList<UserResponseAdmin>> GetAllAccountsAsync(int pageNumber, int pageSize);
-        Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request);
+        Task<UserResponse> AdminUpdateAsync(Guid id, AdminUpdateRequest request);
 
         Task<bool> ConfirmEmailAsync(string userId, string token);
         Task<bool> ResendConfirmEmailAsync(string email);
