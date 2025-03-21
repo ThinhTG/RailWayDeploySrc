@@ -19,7 +19,9 @@ namespace DAO.Mapping
             CreateMap<Review, ReviewResponse>();
             CreateMap<ReviewRequest, Review>();
 
-            
+            CreateMap<ApplicationUser, UserResponseAdmin>();
+
+
 
         }
     }

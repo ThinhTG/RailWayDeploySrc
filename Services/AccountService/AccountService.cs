@@ -372,22 +372,22 @@ namespace Services.AccountService
             return userResponse;
         }
 
-        public async Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize)
+        public async Task<PaginatedList<UserResponseAdmin>> GetAllAccountsAsync(int pageNumber, int pageSize)
         {
             var users = await _userManager.Users.ToListAsync(); // Lấy danh sách User trước
 
-            var listAccount = new List<UserDTO>();
+            var listAccount = new List<UserResponseAdmin>();
 
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 string firstRole = roles.FirstOrDefault()!;
-                var userDto = _mapper.Map<UserDTO>(user);
+                var userDto = _mapper.Map<UserResponseAdmin>(user);
                 userDto.Role = firstRole;
                 listAccount.Add(userDto);
             }
 
-            return  PaginatedList<UserDTO>.Create(listAccount, pageNumber, pageSize);
+            return  PaginatedList<UserResponseAdmin>.Create(listAccount, pageNumber, pageSize);
         }
 
 

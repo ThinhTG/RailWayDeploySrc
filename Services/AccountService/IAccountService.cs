@@ -31,7 +31,7 @@ namespace Services.AccountService
         //Create Wallet
         Task CreateWalletForUserAsync(string accountId);
 
-        Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize);
+        Task<PaginatedList<UserResponseAdmin>> GetAllAccountsAsync(int pageNumber, int pageSize);
         Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request);
 
         Task<bool> ConfirmEmailAsync(string userId, string token);
