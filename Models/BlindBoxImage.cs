@@ -13,6 +13,9 @@ namespace Models
         public Guid BlindBoxId { get; set; }
 
         [Required]
+        public int DisplayBlindboxId { get; set; }
+
+        [Required]
         [StringLength(255)]
         public string ImageUrl { get; set; }
 

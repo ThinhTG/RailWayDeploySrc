@@ -15,6 +15,9 @@ namespace Repositories.ReviewRepo
         Task UpdateReviewAsync(Review review);
         Task SaveChangesAsync();
 
-        Task<IEnumerable<Review>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId);
+        //Task<IEnumerable<Review>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId);
+        Task<IEnumerable<Review>> GetAllReviewsAsync();
+        Task<IEnumerable<Review>> GetAllReviewsByBlindBoxIdAsync(Guid blindBoxId);
+        Task<IEnumerable<Review>> GetAllReviewsByPackageIdAsync(Guid packageId);
     }
 }

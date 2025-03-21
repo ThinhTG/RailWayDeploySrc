@@ -140,5 +140,22 @@ namespace BlindBoxSS.API.Services
             await _walletTransactionService.AddWalletTransactionAsync(wallet.WalletId, amount, "purchase", "success", transactionDatetime.ToString(dateFormat, CultureInfo.InvariantCulture), wallet.Balance, orderId);
             return true;
         }
+
+        public async Task<bool> UpdateUserWalletAsync(Wallet updatedWallet)
+        {
+            if (updatedWallet == null)
+                throw new ArgumentNullException(nameof(updatedWallet), "Wallet cannot be null.");
+
+            var wallet = await _walletRepository.GetWalletByAccountIdAsync(updatedWallet.AccountId);
+            if (wallet == null)
+                throw new Exception("Wallet not found");
+
+            // Cập nhật số dư và ngày cập nhật
+            wallet.Balance = updatedWallet.Balance;
+
+            await _walletRepository.UpdateWalletAsync(wallet);
+
+            return true;
+        }
     }
 }

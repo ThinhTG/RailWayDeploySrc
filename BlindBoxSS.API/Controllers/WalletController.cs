@@ -20,7 +20,11 @@ public class WalletController : ControllerBase
         _logger = logger;
     }
 
-    // Lấy thông tin ví của người dùng
+   /// <summary>
+   /// Lấy tt Ví người dùng
+   /// </summary>
+   /// <param name="accountId"></param>
+   /// <returns></returns>
     [HttpGet("{accountId}")]
     public async Task<IActionResult> GetWallet(string accountId)
     {
@@ -42,7 +46,13 @@ public class WalletController : ControllerBase
         }
     }
 
-    // Nạp tiền vào ví
+    /// <summary>
+    /// Nạp Tiền
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <param name="amount"></param>
+    /// <param name="orderCode"></param>
+    /// <returns></returns>
     [HttpPost("{accountId}/deposit")]
     public async Task<IActionResult> AddMoney(string accountId, [FromQuery] int amount, int orderCode)
     {
@@ -61,7 +71,13 @@ public class WalletController : ControllerBase
         }
     }
 
-    // Thanh toán từ ví
+    /// <summary>
+    /// Thanh Toán Bằng ví
+    /// </summary>
+    /// <param name="accountId"></param>
+    /// <param name="amount"></param>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
     [HttpPost("{accountId}/purchase")]
     public async Task<IActionResult> Purchase(string accountId, [FromQuery] int amount, [FromQuery] int? orderId)
     {

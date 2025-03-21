@@ -1,4 +1,8 @@
-﻿using Repositories.UnitOfWork;
+﻿using AutoMapper;
+using DAO.Contracts;
+using Microsoft.EntityFrameworkCore;
+using Models;
+using Repositories.UnitOfWork;
 using Services.DTO;
 
 namespace Services
@@ -6,10 +10,12 @@ namespace Services
     public class CartService : ICartService
     {
         public readonly IUnitOfWork _unitOfWork;
+        public readonly IMapper _mapper;
 
-        public CartService(IUnitOfWork unitOfWork)
+        public CartService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task AddToCart(CartDTO cartDto)
@@ -21,11 +27,13 @@ namespace Services
                 throw new ArgumentException("Quantity must be greater than zero.");
 
             var cartRepository = _unitOfWork.GetRepository<Cart>();
+            var blindBox = await _unitOfWork.GetRepository<BlindBox>().GetByIdAsync(cartDto.BlindBoxId);
 
             var existingCartItem = await cartRepository.FindAsync(c =>
                 c.UserId == cartDto.UserId &&
                 c.BlindBoxId == cartDto.BlindBoxId &&
                 c.PackageId == cartDto.PackageId);
+
 
             if (existingCartItem != null)
             {
@@ -41,7 +49,8 @@ namespace Services
                     BlindBoxId = cartDto.BlindBoxId,
                     PackageId = cartDto.PackageId,
                     Quantity = cartDto.Quantity,
-                    CreateDate = DateTime.UtcNow
+                    CreateDate = DateTime.UtcNow,
+                    BlindBox = blindBox
                 };
                 await cartRepository.InsertAsync(newCart);
             }
@@ -55,7 +64,15 @@ namespace Services
                 throw new ArgumentException("UserId cannot be null or empty.");
 
             var cartRepository = _unitOfWork.GetRepository<Cart>();
-            var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
+
+            //var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
+            var carts = await cartRepository
+                        .Query() 
+                      .Include(c => c.BlindBox)
+                      .Include(c => c.Package)
+                     .Where(c => c.UserId == userId)
+                       .ToListAsync();
+
 
             return carts ?? throw new KeyNotFoundException("User not found or cart is empty.");
         }

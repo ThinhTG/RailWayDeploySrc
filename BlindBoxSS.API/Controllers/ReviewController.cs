@@ -24,7 +24,7 @@ namespace BlindBoxSS.API.Controllers
         /// </summary>
         /// <param name="orderDetailId"></param>
         /// <returns>Review của Order đó </returns>
-        [HttpGet("{orderDetailId}")]
+        [HttpGet("/OrderDetail/{orderDetailId}")]
         public async Task<IActionResult> GetReviews(Guid orderDetailId)
         {
             var reviews = await _reviewService.GetReviewsByOrderDetailIdAsync(orderDetailId);
@@ -36,10 +36,10 @@ namespace BlindBoxSS.API.Controllers
         /// </summary>
         /// <param name="BlindBoxId"></param>
         /// <returns></returns>
-        [HttpGet("{BlindBoxId}")]
+        [HttpGet("/Blindbox/{BlindBoxId}")]
         public async Task<IActionResult> GetReviewsByBlindBoxId(Guid BlindBoxId)
         {
-            var reviews = await _reviewService.GetReviewsByBlindBoxIdAsync(BlindBoxId);
+            var reviews = await _reviewService.GetAllReviewsByBlindBoxIdAsync(BlindBoxId);
             return Ok(reviews);
         }
 
@@ -51,9 +51,10 @@ namespace BlindBoxSS.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReview([FromBody] ReviewRequest review)
         {
-            var success = await _reviewService.CreateReviewAsync(review);
-            if (!success) return BadRequest("Không thể tạo đánh giá!");
-            return Ok("Review đã được tạo và đang chờ duyệt!");
+
+            var NewReview = await _reviewService.CreateReviewAsync(review);
+            if (NewReview == null) return BadRequest("Không thể tạo đánh giá!");
+            return Ok(NewReview);
         }
 
 
@@ -68,6 +69,24 @@ namespace BlindBoxSS.API.Controllers
             var success = await _reviewService.ApproveReviewAsync(reviewId);
             if (!success) return NotFound("Review không tồn tại!");
             return Ok("Review đã được duyệt!");
+        }
+
+        /// <summary>
+        /// Admin Lấy Tất Cả Review Để Xác Nhận
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllReviews()
+        {
+            var reviews = await _reviewService.GetAllReviewsAsync();
+            return Ok(reviews);
+        }
+
+        [HttpGet("/Package/{PackageId}")]
+        public async Task<IActionResult> GetReviewsByPackageId(Guid PackageId)
+        {
+            var reviews = await _reviewService.GetAllReviewsByPackageIdAsync(PackageId);
+            return Ok(reviews);
         }
 
 

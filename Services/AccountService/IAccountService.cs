@@ -31,8 +31,8 @@ namespace Services.AccountService
         //Create Wallet
         Task CreateWalletForUserAsync(string accountId);
 
-        Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize);
-        Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request);
+        Task<PaginatedList<UserResponseAdmin>> GetAllAccountsAsync(int pageNumber, int pageSize);
+        Task<UserResponse> AdminUpdateAsync(Guid id, AdminUpdateRequest request);
 
         Task<bool> ConfirmEmailAsync(string userId, string token);
         Task<bool> ResendConfirmEmailAsync(string email);
@@ -42,5 +42,7 @@ namespace Services.AccountService
         Task<UserResponse> UpdateAsync(Guid parseID, UpdateOrderCodeRequest newacount);
 
         Task<bool> UpdateAvatarAsync(string userId, string avatarUrl);
+
+        Task<UserResponse>  UpdateAccount(UpdateProfileDTO updateProfileDTO);
     }
 }

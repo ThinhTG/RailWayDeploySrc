@@ -32,7 +32,7 @@ public class AdminController : ControllerBase
     /// Cập nhật thông tin người dùng
     /// </summary>
     [HttpPut("users/{id}")]
-    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] AdminUpdateRequest request)
     {
         if (request == null)
             return BadRequest(new { message = "Invalid request data." });

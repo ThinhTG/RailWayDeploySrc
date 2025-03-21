@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using DAO.Contracts;
+using Models;
 using Repositories.Pagging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,9 +13,12 @@ namespace Repositories.Product
         Task<BlindBox> AddAsync(BlindBox blindBox);
         Task<BlindBox> UpdateAsync(BlindBox blindBox);
         Task DeleteAsync(Guid id);
-
+         
+        Task<IEnumerable<BlindBox>> GetAllMobileAsync();
         IQueryable<BlindBox> GetAll();
+
         Task<List<BlindBox>> GetBlindBoxByTypeSell(string typeSell);
+
 
     }
 }

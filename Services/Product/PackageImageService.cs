@@ -28,6 +28,7 @@ namespace Services.Product
             {
                 PackageId = packageImage.PackageId,
                 PackageImageId = Guid.NewGuid(),
+                DisplayPackageId = packageImage.DisplayPackageId,
                 ImageUrl = packageImage.ImageUrl
             };
 
