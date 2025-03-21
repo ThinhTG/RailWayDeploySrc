@@ -4,6 +4,7 @@ namespace Repositories.GenericRepo
 {
     public interface IGenericRepository<T> where T : class
     {
+        IQueryable<T> Query();
         IEnumerable<T> Get(int index, int pageSize);
         IQueryable<T> Entities { get; }
         //Task<PaginatedList<T>> GetPagging(IQueryable<T> query, int index, int pageSize);
