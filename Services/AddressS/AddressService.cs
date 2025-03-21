@@ -38,7 +38,8 @@ namespace Services.AddressS
                 State = addAddressDTO.State,
                 PostalCode =addAddressDTO.PostalCode,
                 Country = addAddressDTO.Country,
-               
+               PhoneNumber = addAddressDTO.PhoneNumber,
+                NameReceiver = addAddressDTO.NameReceiver,
                 IsDefault = addAddressDTO.IsDefault,
                 CreatedAt = addAddressDTO.CreatedAt.Kind == DateTimeKind.Unspecified
             ? DateTime.SpecifyKind(addAddressDTO.CreatedAt, DateTimeKind.Utc)
@@ -100,6 +101,9 @@ namespace Services.AddressS
             }
             address.AddressLine1 = updateAddressDTO.AddressLine1;
             address.AddressLine2 = updateAddressDTO.AddressLine2; // Nullable field
+            address.PhoneNumber = updateAddressDTO.PhoneNumber; 
+
+            address.NameReceiver = updateAddressDTO.NameReceiver; 
             address.City = updateAddressDTO.City;
             address.State = updateAddressDTO.State; // Nullable field
             address.PostalCode = updateAddressDTO.PostalCode; // Nullable field
