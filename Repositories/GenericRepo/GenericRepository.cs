@@ -137,5 +137,10 @@ namespace Repositories.GenericRepo
         {
             return await _dbSet.ToListAsync();
         }
+
+        public IQueryable<T> Query()
+        {
+            return _dbSet.AsQueryable(); // Trả về IQueryable<T>
+        }
     }
 }

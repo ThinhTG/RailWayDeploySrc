@@ -8,26 +8,20 @@ using System.Threading.Tasks;
 
 namespace Services.DTO
 {
-   public class AddCategoryDTO
+   public class AddImageCategoryDTO
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid CategoryId { get; set; } = Guid.NewGuid();
+        public Guid CategoryId { get; set; }
 
         [Required]
-        public string TypeSell { get; set; }
+        public string CategoryImage { get; set; }
 
         [Required]
-        [StringLength(255)]
-        public string CategoryName { get; set; }
-
-        public string CategoryImage { get; set; } = "";
-
-        [Required]
-        public DateTime CreatedAt { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
 
         [Required]
-        public DateTime UpdatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
     }
 }

@@ -28,6 +28,7 @@ namespace Services.Product
             {
                 PackageId = packageImage.PackageId,
                 PackageImageId = Guid.NewGuid(),
+                DisplayPackageId = packageImage.DisplayPackageId,
                 ImageUrl = packageImage.ImageUrl
             };
 
@@ -45,6 +46,21 @@ namespace Services.Product
             var packageImages = await packageImageRepo.FindAllAsync(b => b.PackageImageId == packageImageId);
             //var packageImages = await packageImageRepo.FindAllAsync(b => b.PackageImageId == packageImageId).Where(b => b.PackageImageId == packageImageId).Select(b => b.Package).FirstOrDefaultAsync();
 
+            if (packageImages == null)
+            {
+                throw new Exception("error get package image");
+            }
+            else
+            {
+                return packageImages;
+            }
+        }
+
+        //get list package image by packageId
+        public async Task<IEnumerable<PackageImage>> GetPackageImagesByPackageId(Guid packageId)
+        {
+            var packageImageRepo = _unitOfWork.GetRepository<PackageImage>();
+            var packageImages = await packageImageRepo.FindListAsync(b => b.PackageId == packageId);
             if (packageImages == null)
             {
                 throw new Exception("error get package image");

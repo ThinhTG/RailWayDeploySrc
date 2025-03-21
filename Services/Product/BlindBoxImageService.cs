@@ -24,11 +24,15 @@ namespace Services.Product
                 throw new Exception("Image URL is required");
             }
             var blindboxImageRepo = _unitOfWork.GetRepository<BlindBoxImage>();
+            var blindbox = _unitOfWork.GetRepository<BlindBox>();
             var newBlindBoxImage = new BlindBoxImage
             {
                 BlindBoxId = blindBoxImage.BlindBoxId,
                 BlindBoxImageId = Guid.NewGuid(),
-                ImageUrl = blindBoxImage.ImageUrl
+                ImageUrl = blindBoxImage.ImageUrl,
+                DisplayBlindboxId= blindBoxImage.DisplayBlindboxId,
+                BlindBox = blindbox.GetById(blindBoxImage.BlindBoxId)
+
             };
 
             blindboxImageRepo.Insert(newBlindBoxImage);
@@ -57,6 +61,21 @@ namespace Services.Product
             }
             //var blindboxImages = await blindboxImageRepo.FindAllAsync(b => b.BlindBoxId == blindboxId);
 
+        }
+
+        //get list image by blindboxId
+        public async Task<IEnumerable<BlindBoxImage>> GetBlindBoxImageByBlindBox(Guid blindboxId)
+        {
+            var blindboxImageRepo = _unitOfWork.GetRepository<BlindBoxImage>();
+            var blindboxImages = await blindboxImageRepo.FindListAsync(b => b.BlindBoxId == blindboxId);
+            if (blindboxImages == null)
+            {
+                throw new Exception("error get blindbox image");
+            }
+            else
+            {
+                return blindboxImages;
+            }
         }
 
         public async Task<bool> UpdateBlindBoxImage(Guid blindboxImageId, string imageURL)

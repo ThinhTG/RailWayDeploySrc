@@ -9,6 +9,7 @@ using Models;
 using Repositories.Pagging;
 using Repositories.UnitOfWork;
 using Repositories.WalletRepo;
+using Services.DTO;
 using Services.Email;
 using Services.Request;
 using System.Security.Authentication;
@@ -59,6 +60,7 @@ namespace Services.AccountService
             var result = await _userManager.CreateAsync(newUser, request.Password);
             await CreateWalletForUserAsync(newUser.Id);
             await _userManager.AddToRoleAsync(newUser, "User");
+
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
@@ -78,6 +80,7 @@ namespace Services.AccountService
         {
             var wallet = new Models.Wallet
             {
+                WalletId = Guid.NewGuid(),
                 AccountId = accountId,
                 Balance = 0
             };
@@ -136,6 +139,9 @@ namespace Services.AccountService
 
             // Update user information in database
             var result = await _userManager.UpdateAsync(user);
+            //create wallet for user login with google
+            await CreateWalletForUserAsync(user.Id);
+
             if (!result.Succeeded)
             {
                 var errors = string.Join(", ", result.Errors.Select(e => e.Description));
@@ -367,22 +373,22 @@ namespace Services.AccountService
             return userResponse;
         }
 
-        public async Task<PaginatedList<UserDTO>> GetAllAccountsAsync(int pageNumber, int pageSize)
+        public async Task<PaginatedList<UserResponseAdmin>> GetAllAccountsAsync(int pageNumber, int pageSize)
         {
             var users = await _userManager.Users.ToListAsync(); // Lấy danh sách User trước
 
-            var listAccount = new List<UserDTO>();
+            var listAccount = new List<UserResponseAdmin>();
 
             foreach (var user in users)
             {
                 var roles = await _userManager.GetRolesAsync(user);
                 string firstRole = roles.FirstOrDefault()!;
-                var userDto = _mapper.Map<UserDTO>(user);
+                var userDto = _mapper.Map<UserResponseAdmin>(user);
                 userDto.Role = firstRole;
                 listAccount.Add(userDto);
             }
 
-            return  PaginatedList<UserDTO>.Create(listAccount, pageNumber, pageSize);
+            return  PaginatedList<UserResponseAdmin>.Create(listAccount, pageNumber, pageSize);
         }
 
 
@@ -406,7 +412,7 @@ namespace Services.AccountService
 
         //}
 
-        public async Task<UserDTO> AdminUpdateAsync(Guid id, UpdateUserRequest request)
+        public async Task<UserResponse> AdminUpdateAsync(Guid id, AdminUpdateRequest request)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
             if (user == null)
@@ -417,11 +423,17 @@ namespace Services.AccountService
             user.UpdateAt = DateTime.Now;
             user.FirstName = request.FirstName;
             user.LastName = request.LastName;
-            user.Email = request.Email;
             user.Gender = request.Gender;
+            user.PhoneNumber = request.PhoneNumber;
+            user.Address = request.Address;
+
+            // Update user role
+            var roles = await _userManager.GetRolesAsync(user);
+            await _userManager.RemoveFromRolesAsync(user, roles);
+            await _userManager.AddToRoleAsync(user, request.Role);
 
             await _userManager.UpdateAsync(user);
-            return _mapper.Map<UserDTO>(user);
+            return _mapper.Map<UserResponse>(user);
         }
 
         /// <summary>
@@ -485,6 +497,39 @@ namespace Services.AccountService
 
             var result = await _userManager.UpdateAsync(user);
             return result.Succeeded;
+        }
+
+        public async Task<UserResponse> UpdateAccount(UpdateProfileDTO updateProfileDTO)
+        {
+            var user = await _userManager.FindByIdAsync(updateProfileDTO.AccountId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+
+         if(!string.IsNullOrEmpty(updateProfileDTO.PhoneNumber))
+            {
+                user.PhoneNumber = updateProfileDTO.PhoneNumber;
+            }
+
+         if(!string.IsNullOrEmpty(updateProfileDTO.FirstName))
+            {
+                user.FirstName = updateProfileDTO.FirstName;
+            }
+
+         if (!string.IsNullOrEmpty(updateProfileDTO.LastName))
+            {
+                user.LastName = updateProfileDTO.LastName;
+            }
+
+            if (!string.IsNullOrEmpty(updateProfileDTO.Gender))
+            {
+                user.Gender = updateProfileDTO.Gender;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return _mapper.Map<UserResponse>(user);
         }
     }
 

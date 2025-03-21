@@ -24,6 +24,13 @@ namespace Models
         [StringLength(255)]
         public string? AddressLine2 { get; set; }
 
+        [StringLength(255)]
+        public  string PhoneNumber { get; set; }
+
+        [StringLength(255)]
+        public string NameReceiver { get; set; }
+
+
         [Required]
         [StringLength(100)]
         public string City { get; set; }

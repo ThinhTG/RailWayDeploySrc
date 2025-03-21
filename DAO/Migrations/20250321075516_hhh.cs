@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAO.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class hhh : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,47 +28,13 @@ namespace DAO.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    AvatarURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    orderCode = table.Column<int>(type: "int", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
                     CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CategoryName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    CategoryImage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TypeSell = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
@@ -89,6 +55,19 @@ namespace DAO.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IdentityRole", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Wallet",
+                columns: table => new
+                {
+                    WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Wallet", x => x.WalletId);
                 });
 
             migrationBuilder.CreateTable(
@@ -113,6 +92,142 @@ namespace DAO.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Packages",
+                columns: table => new
+                {
+                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PackageName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    PackagePrice = table.Column<decimal>(type: "decimal(19,0)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    PackageStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Packages", x => x.PackageId);
+                    table.ForeignKey(
+                        name: "FK_Packages_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Packages_Category_CategoryId1",
+                        column: x => x.CategoryId1,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AvatarURL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RefreshTokenExpiryTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    orderCode = table.Column<int>(type: "int", nullable: true),
+                    WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Wallet_WalletId",
+                        column: x => x.WalletId,
+                        principalTable: "Wallet",
+                        principalColumn: "WalletId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BlindBoxes",
+                columns: table => new
+                {
+                    BlindBoxId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BlindBoxName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(19,0)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Percent = table.Column<float>(type: "real", nullable: true),
+                    BlindBoxStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PackageId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BlindBoxes", x => x.BlindBoxId);
+                    table.ForeignKey(
+                        name: "FK_BlindBoxes_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId");
+                    table.ForeignKey(
+                        name: "FK_BlindBoxes_Category_CategoryId1",
+                        column: x => x.CategoryId1,
+                        principalTable: "Category",
+                        principalColumn: "CategoryId");
+                    table.ForeignKey(
+                        name: "FK_BlindBoxes_Packages_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Packages",
+                        principalColumn: "PackageId");
+                    table.ForeignKey(
+                        name: "FK_BlindBoxes_Packages_PackageId1",
+                        column: x => x.PackageId1,
+                        principalTable: "Packages",
+                        principalColumn: "PackageId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PackageImages",
+                columns: table => new
+                {
+                    PackageImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DisplayPackageId = table.Column<int>(type: "int", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PackageImages", x => x.PackageImageId);
+                    table.ForeignKey(
+                        name: "FK_PackageImages_Packages_PackageId",
+                        column: x => x.PackageId,
+                        principalTable: "Packages",
+                        principalColumn: "PackageId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Address",
                 columns: table => new
                 {
@@ -120,6 +235,8 @@ namespace DAO.Migrations
                     AccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AddressLine1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     AddressLine2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    NameReceiver = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     State = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
@@ -254,194 +371,22 @@ namespace DAO.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reviews",
+                name: "BlindBoxImages",
                 columns: table => new
                 {
-                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Rating = table.Column<int>(type: "int", nullable: false),
-                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReviewStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Reviews", x => x.ReviewId);
-                    table.ForeignKey(
-                        name: "FK_Reviews_AspNetUsers_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Wallet",
-                columns: table => new
-                {
-                    WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Balance = table.Column<int>(type: "int", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Wallet", x => x.WalletId);
-                    table.ForeignKey(
-                        name: "FK_Wallet_AspNetUsers_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Wallet_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Packages",
-                columns: table => new
-                {
-                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PackageName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    PackagePrice = table.Column<decimal>(type: "decimal(19,0)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Stock = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    PackageStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    OrderDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Packages", x => x.PackageId);
-                    table.ForeignKey(
-                        name: "FK_Packages_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
-                        principalColumn: "CategoryId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Packages_Category_CategoryId1",
-                        column: x => x.CategoryId1,
-                        principalTable: "Category",
-                        principalColumn: "CategoryId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Voucher",
-                columns: table => new
-                {
-                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiscountMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Money = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Voucher", x => x.VoucherId);
-                    table.ForeignKey(
-                        name: "FK_Voucher_Order_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Order",
-                        principalColumn: "OrderId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "WalletTransaction",
-                columns: table => new
-                {
-                    WalletTransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Amount = table.Column<int>(type: "int", nullable: false),
-                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TransactionStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TransactionDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    TransactionBalance = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_WalletTransaction", x => x.WalletTransactionId);
-                    table.ForeignKey(
-                        name: "FK_WalletTransaction_Order_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Order",
-                        principalColumn: "OrderId");
-                    table.ForeignKey(
-                        name: "FK_WalletTransaction_Wallet_WalletId",
-                        column: x => x.WalletId,
-                        principalTable: "Wallet",
-                        principalColumn: "WalletId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BlindBoxes",
-                columns: table => new
-                {
+                    BlindBoxImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     BlindBoxId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BlindBoxName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(19,0)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Stock = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Percent = table.Column<float>(type: "real", nullable: true),
-                    BlindBoxStatus = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CategoryId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    PackageId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BlindBoxes", x => x.BlindBoxId);
-                    table.ForeignKey(
-                        name: "FK_BlindBoxes_Category_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Category",
-                        principalColumn: "CategoryId");
-                    table.ForeignKey(
-                        name: "FK_BlindBoxes_Category_CategoryId1",
-                        column: x => x.CategoryId1,
-                        principalTable: "Category",
-                        principalColumn: "CategoryId");
-                    table.ForeignKey(
-                        name: "FK_BlindBoxes_Packages_PackageId",
-                        column: x => x.PackageId,
-                        principalTable: "Packages",
-                        principalColumn: "PackageId");
-                    table.ForeignKey(
-                        name: "FK_BlindBoxes_Packages_PackageId1",
-                        column: x => x.PackageId1,
-                        principalTable: "Packages",
-                        principalColumn: "PackageId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PackageImages",
-                columns: table => new
-                {
-                    PackageImageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DisplayBlindboxId = table.Column<int>(type: "int", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PackageImages", x => x.PackageImageId);
+                    table.PrimaryKey("PK_BlindBoxImages", x => x.BlindBoxImageId);
                     table.ForeignKey(
-                        name: "FK_PackageImages_Packages_PackageId",
-                        column: x => x.PackageId,
-                        principalTable: "Packages",
-                        principalColumn: "PackageId",
+                        name: "FK_BlindBoxImages_BlindBoxes_BlindBoxId",
+                        column: x => x.BlindBoxId,
+                        principalTable: "BlindBoxes",
+                        principalColumn: "BlindBoxId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -483,7 +428,6 @@ namespace DAO.Migrations
                 {
                     OrderDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
-                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     BlindBoxId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     PackageId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
@@ -509,11 +453,87 @@ namespace DAO.Migrations
                         column: x => x.PackageId,
                         principalTable: "Packages",
                         principalColumn: "PackageId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Voucher",
+                columns: table => new
+                {
+                    VoucherId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DiscountMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    VoucherCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Money = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Voucher", x => x.VoucherId);
                     table.ForeignKey(
-                        name: "FK_OrderDetail_Reviews_OrderDetailId",
+                        name: "FK_Voucher_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "OrderId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "WalletTransaction",
+                columns: table => new
+                {
+                    WalletTransactionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TransactionType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TransactionBalance = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_WalletTransaction", x => x.WalletTransactionId);
+                    table.ForeignKey(
+                        name: "FK_WalletTransaction_Order_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Order",
+                        principalColumn: "OrderId");
+                    table.ForeignKey(
+                        name: "FK_WalletTransaction_Wallet_WalletId",
+                        column: x => x.WalletId,
+                        principalTable: "Wallet",
+                        principalColumn: "WalletId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderDetailId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccountId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Rating = table.Column<int>(type: "int", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReviewStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.ReviewId);
+                    table.ForeignKey(
+                        name: "FK_Reviews_AspNetUsers_AccountId",
+                        column: x => x.AccountId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Reviews_OrderDetail_OrderDetailId",
                         column: x => x.OrderDetailId,
-                        principalTable: "Reviews",
-                        principalColumn: "ReviewId",
+                        principalTable: "OrderDetail",
+                        principalColumn: "OrderDetailId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -564,6 +584,11 @@ namespace DAO.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_WalletId",
+                table: "AspNetUsers",
+                column: "WalletId");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -591,6 +616,11 @@ namespace DAO.Migrations
                 column: "PackageId1");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BlindBoxImages_BlindBoxId",
+                table: "BlindBoxImages",
+                column: "BlindBoxId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Carts_applicationUserId",
                 table: "Carts",
                 column: "applicationUserId");
@@ -615,9 +645,7 @@ namespace DAO.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_BlindBoxId",
                 table: "OrderDetail",
-                column: "BlindBoxId",
-                unique: true,
-                filter: "[BlindBoxId] IS NOT NULL");
+                column: "BlindBoxId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderDetail_OrderId",
@@ -650,19 +678,15 @@ namespace DAO.Migrations
                 column: "AccountId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reviews_OrderDetailId",
+                table: "Reviews",
+                column: "OrderDetailId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Voucher_OrderId",
                 table: "Voucher",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Wallet_AccountId",
-                table: "Wallet",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Wallet_ApplicationUserId",
-                table: "Wallet",
-                column: "ApplicationUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WalletTransaction_OrderId",
@@ -697,16 +721,19 @@ namespace DAO.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BlindBoxImages");
+
+            migrationBuilder.DropTable(
                 name: "Carts");
 
             migrationBuilder.DropTable(
                 name: "IdentityRole");
 
             migrationBuilder.DropTable(
-                name: "OrderDetail");
+                name: "PackageImages");
 
             migrationBuilder.DropTable(
-                name: "PackageImages");
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Voucher");
@@ -718,16 +745,13 @@ namespace DAO.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "OrderDetail");
+
+            migrationBuilder.DropTable(
                 name: "BlindBoxes");
 
             migrationBuilder.DropTable(
-                name: "Reviews");
-
-            migrationBuilder.DropTable(
                 name: "Order");
-
-            migrationBuilder.DropTable(
-                name: "Wallet");
 
             migrationBuilder.DropTable(
                 name: "Packages");
@@ -737,6 +761,9 @@ namespace DAO.Migrations
 
             migrationBuilder.DropTable(
                 name: "Category");
+
+            migrationBuilder.DropTable(
+                name: "Wallet");
         }
     }
 }

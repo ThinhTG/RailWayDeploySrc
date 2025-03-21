@@ -55,6 +55,27 @@ namespace BlindBoxSS.API.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// get list blindbox image by blindboxId
+        /// </summary>
+        [HttpGet("Blindbox-Images/Blindbox/{blindboxId}")]
+        public async Task<IActionResult> GetBlindBoxImageByBlindBox(Guid blindboxId)
+        {
+            try
+            {
+                var image = await _blindBoxImageService.GetBlindBoxImageByBlindBox(blindboxId);
+                if (image != null)
+                {
+                    return Ok(image);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+            return BadRequest();
+        }
+
         [HttpPut("Blindbox-Images")]
         public async Task<IActionResult> UpdateBlindboxImage(Guid blindboximageId, string imageUrl)
         {
@@ -141,6 +162,27 @@ namespace BlindBoxSS.API.Controllers
             }
 
             return NotFound();
+        }
+
+        /// <summary>
+        /// get list package image by packageId
+        /// </summary>
+        [HttpGet("Package-Images/Package/{packageId}")]
+        public async Task<IActionResult> GetPackageImageByPackage(Guid packageId)
+        {
+            try
+            {
+                var image = await _packageImageService.GetPackageImagesByPackageId(packageId);
+                if (image != null)
+                {
+                    return Ok(image);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Error = ex.Message });
+            }
+            return BadRequest();
         }
 
         [HttpPut("Pacakge-Images")]

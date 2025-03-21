@@ -45,6 +45,8 @@ namespace Services.VocherS
             var voucher = new Voucher
             {
                 VoucherId = voucherId,
+                Quantity = createVocherDto.Quantity,
+                VoucherCode = createVocherDto.VoucherCode,
                 OrderId = null, // Set to null as per requirement
                 Description = createVocherDto.Description,
                 DiscountMoney = createVocherDto.DiscountMoney,

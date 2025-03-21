@@ -26,9 +26,9 @@ public class BlindBoxController : ControllerBase
     /// <param name="maxPrice">giá tiền tối đa</param>
     /// <returns></returns>
     [HttpGet]
-    public async Task<ActionResult> GetAll(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice)
+    public async Task<ActionResult> GetAll(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, string? size)
     {
-        var blindBoxes = await _service.GetAllAsync(searchByCategory, searchByName, minPrice, maxPrice);
+        var blindBoxes = await _service.GetAllAsync(searchByCategory, searchByName, minPrice, maxPrice,size);
         return Ok(blindBoxes);
     }
 
@@ -44,9 +44,9 @@ public class BlindBoxController : ControllerBase
     /// <param name="pageSize">số Blindbox</param>
     /// <returns></returns>
     [HttpGet("paged")]
-    public async Task<IActionResult> GetPaged(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber=1, int pageSize = 6)
+    public async Task<IActionResult> GetPaged(string? searchByCategory,string? size, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber=1, int pageSize = 6)
     {
-        var result = await _service.GetAllFilter(searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
+        var result = await _service.GetAllFilter(searchByCategory,size, searchByName, minPrice, maxPrice, pageNumber, pageSize);
         return Ok(result);
     }
 

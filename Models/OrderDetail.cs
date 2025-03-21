@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace Models
 {
@@ -13,8 +14,6 @@ namespace Models
         [Required]
         public int OrderId { get; set; }
 
-        public Guid? ReviewId { get; set; }
-
         public Guid? BlindBoxId { get; set; }
 
         public Guid? PackageId { get; set; }
@@ -25,13 +24,16 @@ namespace Models
         [Required]
         public decimal Price { get; set; }
 
+
+        [JsonIgnore]
         public virtual BlindBox? BlindBox { get; set; }
-
+        [JsonIgnore]
         public virtual Package? Package { get; set; }
-
+        [JsonIgnore]
         public virtual Order? Order { get; set; }
 
-        public virtual Review? Review { get; set; }
+
+
 
     }
 }

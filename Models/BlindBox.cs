@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
 namespace Models
 {
@@ -39,6 +40,8 @@ namespace Models
         [Required]
         public int Stock { get; set; }
 
+        public string Size { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
 
@@ -50,6 +53,10 @@ namespace Models
         [Required]
         [StringLength(50)]
         public string BlindBoxStatus { get; set; }
-        public virtual OrderDetail OrderDetail { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+
+        public virtual ICollection<BlindBoxImage> BlindBoxImages { get; set; } = new List<BlindBoxImage>();
     }
 }

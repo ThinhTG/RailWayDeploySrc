@@ -15,5 +15,7 @@ namespace Repositories.CategoryRepo
         Task<Category> UpdateAsync(Category category);
         Task DeleteAsync(Guid id);
         IQueryable<Category> GetAll();
+
+        Task<Category> AddCategoryImage(Guid id, string Url);
     }
 }

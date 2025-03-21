@@ -18,6 +18,8 @@ namespace DAO
 
         public DbSet<BlindBox> BlindBoxes { get; set; }
 
+        public DbSet<BlindBoxImage> BlindBoxImages { get; set; }
+
         public DbSet<Category> Category { get; set; }
 
         public DbSet<Cart> Carts { get; set; }
@@ -94,12 +96,12 @@ namespace DAO
             modelBuilder.Entity<Review>()
                 .HasKey(r => r.ReviewId);
 
-            // ✅ Quan hệ: OrderDetail - Review (1-1)
+            // ✅ Quan hệ: OrderDetail - Review (1-1) (Đặt FK ở Review)
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.OrderDetail)
-                .WithOne(od => od.Review)
-                .HasForeignKey<OrderDetail>(od => od.OrderDetailId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .WithOne()
+                .HasForeignKey<Review>(r => r.OrderDetailId)
+                .OnDelete(DeleteBehavior.Cascade); // Nếu xóa OrderDetail thì xóa luôn Review
 
             // ✅ Quan hệ: Account - Review (1-n)
             modelBuilder.Entity<Review>()
@@ -108,11 +110,13 @@ namespace DAO
                 .HasForeignKey(r => r.AccountId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // ✅ Quan hệ: BlindBox - OrderDetail (1-N)
             modelBuilder.Entity<OrderDetail>()
-             .HasOne(od => od.BlindBox)
-                 .WithOne(b => b.OrderDetail)
-                 .HasForeignKey<OrderDetail>(od => od.BlindBoxId) // Định rõ bên phụ thuộc
-                 .OnDelete(DeleteBehavior.Cascade); // Chọn hành vi khi xóa BlindBox
+                .HasOne(od => od.BlindBox)
+                .WithMany(b => b.OrderDetails)
+                .HasForeignKey(od => od.BlindBoxId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
 
 

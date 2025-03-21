@@ -76,6 +76,20 @@ namespace BlindBoxSS.API.Controllers
         }
 
         /// <summary>
+        ///  add image category
+        /// </summary>
+        [HttpPost("AddImage")]
+        public async Task<ActionResult<Category>> AddImage(Guid id, string imageUrl)
+        {
+            if (imageUrl == null)
+            {
+                return BadRequest("Category image url is required.");
+            }
+            var createdCategory = await _categoryService.AddCategoryImage(id, imageUrl);
+            return CreatedAtAction(nameof(GetById), new { id = createdCategory.CategoryId }, createdCategory);
+        }
+
+        /// <summary>
         ///  Xóa category
         /// </summary>
         [HttpDelete("{id}")]

@@ -19,6 +19,12 @@ namespace Models
         public string CategoryName { get; set; }
 
         [Required]
+        public string CategoryImage { get; set; } = null;
+
+        [Required]
+        public string TypeSell { get; set; }
+
+        [Required]
         public DateTime CreatedAt { get; set; }
 
         [Required]

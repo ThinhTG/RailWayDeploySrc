@@ -1,7 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using DAO.Contracts;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Pagging;
 using Repositories.Product;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +16,12 @@ namespace Services.Product
     public class BlindBoxService : IBlindBoxService
     {
         private readonly IBlindBoxRepository _repository;
+        private readonly IMapper _mapper;
 
-        public BlindBoxService(IBlindBoxRepository repository)
+        public BlindBoxService(IBlindBoxRepository repository,IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<BlindBox>> GetAllAsync()
@@ -48,7 +53,7 @@ namespace Services.Product
             await _repository.DeleteAsync(id);
         }
 
-        public async Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
+        public async Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory,string?size , string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
         {
             IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
 
@@ -73,19 +78,30 @@ namespace Services.Product
             {
                 blindBoxes = blindBoxes.Where(b => b.Price <= maxPrice.Value);
             }
+
+            if(!string.IsNullOrEmpty(size))
+            {
+                blindBoxes = blindBoxes.Where(b => b.Size.Contains(size));
+            }
+
+
 
             return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
         }
 
-        public async Task<IEnumerable<BlindBox>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice)
+
+        //Mobile
+        public async Task<IEnumerable<BlindBoxMobileResponse>> GetAllAsync(
+            string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice,string? size)
         {
-            IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
+            IQueryable<BlindBox> blindBoxes = _repository.GetAll()
+                .Include(b => b.Category)
+                .Include(b => b.BlindBoxImages) // Include bảng chứa hình ảnh
+                .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchByCategory))
             {
-                blindBoxes = blindBoxes
-                    .Include(b => b.Category)
-                    .Where(b => b.Category.CategoryName.Contains(searchByCategory));
+                blindBoxes = blindBoxes.Where(b => b.Category.CategoryName.Contains(searchByCategory));
             }
 
             if (!string.IsNullOrEmpty(searchByName))
@@ -103,7 +119,25 @@ namespace Services.Product
                 blindBoxes = blindBoxes.Where(b => b.Price <= maxPrice.Value);
             }
 
-            return await blindBoxes.ToListAsync();
+            if(!string.IsNullOrEmpty(size))
+            {
+                blindBoxes = blindBoxes.Where(b => b.Size.Contains(size));
+            }
+
+            var blindBoxMobileResponses = await blindBoxes.Select(b => new BlindBoxMobileResponse
+            {
+                BlindBoxId = b.BlindBoxId,
+                ImageUrl = b.BlindBoxImages.Select(img => img.ImageUrl).FirstOrDefault(),
+                BlindBoxName = b.BlindBoxName,
+                Price = b.Price,
+                Description = b.Description,
+                Stock = b.Stock
+            }).ToListAsync();
+
+            return blindBoxMobileResponses;
         }
+
+
+
     }
 }

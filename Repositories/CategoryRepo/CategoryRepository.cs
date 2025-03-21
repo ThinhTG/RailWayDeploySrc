@@ -56,5 +56,13 @@ namespace Repositories.CategoryRepo
             await _context.SaveChangesAsync();
             return category;
         }
+
+        public async Task<Category> AddCategoryImage(Guid id,string Url)
+        {
+            var category = await _context.Set<Category>().FindAsync(id);
+            category.CategoryImage = Url;
+            await _context.SaveChangesAsync();
+            return category;
+        }
     }
 }

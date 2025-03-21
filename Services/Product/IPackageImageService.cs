@@ -10,5 +10,6 @@ namespace Services.Product
         Task<bool> UpdatePackageImage(Guid packageimageId, string imageURL);
         Task<bool> DeletePackageImage(Guid packageimageId);
         Task<Package?> FindPackageByImageId(Guid packageImageId);
+        Task<IEnumerable<PackageImage>> GetPackageImagesByPackageId(Guid packageId);
     }
 }

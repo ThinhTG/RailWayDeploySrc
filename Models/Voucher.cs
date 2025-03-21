@@ -19,6 +19,12 @@ namespace Models
         [Required]
         public decimal DiscountMoney { get; set; }
 
+        [Required]
+        public int Quantity { get; set; }
+
+        [Required]
+        public string VoucherCode { get; set; }
+
         // So tien toi thieu de ap dung Voucher
         [Required]
         public decimal Money { get; set; }
