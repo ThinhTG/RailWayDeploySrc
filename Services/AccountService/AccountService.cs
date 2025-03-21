@@ -9,6 +9,7 @@ using Models;
 using Repositories.Pagging;
 using Repositories.UnitOfWork;
 using Repositories.WalletRepo;
+using Services.DTO;
 using Services.Email;
 using Services.Request;
 using System.Security.Authentication;
@@ -492,6 +493,39 @@ namespace Services.AccountService
 
             var result = await _userManager.UpdateAsync(user);
             return result.Succeeded;
+        }
+
+        public async Task<UserResponse> UpdateAccount(UpdateProfileDTO updateProfileDTO)
+        {
+            var user = await _userManager.FindByIdAsync(updateProfileDTO.AccountId);
+            if (user == null)
+            {
+                throw new KeyNotFoundException("User not found");
+            }
+
+         if(!string.IsNullOrEmpty(updateProfileDTO.PhoneNumber))
+            {
+                user.PhoneNumber = updateProfileDTO.PhoneNumber;
+            }
+
+         if(!string.IsNullOrEmpty(updateProfileDTO.FirstName))
+            {
+                user.FirstName = updateProfileDTO.FirstName;
+            }
+
+         if (!string.IsNullOrEmpty(updateProfileDTO.LastName))
+            {
+                user.LastName = updateProfileDTO.LastName;
+            }
+
+            if (!string.IsNullOrEmpty(updateProfileDTO.Gender))
+            {
+                user.Gender = updateProfileDTO.Gender;
+            }
+
+            await _userManager.UpdateAsync(user);
+
+            return _mapper.Map<UserResponse>(user);
         }
     }
 

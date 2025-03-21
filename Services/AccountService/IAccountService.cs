@@ -42,5 +42,7 @@ namespace Services.AccountService
         Task<UserResponse> UpdateAsync(Guid parseID, UpdateOrderCodeRequest newacount);
 
         Task<bool> UpdateAvatarAsync(string userId, string avatarUrl);
+
+        Task<UserResponse>  UpdateAccount(UpdateProfileDTO updateProfileDTO);
     }
 }

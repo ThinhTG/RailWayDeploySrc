@@ -21,6 +21,8 @@ namespace DAO.Mapping
 
             CreateMap<ApplicationUser, UserResponseAdmin>();
 
+            CreateMap<UpdateUserRequest, ApplicationUser>();
+
 
 
         }
