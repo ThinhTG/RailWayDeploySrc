@@ -67,11 +67,11 @@ namespace Services
 
             //var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
             var carts = await cartRepository
-                        .Query() // Lấy IQueryable<Cart>
-                      .Include(c => c.BlindBox) // Load BlindBox
-                      .Include(c => c.Package) // Load Package
+                        .Query() 
+                      .Include(c => c.BlindBox)
+                      .Include(c => c.Package)
                      .Where(c => c.UserId == userId)
-                       .ToListAsync(); // Chuyển thành List
+                       .ToListAsync();
 
 
             return carts ?? throw new KeyNotFoundException("User not found or cart is empty.");

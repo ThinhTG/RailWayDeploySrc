@@ -103,5 +103,18 @@ namespace Services.Product
 
             return await PaginatedList<Package>.CreateAsync(packages, pageNumber, pageSize);
         }
+
+        public async Task<BlindBox> GetRandomBlindBoxFromPackage(Guid packageId)
+        {
+            var package = await _packageRepository.GetPackageByIdAsync(packageId);
+            if (package == null || package.BlindBoxes == null || !package.BlindBoxes.Any())
+                throw new Exception("Package not found or contains no BlindBox.");
+
+            // Chọn ngẫu nhiên một BlindBox từ danh sách
+            var random = new Random();
+            int index = random.Next(package.BlindBoxes.Count);
+
+            return package.BlindBoxes.ElementAt(index);
+        }
     }
 }
