@@ -19,6 +19,8 @@ namespace Repositories.Product
 
         Task<List<BlindBox>> GetBlindBoxByTypeSell(string typeSell);
 
+        Task<IEnumerable<BlindBox>> GetBlindBoxByTypeSellPaged(string typeSell);
+
 
     }
 }

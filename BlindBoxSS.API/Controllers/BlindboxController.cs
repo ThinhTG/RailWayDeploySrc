@@ -44,9 +44,9 @@ public class BlindBoxController : ControllerBase
     /// <param name="pageSize">số Blindbox</param>
     /// <returns></returns>
     [HttpGet("paged")]
-    public async Task<IActionResult> GetPaged(string? searchByCategory,string? size, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber=1, int pageSize = 6)
+    public async Task<IActionResult> GetPaged(string? searchByCategory,string? typeSell,string? size, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber=1, int pageSize = 6)
     {
-        var result = await _service.GetAllFilter(searchByCategory,size, searchByName, minPrice, maxPrice, pageNumber, pageSize);
+        var result = await _service.GetAllFilter(searchByCategory, typeSell,size, searchByName, minPrice, maxPrice, pageNumber, pageSize);
         return Ok(result);
     }
 
@@ -69,6 +69,8 @@ public class BlindBoxController : ControllerBase
         var blindBoxes = await _service.GetBlindboxeByTypeSell(typeSell);
         return Ok(blindBoxes);
     }
+
+ 
 
     // Tạo một blindbox mới
     [HttpPost]

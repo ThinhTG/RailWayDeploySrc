@@ -76,5 +76,13 @@ namespace Repositories.Product
         {
             return await _context.Set<BlindBox>().ToListAsync();
         }
+
+        public async Task<IEnumerable<BlindBox>> GetBlindBoxByTypeSellPaged(string typeSell)
+        {
+            IQueryable<BlindBox> blindBoxes = _context.BlindBoxes.AsQueryable()
+                .Where(b => b.TypeSell == typeSell && b.Package.TypeSell == typeSell)
+                .Include(b => b.Package);
+            return await blindBoxes.ToListAsync();
+        }
     }
 }

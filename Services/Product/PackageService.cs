@@ -80,7 +80,7 @@ namespace Services.Product
             return await packages.ToListAsync();
         }
 
-        public async Task<PaginatedList<Package>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
+        public async Task<PaginatedList<Package>> GetAllFilter(string? typeSell,string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
         {
             IQueryable<Package> packages = _packageRepository.GetAll().AsQueryable();
 
@@ -104,6 +104,10 @@ namespace Services.Product
             if (maxPrice.HasValue)
             {
                 packages = packages.Where(b => b.PackagePrice <= maxPrice.Value);
+            }
+            if(!string.IsNullOrEmpty(typeSell))
+            {
+                packages = packages.Where(b => b.TypeSell.Contains(typeSell));
             }
 
             return await PaginatedList<Package>.CreateAsync(packages, pageNumber, pageSize);

@@ -58,7 +58,7 @@ namespace Services.Product
             await _repository.DeleteAsync(id);
         }
 
-        public async Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory,string?size , string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
+        public async Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory,string? typeSell, string?size , string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
         {
             IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
 
@@ -87,6 +87,10 @@ namespace Services.Product
             if(!string.IsNullOrEmpty(size))
             {
                 blindBoxes = blindBoxes.Where(b => b.Size.Contains(size));
+            }
+            if(!string.IsNullOrEmpty(typeSell))
+            {
+                blindBoxes = blindBoxes.Where(b => b.TypeSell.Contains(typeSell));
             }
 
 
@@ -142,7 +146,10 @@ namespace Services.Product
             return blindBoxMobileResponses;
         }
 
-
-
+        public async Task<PaginatedList<BlindBox>> GetBlindboxeByTypeSellPaged(string typeSell, int pageNumber, int pageSize)
+        {
+            IQueryable<BlindBox> blindBoxes = (await _repository.GetBlindBoxByTypeSell(typeSell)).AsQueryable();
+            return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
+        }
     }
 }

@@ -101,9 +101,9 @@ public class PackageController : ControllerBase
     /// <param name="pageSize">số Blindbox</param>
     /// <returns></returns>
     [HttpGet("paged")]
-    public async Task<IActionResult> GetPaged(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber = 1, int pageSize =6)
+    public async Task<IActionResult> GetPaged(string? typeSell,string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber = 1, int pageSize =6)
     {
-        var result = await _packageService.GetAllFilter(searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
+        var result = await _packageService.GetAllFilter(typeSell,searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
         return Ok(result);
     }
 }

@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 
 public class Cart
 {
-   
     [Key]
     public Guid CartId { get; set; } = Guid.NewGuid();
 
