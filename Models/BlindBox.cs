@@ -40,6 +40,8 @@ namespace Models
         [Required]
         public int Stock { get; set; }
 
+        public string Size { get; set; }
+
         [Required]
         public DateTime CreatedAt { get; set; }
 

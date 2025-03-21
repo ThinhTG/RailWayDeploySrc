@@ -53,7 +53,7 @@ namespace Services.Product
             await _repository.DeleteAsync(id);
         }
 
-        public async Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
+        public async Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory,string?size , string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize)
         {
             IQueryable<BlindBox> blindBoxes = _repository.GetAll().AsQueryable();
 
@@ -79,13 +79,20 @@ namespace Services.Product
                 blindBoxes = blindBoxes.Where(b => b.Price <= maxPrice.Value);
             }
 
+            if(!string.IsNullOrEmpty(size))
+            {
+                blindBoxes = blindBoxes.Where(b => b.Size.Contains(size));
+            }
+
+
+
             return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
         }
 
 
         //Mobile
         public async Task<IEnumerable<BlindBoxMobileResponse>> GetAllAsync(
-            string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice)
+            string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice,string? size)
         {
             IQueryable<BlindBox> blindBoxes = _repository.GetAll()
                 .Include(b => b.Category)
@@ -110,6 +117,11 @@ namespace Services.Product
             if (maxPrice.HasValue)
             {
                 blindBoxes = blindBoxes.Where(b => b.Price <= maxPrice.Value);
+            }
+
+            if(!string.IsNullOrEmpty(size))
+            {
+                blindBoxes = blindBoxes.Where(b => b.Size.Contains(size));
             }
 
             var blindBoxMobileResponses = await blindBoxes.Select(b => new BlindBoxMobileResponse
