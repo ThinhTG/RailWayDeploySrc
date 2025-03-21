@@ -162,6 +162,8 @@ namespace DAO.Contracts
             public string Gender { get; set; }
 
             public string Address { get; set; }
+
+            public string PhoneNumber { get; set; } // Thêm số điện thoại
         }
 
 

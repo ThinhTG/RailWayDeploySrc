@@ -424,6 +424,7 @@ namespace Services.AccountService
             user.LastName = request.LastName;
             user.Email = request.Email;
             user.Gender = request.Gender;
+            user.PhoneNumber = request.PhoneNumber;
             user.Address = request.Address;
 
             await _userManager.UpdateAsync(user);

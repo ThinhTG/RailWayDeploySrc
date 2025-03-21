@@ -1,4 +1,6 @@
-﻿using Repositories.UnitOfWork;
+﻿using AutoMapper;
+using DAO.Contracts;
+using Repositories.UnitOfWork;
 using Services.DTO;
 
 namespace Services
@@ -6,10 +8,12 @@ namespace Services
     public class CartService : ICartService
     {
         public readonly IUnitOfWork _unitOfWork;
+        public readonly IMapper _mapper;
 
-        public CartService(IUnitOfWork unitOfWork)
+        public CartService(IUnitOfWork unitOfWork,IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         public async Task AddToCart(CartDTO cartDto)
@@ -41,7 +45,8 @@ namespace Services
                     BlindBoxId = cartDto.BlindBoxId,
                     PackageId = cartDto.PackageId,
                     Quantity = cartDto.Quantity,
-                    CreateDate = DateTime.UtcNow
+                    CreateDate = DateTime.UtcNow,
+                    //BlindBox = _unitOfWork.GetRepository<BlindBoxMobileResponse>().GetById(cartDto.BlindBoxId),
                 };
                 await cartRepository.InsertAsync(newCart);
             }
