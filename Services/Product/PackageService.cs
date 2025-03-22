@@ -2,6 +2,7 @@
 using Models;
 using Repositories.Pagging;
 using Repositories.Product;
+using Services.DTO;
 
 namespace Services.Product
 {
@@ -34,9 +35,24 @@ namespace Services.Product
             return await _packageRepository.AddPackageAsync(package);
         }
 
-        public async Task<Package?> UpdatePackageAsync(Package package)
+        public async Task<Package?> UpdatePackageAsync(Guid id, UpdatePackageRequest updatePackageRequest)
         {
-            return await _packageRepository.UpdatePackageAsync(package);
+           var Package = await _packageRepository.GetPackageByIdAsync(id);
+            if (Package == null)
+            {
+                throw new Exception("Package not found");
+            }
+            Package.CategoryId = updatePackageRequest.CategoryId;
+            Package.PackageName = updatePackageRequest.PackageName;
+            Package.PackagePrice = updatePackageRequest.PackagePrice;
+            Package.Description = updatePackageRequest.Description;
+            Package.PackageStatus = updatePackageRequest.PackageStatus;
+            Package.TypeSell = updatePackageRequest.TypeSell;
+           Package.Stock = updatePackageRequest.Stock;
+            Package.Amount = updatePackageRequest.Amount;
+
+             await _packageRepository.UpdatePackageAsync(Package);
+            return Package;
         }
 
         public async Task<bool> DeletePackageAsync(Guid id)

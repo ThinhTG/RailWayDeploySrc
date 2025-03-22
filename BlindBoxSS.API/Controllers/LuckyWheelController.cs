@@ -5,6 +5,7 @@ using Models;
 using Services.OrderS;
 using Services.Product;
 using Services.Request;
+using Services.DTO;
 
 namespace BlindBoxSS.API.Controllers
 {
@@ -49,7 +50,10 @@ namespace BlindBoxSS.API.Controllers
 
             // Chuyển trạng thái BlindBox thành "Sold"
             blindBox.BlindBoxStatus = "SoldOut";
-            await _blindBoxService.UpdateAsync(blindBox);
+            await _blindBoxService.UpdateAsync(blindBox.BlindBoxId, new UpdateBlindBoxDTO
+            {
+                BlindBoxStatus = blindBox.BlindBoxStatus
+            });
 
             // Tạo đơn hàng
             var order = new Order

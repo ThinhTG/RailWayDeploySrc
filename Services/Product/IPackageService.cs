@@ -1,5 +1,6 @@
 ﻿using Models;
 using Repositories.Pagging;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Services.Product
         Task<IEnumerable<Package>> GetAllPackagesAsync();
         Task<Package?> GetPackageByIdAsync(Guid id);
         Task<Package> AddPackageAsync(Package package);
-        Task<Package?> UpdatePackageAsync(Package package);
+        Task<Package?> UpdatePackageAsync(Guid id, UpdatePackageRequest updatePackageRequest);
         Task<bool> DeletePackageAsync(Guid id);
         Task<IEnumerable<Package>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice);
         Task<PaginatedList<Package>> GetAllFilter(string? typeSell,string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize);
