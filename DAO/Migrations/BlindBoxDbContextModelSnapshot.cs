@@ -239,6 +239,9 @@ namespace DAO.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(255)
@@ -505,10 +508,6 @@ namespace DAO.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("TypeSell")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -529,12 +528,12 @@ namespace DAO.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<Guid?>("AddressId")
+                        .IsRequired()
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("DeliveryAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DiscountMoney")
                         .HasColumnType("decimal(18,2)");
@@ -564,6 +563,8 @@ namespace DAO.Migrations
                     b.HasKey("OrderId");
 
                     b.HasIndex("AccountId");
+
+                    b.HasIndex("AddressId");
 
                     b.ToTable("Order");
                 });
@@ -881,7 +882,7 @@ namespace DAO.Migrations
             modelBuilder.Entity("Models.Address", b =>
                 {
                     b.HasOne("Models.ApplicationUser", "applicationUser")
-                        .WithMany()
+                        .WithMany("Addresses")
                         .HasForeignKey("applicationUserId");
 
                     b.Navigation("applicationUser");
@@ -940,7 +941,15 @@ namespace DAO.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Models.Address", "DeliveryAddress")
+                        .WithMany()
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
                     b.Navigation("Account");
+
+                    b.Navigation("DeliveryAddress");
                 });
 
             modelBuilder.Entity("Models.OrderDetail", b =>
@@ -1040,6 +1049,8 @@ namespace DAO.Migrations
 
             modelBuilder.Entity("Models.ApplicationUser", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("Reviews");
                 });
 

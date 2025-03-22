@@ -31,7 +31,9 @@ namespace Models
 
         public int? orderCode { get; set; }
 
-        
+        public virtual ICollection<Address>? Addresses { get; set; }
+
+
 
     }
 }

@@ -53,7 +53,8 @@ namespace Models
 
         [Required]
         public DateTime UpdatedAt { get; set; }
-
+        
+        public int? OrderId { get; set; }
         public virtual ApplicationUser? applicationUser { get; set; }
     }
 }

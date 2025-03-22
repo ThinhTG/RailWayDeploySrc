@@ -69,7 +69,7 @@ public class OrderController : ControllerBase
             OrderStatus = Models.Enum.OrderStatus.PENDING,
             Price = createDto.Price,
             PriceTotal = createDto.PriceTotal,
-            DeliveryAddress = createDto.DeliveryAddress,
+            AddressId = createDto.AddressId,
             PaymentConfirmed = false,
             Note = createDto.Note,
             PhoneNumber = createDto.PhoneNumber,

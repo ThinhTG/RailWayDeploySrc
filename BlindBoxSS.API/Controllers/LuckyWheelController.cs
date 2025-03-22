@@ -63,8 +63,7 @@ namespace BlindBoxSS.API.Controllers
                 Price = spinCost,
                 PriceTotal = spinCost,
                 CreatedDate = DateTime.UtcNow,
-                PaymentConfirmed = true,
-                DeliveryAddress = "Lucky Wheel Delivery",
+                PaymentConfirmed = true, 
                 Note = "Spin reward",
                 PhoneNumber = 0,
                 DiscountMoney = 0

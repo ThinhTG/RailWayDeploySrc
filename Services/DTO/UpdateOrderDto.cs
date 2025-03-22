@@ -27,7 +27,7 @@ namespace Models
         public decimal PriceTotal { get; set; }
 
         [Required]
-        public string DeliveryAddress { get; set; }
+        public Guid AddressId { get; set; }
 
         [Required]
         public string Note { get; set; }

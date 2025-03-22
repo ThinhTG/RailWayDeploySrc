@@ -30,7 +30,7 @@ namespace Models
         public bool PaymentConfirmed { get; set; }
 
         [Required]
-        public string DeliveryAddress { get; set; }
+        public Guid? AddressId { get; set; }
 
         [Required]
         public string Note { get; set; }
@@ -50,5 +50,7 @@ namespace Models
         public virtual ICollection<Voucher> Vouchers { get; set; }
 
         public virtual ICollection<WalletTransaction> WalletTransactions { get; set; }
+
+        public virtual Address? DeliveryAddress { get; set; } 
     }
 }

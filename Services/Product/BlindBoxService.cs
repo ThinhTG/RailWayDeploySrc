@@ -1,19 +1,10 @@
 ﻿using AutoMapper;
 using DAO.Contracts;
-using DAO.Migrations;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Pagging;
 using Repositories.Product;
 using Services.DTO;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.Product
 {

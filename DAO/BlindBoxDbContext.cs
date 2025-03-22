@@ -117,6 +117,12 @@ namespace DAO
                 .HasForeignKey(od => od.BlindBoxId)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.DeliveryAddress)
+                .WithMany()
+                .HasForeignKey(o => o.AddressId)
+                .OnDelete(DeleteBehavior.SetNull); // Không bị lỗi khi xóa Address
+
 
 
 

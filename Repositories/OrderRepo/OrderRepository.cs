@@ -16,7 +16,11 @@ namespace Repositories.OrderRep
 
         public IQueryable<Order> GetAll()
         {
-            return _context.Orders.AsQueryable();
+            return _context.Orders
+                .Include(o => o.Account) // Lấy thông tin tài khoản của khách hàng
+                .Include(o => o.Account.Addresses) // Lấy danh sách địa chỉ của tài khoản (Không cần thiết nếu chỉ lấy 1 Address)
+                .Include(o => o.DeliveryAddress) // Lấy thông tin địa chỉ đã chọn
+                .AsQueryable();
         }
 
         public async Task<Order> AddAsync(Order order)

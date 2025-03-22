@@ -1,7 +1,4 @@
-﻿using BlindBoxSS.API.Attributes;
-using DAO.Migrations;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.DTO;
 using Services.Product;
