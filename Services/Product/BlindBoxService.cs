@@ -20,10 +20,12 @@ namespace Services.Product
     public class BlindBoxService : IBlindBoxService
     {
         private readonly IBlindBoxRepository _repository;
+        private readonly IPackageRepository _packageRepository;
         private readonly IMapper _mapper;
 
-        public BlindBoxService(IBlindBoxRepository repository,IMapper mapper)
+        public BlindBoxService(IBlindBoxRepository repository,IMapper mapper, IPackageRepository packageRepository)
         {
+            _packageRepository = packageRepository;
             _repository = repository;
             _mapper = mapper;
         }
@@ -191,6 +193,57 @@ namespace Services.Product
         {
             IQueryable<BlindBox> blindBoxes = (await _repository.GetBlindBoxByTypeSell(typeSell)).AsQueryable();
             return await PaginatedList<BlindBox>.CreateAsync(blindBoxes, pageNumber, pageSize);
+        }
+
+        public async Task<BlindBox> AddAsyncV2(AddBlindBoxDTOV2 addBlindBoxDTOV2)
+        {
+            // Fetch the Package using the PackageId from the DTO
+            var package = await _packageRepository.GetPackageByIdAsync(addBlindBoxDTOV2.PackageId);
+
+            var blindboxV2 = new BlindBox
+            {
+
+                BlindBoxId = Guid.NewGuid(),
+                PackageId = addBlindBoxDTOV2.PackageId,
+                CategoryId = package.CategoryId,
+                BlindBoxName = addBlindBoxDTOV2.BlindBoxName,
+                Price = addBlindBoxDTOV2.Price,
+                Description = addBlindBoxDTOV2.Description,
+                Stock = addBlindBoxDTOV2.Stock,
+                Size = addBlindBoxDTOV2.Size,
+                TypeSell = addBlindBoxDTOV2.TypeSell,
+                Percent = addBlindBoxDTOV2.Percent,
+                BlindBoxStatus = addBlindBoxDTOV2.BlindBoxStatus,
+                CreatedAt = addBlindBoxDTOV2.CreatedAt.Kind == DateTimeKind.Unspecified
+                   ? DateTime.SpecifyKind(addBlindBoxDTOV2.CreatedAt, DateTimeKind.Utc)
+                   : addBlindBoxDTOV2.CreatedAt.ToUniversalTime(),
+                UpdatedAt = addBlindBoxDTOV2.UpdatedAt.Kind == DateTimeKind.Unspecified
+                   ? DateTime.SpecifyKind(addBlindBoxDTOV2.UpdatedAt, DateTimeKind.Utc)
+                   : addBlindBoxDTOV2.UpdatedAt.ToUniversalTime()
+            };
+            await _repository.AddAsync(blindboxV2);
+            return blindboxV2;
+        }
+
+        public async Task<BlindBox> UpdateAsyncV2(Guid id, UpdateBlindBoxDTOV2 updateBlindBoxDTOV2)
+        {   
+            var blindbox = await _repository.GetByIdAsync(id);
+            
+
+            blindbox.BlindBoxName = updateBlindBoxDTOV2.BlindBoxName;
+            blindbox.Price = updateBlindBoxDTOV2.Price;
+            blindbox.Description = updateBlindBoxDTOV2.Description;
+            blindbox.Stock = updateBlindBoxDTOV2.Stock;
+            blindbox.Size = updateBlindBoxDTOV2.Size;
+            blindbox.TypeSell = updateBlindBoxDTOV2.TypeSell;
+            blindbox.Percent = updateBlindBoxDTOV2.Percent;
+            blindbox.BlindBoxStatus = updateBlindBoxDTOV2.BlindBoxStatus;
+
+            blindbox.UpdatedAt = updateBlindBoxDTOV2.UpdatedAt.Kind == DateTimeKind.Unspecified
+                ? DateTime.SpecifyKind(updateBlindBoxDTOV2.UpdatedAt, DateTimeKind.Utc)
+                : updateBlindBoxDTOV2.UpdatedAt.ToUniversalTime();
+            await _repository.UpdateAsync(blindbox);
+            return blindbox;
         }
     }
 }
