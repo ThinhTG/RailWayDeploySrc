@@ -1,6 +1,7 @@
 ﻿using DAO.Contracts;
 using Models;
 using Repositories.Pagging;
+using Services.DTO;
 
 namespace Services.Product
 {
@@ -8,8 +9,8 @@ namespace Services.Product
     {
         Task<IEnumerable<BlindBoxMobileResponse>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, string? size);
         Task<BlindBox> GetByIdAsync(Guid id);
-        Task<BlindBox> AddAsync(BlindBox blindBox);
-        Task<BlindBox> UpdateAsync(BlindBox blindBox);
+        Task<BlindBox> AddAsync(AddBlindBoxDTO addBlindBoxDTO);
+        Task<BlindBox> UpdateAsync(Guid id, UpdateBlindBoxDTO updateBlindBoxDTO);
         Task DeleteAsync(Guid id);
 
         Task<PaginatedList<BlindBox>> GetAll(int pageNumber, int pageSize);

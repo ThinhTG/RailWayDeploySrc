@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Cache;
+using Services.DTO;
 using Services.Product;
 
 [Route("api/blindboxes")]
@@ -74,23 +75,52 @@ public class BlindBoxController : ControllerBase
 
     // Tạo một blindbox mới
     [HttpPost]
-    public async Task<ActionResult<BlindBox>> Create(BlindBox blindBox)
+    public async Task<ActionResult<BlindBox>> Create([FromBody] AddBlindBoxDTO addBlindBoxDTO)
     {
-        var createdBlindBox = await _service.AddAsync(blindBox);
-        return CreatedAtAction(nameof(GetById), new { id = createdBlindBox.BlindBoxId }, createdBlindBox);
+        if (addBlindBoxDTO == null)
+        {
+            return BadRequest("Blindbox data is required.");
+        }
+
+        try
+        {
+            var createdBlindBox= await _service.AddAsync(addBlindBoxDTO);
+            return CreatedAtAction(nameof(GetById), new { id = createdBlindBox.BlindBoxId}, createdBlindBox);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(ex.Message); // 409 Conflict for duplicate VoucherId
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message); // For validation errors
+        }
     }
 
     // Cập nhật blindbox theo ID
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, BlindBox blindBox)
+    public async Task<IActionResult> Update(Guid id, UpdateBlindBoxDTO updateBlindBoxDTO)
     {
-        if (id != blindBox.BlindBoxId)
+        if (updateBlindBoxDTO == null)
         {
-            return BadRequest();
+            return BadRequest("Blindbox update data is required.");
         }
 
-        await _service.UpdateAsync(blindBox);
-        return NoContent();
+        try
+        {
+            var updatedBlindbox = await _service.UpdateAsync(id, updateBlindBoxDTO);
+            if (updatedBlindbox == null)
+            {
+                return NotFound($"Blindbox with ID {id} not found.");
+            }
+
+            return NoContent(); // 204 No Content, no body
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error while updating voucher {id}: {ex.Message}");
+            return StatusCode(500, "An unexpected error occurred while updating the voucher.");
+        }
     }
 
     // Xóa blindbox theo ID
