@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAO.Migrations
 {
     [DbContext(typeof(BlindBoxDbContext))]
-    [Migration("20250322180112_newDb")]
-    partial class newDb
+    [Migration("20250322180812_newDb2")]
+    partial class newDb2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -532,7 +532,6 @@ namespace DAO.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("AddressId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -947,8 +946,7 @@ namespace DAO.Migrations
                     b.HasOne("Models.Address", "DeliveryAddress")
                         .WithMany()
                         .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Account");
 

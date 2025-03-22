@@ -529,7 +529,6 @@ namespace DAO.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<Guid?>("AddressId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
@@ -944,8 +943,7 @@ namespace DAO.Migrations
                     b.HasOne("Models.Address", "DeliveryAddress")
                         .WithMany()
                         .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.SetNull)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Account");
 
