@@ -55,6 +55,11 @@ namespace Services.OrderS
             return await PaginatedList<Order>.CreateAsync(orders, pageNumber, pageSize);
         }
 
+        public async Task<PaginatedList<Order>> GetListOrderForCheck(int pageNumber, int pageSize)
+        {
+            IQueryable<Order> orders = _orderRepository.GetListOrderForCheck().AsQueryable();
 
+            return await PaginatedList<Order>.CreateAsync(orders, pageNumber, pageSize);
+        }
     }
 }

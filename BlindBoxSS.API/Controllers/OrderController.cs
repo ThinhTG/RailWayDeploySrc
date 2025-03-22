@@ -58,6 +58,18 @@ public class OrderController : ControllerBase
         return Ok(orders);
     }
 
+    /// <summary>
+    /// lấy danh sách đơn hàng theo OrderStatus = PENDING và PaymentConfirmed = true và OrderCode != null
+    /// </summary>
+    /// <param name="pageNumber">Số Trang</param>
+    /// <param name="pageSize">Số Đơn hàng trong 1 trang</param>
+    /// <returns></returns>
+    [HttpGet("checkOrder")]
+    public async Task<ActionResult<IEnumerable<Order>>> GetListOrderForCheck(int pageNumber = 1, int pageSize = 10)
+    {
+        var orders = await _orderService.GetListOrderForCheck(pageNumber, pageSize);
+        return Ok(orders);
+    }
 
     // Tạo đơn hàng mới
     [HttpPost]
