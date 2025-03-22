@@ -130,4 +130,64 @@ public class BlindBoxController : ControllerBase
         await _service.DeleteAsync(id);
         return NoContent();
     }
+
+    /// <summary>
+    /// tao blindbox V2
+    /// </summary>
+    /// <param name="addBlindBoxDTOV2"></param>
+    /// <returns></returns>
+    [HttpPost("v2blindbox")]
+    public async Task<ActionResult<BlindBox>> Create([FromBody] AddBlindBoxDTOV2 addBlindBoxDTOV2)
+    {
+        if (addBlindBoxDTOV2 == null)
+        {
+            return BadRequest("Blindbox data is required.");
+        }
+
+        try
+        {
+            var createdBlindBoxV2 = await _service.AddAsyncV2(addBlindBoxDTOV2);
+            return CreatedAtAction(nameof(GetById), new { id = createdBlindBoxV2.BlindBoxId }, createdBlindBoxV2);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Conflict(ex.Message); // 409 Conflict for duplicate VoucherId
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message); // For validation errors
+        }
+    }
+
+    /// <summary>
+    /// update blindbox V2
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="updateBlindBoxDTOV2"></param>
+    /// <returns></returns>
+    [HttpPut("v2/{id}")]
+    public async Task<IActionResult> Update(Guid id, UpdateBlindBoxDTOV2 updateBlindBoxDTOV2)
+    {
+        if (updateBlindBoxDTOV2 == null)
+        {
+            return BadRequest("Blindbox update data is required.");
+        }
+
+        try
+        {
+            var updatedBlindboxV2 = await _service.UpdateAsyncV2(id, updateBlindBoxDTOV2);
+            if (updatedBlindboxV2 == null)
+            {
+                return NotFound($"Blindbox with ID {id} not found.");
+            }
+
+            return NoContent(); // 204 No Content, no body
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Unexpected error while updating voucher {id}: {ex.Message}");
+            return StatusCode(500, "An unexpected error occurred while updating the voucher.");
+        }
+    }
+
 }
