@@ -63,5 +63,12 @@ namespace Repositories.OrderRep
             var OrderDetails = await _context.Set<OrderDetail>().Where(x => x.OrderId == orderId).ToListAsync();
             return OrderDetails;
         }
+
+        public async Task AddMultipleOrderDetailsAsync(IEnumerable<OrderDetail> orderDetails)
+        {
+            await _context.OrderDetails.AddRangeAsync(orderDetails);
+            await _context.SaveChangesAsync();
+        }
+
     }
 }

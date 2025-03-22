@@ -16,5 +16,8 @@ namespace Repositories.OrderRep
         Task<OrderDetail?> UpdateOrderDetailAsync(OrderDetail orderDetail);
         Task<bool> DeleteOrderDetailAsync(Guid id);
         Task<IEnumerable<OrderDetail>> GetOrderDetailsByOrderIdAsync(int orderId);
+
+        Task AddMultipleOrderDetailsAsync(IEnumerable<OrderDetail> orderDetails);
+
     }
 }

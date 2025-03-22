@@ -1,4 +1,6 @@
-﻿using Models;
+﻿using DAO.Contracts;
+using Models;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +18,7 @@ namespace Services.OrderS
         Task<bool> DeleteOrderDetailAsync(Guid id);
 
         Task<IEnumerable<OrderDetail>> GetOrderDetailsByOrderIdAsync(int orderId);
+        Task<IEnumerable<OrderDetail>> AddMultipleOrderDetailsAsync(int orderId, List<OrderDetailRq> orderDetails);
+
     }
 }

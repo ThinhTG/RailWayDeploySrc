@@ -1,4 +1,5 @@
-﻿    using Microsoft.AspNetCore.Mvc;
+﻿using DAO.Contracts;
+using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.DTO;
 using Services.OrderS;
@@ -177,4 +178,41 @@ public class OrderDetailController : ControllerBase
 
     //    return Ok(updatedorderDetail);
     //}
+
+    [HttpPost("mutiple-create")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<IEnumerable<OrderDetail>>> CreateMultipleOrderDetails([FromBody] CreateMultipleOrderDetailsRequest request)
+    {
+        try
+        {
+            // Kiểm tra Order có tồn tại không
+            var orderExists = await _orderService.GetByIdAsync(request.OrderId);
+            if (orderExists == null)
+            {
+                return BadRequest(new
+                {
+                    title = "Bad Request",
+                    statusCode = 400,
+                    message = $"Order with OrderId {request.OrderId} does not exist."
+                });
+            }
+
+            // Gọi Service để xử lý logic
+            var createdOrderDetails = await _orderDetailService.AddMultipleOrderDetailsAsync(request.OrderId, request.OrderDetails);
+
+            return Created("", createdOrderDetails);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(StatusCodes.Status500InternalServerError, new
+            {
+                title = "Internal Server Error",
+                statusCode = 500,
+                message = "An error occurred while creating order details.",
+                detail = ex.InnerException?.Message ?? ex.Message
+            });
+        }
+    }
+
 }
