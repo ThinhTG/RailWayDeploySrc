@@ -54,7 +54,7 @@ public class WalletController : ControllerBase
     /// <param name="orderCode"></param>
     /// <returns></returns>
     [HttpPost("{accountId}/deposit")]
-    public async Task<IActionResult> AddMoney(string accountId, [FromQuery] int amount, int orderCode)
+    public async Task<IActionResult> AddMoney(string accountId, [FromQuery] decimal amount, int orderCode)
     {
         if (string.IsNullOrEmpty(accountId) || amount <= 0)
             return BadRequest(new { Message = "Invalid accountId or amount." });
@@ -79,7 +79,7 @@ public class WalletController : ControllerBase
     /// <param name="orderId"></param>
     /// <returns></returns>
     [HttpPost("{accountId}/purchase")]
-    public async Task<IActionResult> Purchase(string accountId, [FromQuery] int amount, [FromQuery] int? orderId)
+    public async Task<IActionResult> Purchase(string accountId, [FromQuery] decimal amount, [FromQuery] int? orderId)
     {
         if (string.IsNullOrEmpty(accountId) || amount <= 0)
             return BadRequest(new { Message = "Invalid accountId or amount." });
