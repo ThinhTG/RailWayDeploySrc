@@ -66,9 +66,11 @@ public class OrderController : ControllerBase
         var order = new Order
         {
             AccountId = createDto.AccountId,
-            OrderStatus = createDto.OrderStatus,
+            OrderStatus = Models.Enum.OrderStatus.WaitingForConfirmation,
             Price = createDto.Price,
+            PriceTotal = createDto.PriceTotal,
             DeliveryAddress = createDto.DeliveryAddress,
+            PaymentConfirmed = false,
             Note = createDto.Note,
             PhoneNumber = createDto.PhoneNumber,
             CreatedDate = DateTime.UtcNow
@@ -86,7 +88,7 @@ public class OrderController : ControllerBase
         var order = await _orderService.GetByIdAsync(id);
         if (order == null) return NotFound();
 
-        if (updateDto.OrderStatus != null) order.OrderStatus = updateDto.OrderStatus;
+        //if (updateDto.OrderStatus != null) order.OrderStatus = updateDto.OrderStatus;
         if (updateDto.PriceTotal > 0) order.PriceTotal = updateDto.PriceTotal;
 
         await _orderService.UpdateAsync(order);

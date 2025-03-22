@@ -34,6 +34,7 @@ public class PaymentService : IPaymentService
             if (checking.status == "PAID")
             {
                 order.PaymentConfirmed = true;
+                order.OrderStatus = Models.Enum.OrderStatus.WaitingForDelivery;      // Order Status : Thanh Toán Thành Công
                 await _orderSV.UpdateAsync(order);
                 throw new Exception("Order has been paid");
             }
@@ -54,6 +55,7 @@ public class PaymentService : IPaymentService
             var createdLink = await _payOS.createPaymentLink(paymentDataPayment);
 
             order.OrderCode = orderCode;
+            order.OrderStatus = Models.Enum.OrderStatus.WaitingForDelivery;     // Order Status : Đợi thanh toán   
             await _orderSV.UpdateAsync(order);
             return createdLink;
 

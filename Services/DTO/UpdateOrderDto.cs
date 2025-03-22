@@ -17,20 +17,14 @@ namespace Models
         [Required]
         public string AccountId { get; set; }
 
-        [Required]
-        public string OrderStatus { get; set; }
+        //[Required]
+        //public string OrderStatus { get; set; }
 
         [Required]
         public decimal Price { get; set; }
 
         [Required]
         public decimal PriceTotal { get; set; }
-
-        [Required]
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-
-        [Required]
-        public bool PaymentConfirmed { get; set; }
 
         [Required]
         public string DeliveryAddress { get; set; }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Models.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Models
@@ -14,7 +15,7 @@ namespace Models
         public String AccountId { get; set; }
 
         [Required]
-        public string OrderStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
         [Required]
         public decimal Price { get; set; }

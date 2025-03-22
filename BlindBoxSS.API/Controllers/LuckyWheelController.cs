@@ -59,7 +59,7 @@ namespace BlindBoxSS.API.Controllers
             var order = new Order
             {
                 AccountId = request.UserId.ToString(),
-                OrderStatus = "Completed",
+                OrderStatus = Models.Enum.OrderStatus.WaitingForConfirmation,
                 Price = spinCost,
                 PriceTotal = spinCost,
                 CreatedDate = DateTime.UtcNow,
