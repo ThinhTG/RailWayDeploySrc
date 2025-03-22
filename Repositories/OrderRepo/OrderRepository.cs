@@ -61,5 +61,10 @@ namespace Repositories.OrderRep
         {
             return _context.Orders.Where(o => o.AccountId == id);
         }
+
+        public IQueryable<Order> GetListOrderForCheck()
+        {
+            return _context.Orders.Where(o => o.OrderCode != null && o.PaymentConfirmed == true && o.OrderStatus == Models.Enum.OrderStatus.PENDING);
+        }
     }
 }

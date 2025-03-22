@@ -15,9 +15,6 @@ namespace Services.DTO
         public Guid CategoryId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public string TypeSell { get; set; }
-
-        [Required]
         [StringLength(255)]
         public string CategoryName { get; set; }
 

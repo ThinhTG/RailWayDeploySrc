@@ -44,7 +44,6 @@ namespace Services.Product
             {
                 BlindBoxId = Guid.NewGuid(),
                 PackageId = addBlindBoxDTO.PackageId,
-                CategoryId = addBlindBoxDTO.CategoryId,
                 BlindBoxName = addBlindBoxDTO.BlindBoxName,
                 Price = addBlindBoxDTO.Price,
                 Description = addBlindBoxDTO.Description,

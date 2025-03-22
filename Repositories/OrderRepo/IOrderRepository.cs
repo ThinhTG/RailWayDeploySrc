@@ -13,5 +13,6 @@ namespace Repositories.OrderRep
         IQueryable<Order> GetAll();
 
         IQueryable<Order> GetByAccountId(string id);
+        IQueryable<Order> GetListOrderForCheck();
     }
 }

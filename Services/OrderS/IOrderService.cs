@@ -19,5 +19,7 @@ namespace Services.OrderS
         Task<PaginatedList<Order>> GetAll(int pageNumber, int pageSize);
 
         Task<PaginatedList<Order>> GetByAccountId(string accountId,int pageNumber,int pageSize);
+
+        Task<PaginatedList<Order>> GetListOrderForCheck(int pageNumber, int pageSize);
     }
 }
