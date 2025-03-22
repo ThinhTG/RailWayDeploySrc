@@ -107,25 +107,4 @@ public class PackageController : ControllerBase
         var result = await _packageService.GetAllFilter(typeSell,searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
         return Ok(result);
     }
-
-
-    /// <summary>
-    /// Update packageV2
-    /// </summary>
-    /// <param name="id"></param>
-    /// <param name="updatePackageDTO"></param>
-    /// <returns></returns>
-    [HttpPut("v2/{id}")]
-    public async Task<IActionResult> UpdateV2(Guid id, [FromBody] UpdatePackageDTO updatePackageDTO)
-    {
-        try
-        {
-            await _packageService.UpdatePackageAsyncV2(id, updatePackageDTO);
-            return NoContent(); // 204 No Content indicates successful update
-        }
-        catch (KeyNotFoundException)
-        {
-            return NotFound(); // 404 Not Found if category doesn't exist
-        }
-    }
 }
