@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using DAO.Contracts;
+using DAO.Migrations;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.Pagging;
 using Repositories.Product;
 using Services.DTO;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -43,14 +47,51 @@ namespace Services.Product
             return await _repository.GetBlindBoxByTypeSell(typeSell);
         }
 
-        public async Task<BlindBox> AddAsync(BlindBox blindBox)
+        public async Task<BlindBox> AddAsync(AddBlindBoxDTO addBlindBoxDTO)
         {
-            return await _repository.AddAsync(blindBox);
+            var blindbox = new BlindBox
+            {
+                BlindBoxId = Guid.NewGuid(),
+                PackageId = addBlindBoxDTO.PackageId,
+                CategoryId = addBlindBoxDTO.CategoryId,
+                BlindBoxName = addBlindBoxDTO.BlindBoxName,
+                Price = addBlindBoxDTO.Price,
+                Description = addBlindBoxDTO.Description,
+                Stock = addBlindBoxDTO.Stock,
+                Size = addBlindBoxDTO.Size,
+                TypeSell = addBlindBoxDTO.TypeSell,
+                Percent = addBlindBoxDTO.Percent,
+                BlindBoxStatus = addBlindBoxDTO.BlindBoxStatus,
+                CreatedAt = addBlindBoxDTO.CreatedAt.Kind == DateTimeKind.Unspecified
+                    ? DateTime.SpecifyKind(addBlindBoxDTO.CreatedAt, DateTimeKind.Utc)
+                    : addBlindBoxDTO.CreatedAt.ToUniversalTime(),
+                UpdatedAt = addBlindBoxDTO.UpdatedAt.Kind == DateTimeKind.Unspecified
+                    ? DateTime.SpecifyKind(addBlindBoxDTO.UpdatedAt, DateTimeKind.Utc)
+                    : addBlindBoxDTO.UpdatedAt.ToUniversalTime()
+            };
+            await _repository.AddAsync(blindbox);
+            return blindbox;
         }
 
-        public async Task<BlindBox> UpdateAsync(BlindBox blindBox)
+        public async Task<BlindBox> UpdateAsync(Guid id, UpdateBlindBoxDTO updateBlindBoxDTO)
         {
-            return await _repository.UpdateAsync(blindBox);
+            var blindbox = await _repository.GetByIdAsync(id);
+            blindbox.PackageId = updateBlindBoxDTO.PackageId;
+            blindbox.CategoryId = updateBlindBoxDTO.CategoryId;
+            blindbox.BlindBoxName = updateBlindBoxDTO.BlindBoxName;
+            blindbox.Price = updateBlindBoxDTO.Price;
+            blindbox.Description = updateBlindBoxDTO.Description;
+            blindbox.Stock = updateBlindBoxDTO.Stock;
+            blindbox.Size = updateBlindBoxDTO.Size;
+            blindbox.TypeSell = updateBlindBoxDTO.TypeSell;
+            blindbox.Percent = updateBlindBoxDTO.Percent;
+            blindbox.BlindBoxStatus = updateBlindBoxDTO.BlindBoxStatus;
+
+            blindbox.UpdatedAt = updateBlindBoxDTO.UpdatedAt.Kind == DateTimeKind.Unspecified
+                ? DateTime.SpecifyKind(updateBlindBoxDTO.UpdatedAt, DateTimeKind.Utc)
+                : updateBlindBoxDTO.UpdatedAt.ToUniversalTime();
+            await _repository.UpdateAsync(blindbox);
+            return blindbox;
         }
 
         public async Task DeleteAsync(Guid id)
