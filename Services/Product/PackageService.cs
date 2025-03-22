@@ -9,10 +9,12 @@ namespace Services.Product
     public class PackageService : IPackageService
     {
         private readonly IPackageRepository _packageRepository;
+        private readonly IBlindBoxRepository _blindBoxRepository;
 
-        public PackageService(IPackageRepository packageRepository)
+        public PackageService(IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository)
         {
             _packageRepository = packageRepository;
+            _blindBoxRepository = blindBoxRepository;
         }
 
         public async Task<IEnumerable<Package>> GetAllPackagesAsync()
@@ -32,7 +34,39 @@ namespace Services.Product
 
         public async Task<Package> AddPackageAsync(Package package)
         {
-            return await _packageRepository.AddPackageAsync(package);
+            try
+            {
+                var newPackage = await _packageRepository.AddPackageAsync(package);
+                if (newPackage.TypeSell == "LuckyWheel")
+                {
+                    // generate random 10 BlindBox cho package LuckyWheel
+                    for (int i = 0; i < 10; i++)
+                    {
+                        var blindBox = new BlindBox
+                        {
+                            BlindBoxId = Guid.NewGuid(),
+                            PackageId = newPackage.PackageId,
+                            CategoryId = newPackage.CategoryId,
+                            TypeSell = "LuckyWheel",
+                            Price = package.PackagePrice+50,
+                            Size = "Small",
+                            Description = $"BlindBox LuckyWheel {i + 1}",
+                            BlindBoxName = $"BlindBox {package.PackageName} {i + 1}",
+                            Stock = 1,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            Percent = 10,
+                            BlindBoxStatus = "Active"
+                        };
+                        await _blindBoxRepository.AddAsync(blindBox);
+                    }
+                }
+                return newPackage;
+            } catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         public async Task<Package?> UpdatePackageAsync(Guid id, UpdatePackageRequest updatePackageRequest)
