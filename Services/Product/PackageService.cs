@@ -175,5 +175,29 @@ namespace Services.Product
 
             return package.BlindBoxes.ElementAt(index);
         }
+
+
+        // update package v2 danh cho hoang 
+        public async Task<Package?> UpdatePackageAsyncV2(Guid id, UpdatePackageDTO updatePackageDTO)
+        {
+          
+            var Package = await _packageRepository.GetPackageByIdAsync(id);
+            if (Package == null)
+            {
+                throw new Exception("Package not found");
+            }
+           
+            Package.PackageName = updatePackageDTO.PackageName;
+            Package.PackagePrice = updatePackageDTO.PackagePrice;
+            Package.Description = updatePackageDTO.Description;
+            Package.PackageStatus = updatePackageDTO.PackageStatus;
+            Package.TypeSell = updatePackageDTO.TypeSell;
+            Package.Stock = updatePackageDTO.Stock;
+            Package.Amount = updatePackageDTO.Amount;
+
+            await _packageRepository.UpdatePackageAsync(Package);
+            return Package;
+
+        }
     }
 }

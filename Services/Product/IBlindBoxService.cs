@@ -11,6 +11,9 @@ namespace Services.Product
         Task<BlindBox> GetByIdAsync(Guid id);
         Task<BlindBox> AddAsync(AddBlindBoxDTO addBlindBoxDTO);
         Task<BlindBox> UpdateAsync(Guid id, UpdateBlindBoxDTO updateBlindBoxDTO);
+
+        Task<BlindBox> AddAsyncV2(AddBlindBoxDTOV2 addBlindBoxDTOV2);
+        Task<BlindBox> UpdateAsyncV2(Guid id, UpdateBlindBoxDTOV2 updateBlindBoxDTOV2);
         Task DeleteAsync(Guid id);
 
         Task<PaginatedList<BlindBox>> GetAll(int pageNumber, int pageSize);
