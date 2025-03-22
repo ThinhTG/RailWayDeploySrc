@@ -1,4 +1,5 @@
 ﻿using BlindBoxSS.API.Attributes;
+using DAO.Migrations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
@@ -54,14 +55,17 @@ public class PackageController : ControllerBase
 
     // Cập nhật gói
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] Package package)
+    public async Task<IActionResult> Update(Guid id, [FromBody] UpdatePackageRequest updatePackageRequest)
     {
-        if (id != package.PackageId) return BadRequest();
-
-        var updatedPackage = await _packageService.UpdatePackageAsync(package);
-        if (updatedPackage == null) return NotFound();
-
-        return Ok(updatedPackage);
+        try
+        {
+            await _packageService.UpdatePackageAsync(id, updatePackageRequest);
+            return NoContent(); // 204 No Content indicates successful update
+        }
+        catch (KeyNotFoundException)
+        {
+            return NotFound(); // 404 Not Found if category doesn't exist
+        }
     }
 
     // Xóa gói
