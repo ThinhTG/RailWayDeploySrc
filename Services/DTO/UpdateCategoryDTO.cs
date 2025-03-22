@@ -10,8 +10,6 @@ namespace Services.DTO
 {
    public class UpdateCategoryDTO
     {
-        [Required]
-        public string TypeSell { get; set; }
 
         [Required]
         [StringLength(255)]

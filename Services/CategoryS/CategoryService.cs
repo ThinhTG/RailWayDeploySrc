@@ -28,7 +28,6 @@ namespace Services.CategoryS
                 CategoryId = Guid.NewGuid(),
                 CategoryName = createDto.CategoryName,
                 CategoryImage = createDto.CategoryImage,
-                TypeSell = createDto.TypeSell,
                 UpdatedAt = DateTime.UtcNow,
                 CreatedAt = DateTime.UtcNow
             };
@@ -71,12 +70,6 @@ namespace Services.CategoryS
             if (!string.IsNullOrEmpty(updateDto.CategoryImage))
             {
                 category.CategoryImage = updateDto.CategoryImage;
-                await _categoryRepository.UpdateAsync(category);
-            }
-
-            if (!string.IsNullOrEmpty(updateDto.TypeSell))
-            {
-                category.TypeSell = updateDto.TypeSell;
                 await _categoryRepository.UpdateAsync(category);
             }
 
