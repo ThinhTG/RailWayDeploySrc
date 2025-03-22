@@ -35,7 +35,7 @@ namespace BlindBoxSS.API.Controllers
             if (package == null || package.Stock <= 0)
                 return BadRequest("Package not available or out of stock.");
 
-            var userWallet = await _walletService.GetWalletByAccountId(request.UserId);
+            var userWallet = await _walletService.GetWalletByAccountId(request.AccountId);
             if (userWallet == null || userWallet.Balance < package.PackagePrice / 10)
                 return BadRequest("Insufficient balance.");
 
@@ -58,8 +58,8 @@ namespace BlindBoxSS.API.Controllers
             // Tạo đơn hàng
             var order = new Order
             {
-                AccountId = request.UserId.ToString(),
-                OrderStatus = Models.Enum.OrderStatus.WaitingForConfirmation,
+                AccountId = request.AccountId.ToString(),
+                OrderStatus = Models.Enum.OrderStatus.PENDING,
                 Price = spinCost,
                 PriceTotal = spinCost,
                 CreatedDate = DateTime.UtcNow,

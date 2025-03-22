@@ -8,12 +8,10 @@ namespace Models.Enum
 {
     public enum OrderStatus
     {
-        WaitingForConfirmation, // Chờ xác nhận
-        WaitingForPickup,       // Chờ lấy hàng
-        WaitingForDelivery,     // Chờ giao hàng
-        InDelivery,             // Đang giao hàng
-        OrderReceived,          // Đã nhận hàng
-        Completed,              // Hoàn thành
-        OrderCanceled           // Đã hủy
+        PENDING,
+        CONFIRMED,
+        DELIVERING,
+        COMPLETED,
+        CANCELLED
     }
 }

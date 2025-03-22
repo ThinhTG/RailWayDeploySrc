@@ -66,7 +66,7 @@ public class OrderController : ControllerBase
         var order = new Order
         {
             AccountId = createDto.AccountId,
-            OrderStatus = Models.Enum.OrderStatus.WaitingForConfirmation,
+            OrderStatus = Models.Enum.OrderStatus.PENDING,
             Price = createDto.Price,
             PriceTotal = createDto.PriceTotal,
             DeliveryAddress = createDto.DeliveryAddress,

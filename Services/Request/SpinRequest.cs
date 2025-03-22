@@ -8,7 +8,7 @@ namespace Services.Request
 {
     public class SpinRequest
     {
-        public string UserId { get; set; }
+        public string AccountId { get; set; }
         public Guid PackageId { get; set; }
     }
 }
