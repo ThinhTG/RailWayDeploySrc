@@ -28,12 +28,12 @@ namespace Services
 
             var cartRepository = _unitOfWork.GetRepository<Cart>();
             var blindBox = await _unitOfWork.GetRepository<BlindBox>().GetByIdAsync(cartDto.BlindBoxId);
+            var package = await _unitOfWork.GetRepository<Package>().GetByIdAsync(cartDto.PackageId);
 
             var existingCartItem = await cartRepository.FindAsync(c =>
                 c.UserId == cartDto.UserId &&
-                c.BlindBoxId == cartDto.BlindBoxId &&
-                c.PackageId == cartDto.PackageId);
-
+                 (cartDto.BlindBoxId == null && c.PackageId == cartDto.PackageId) ||
+                 (cartDto.PackageId == null || c.BlindBoxId == cartDto.BlindBoxId));
 
             if (existingCartItem != null)
             {
@@ -50,13 +50,18 @@ namespace Services
                     PackageId = cartDto.PackageId,
                     Quantity = cartDto.Quantity,
                     CreateDate = DateTime.UtcNow,
-                    BlindBox = blindBox
+                    BlindBox = blindBox,
+                    Package = package
                 };
                 await cartRepository.InsertAsync(newCart);
+                await _unitOfWork.SaveAsync();
             }
 
-            await _unitOfWork.SaveAsync();
+           
         }
+
+
+
 
         public async Task<IEnumerable<Cart>> GetCartByUserId(string userId)
         {
@@ -65,14 +70,7 @@ namespace Services
 
             var cartRepository = _unitOfWork.GetRepository<Cart>();
 
-            //var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
-            var carts = await cartRepository
-                        .Query() 
-                      .Include(c => c.BlindBox)
-                      .Include(c => c.Package)
-                     .Where(c => c.UserId == userId)
-                       .ToListAsync();
-
+            var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
 
             return carts ?? throw new KeyNotFoundException("User not found or cart is empty.");
         }
