@@ -17,7 +17,7 @@ namespace Models
 
         [JsonIgnore]
         public virtual OrderDetail OrderDetail { get; set; }
-        [JsonIgnore]
+    
         public virtual ApplicationUser Account { get; set; }
 
     }

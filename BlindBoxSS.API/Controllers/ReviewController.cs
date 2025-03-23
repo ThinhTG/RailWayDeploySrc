@@ -39,7 +39,7 @@ namespace BlindBoxSS.API.Controllers
         [HttpGet("/Blindbox/{BlindBoxId}")]
         public async Task<IActionResult> GetReviewsByBlindBoxId(Guid BlindBoxId)
         {
-            var reviews = await _reviewService.GetAllReviewsByBlindBoxIdAsync(BlindBoxId);
+            var reviews = await _reviewService.GetReviewsByBlindBoxIdAsync(BlindBoxId);
             return Ok(reviews);
         }
 

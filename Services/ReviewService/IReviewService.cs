@@ -12,7 +12,10 @@ namespace Services.ReviewService
 
         //Task<IEnumerable<ReviewResponse>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId);
         Task<IEnumerable<Review>> GetAllReviewsAsync();
-        Task<IEnumerable<Review>> GetAllReviewsByBlindBoxIdAsync(Guid blindBoxId);
-        Task<IEnumerable<Review>> GetAllReviewsByPackageIdAsync(Guid packageId);
+        Task<IEnumerable<ReviewResponse>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId);
+
+        Task<IEnumerable<ReviewResponse>> GetAllReviewsByPackageIdAsync(Guid packageId);
+
+
     }
 }

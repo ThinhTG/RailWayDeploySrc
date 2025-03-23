@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using DAO.Contracts;
-using Microsoft.EntityFrameworkCore;
+using DAO.Contracts.ReviewResponses;
+using Microsoft.AspNetCore.Identity;
 using Models;
 using Repositories.ReviewRepo;
 
@@ -9,12 +10,14 @@ namespace Services.ReviewService
     public class ReviewService :IReviewService
     {
         private readonly IReviewRepository _reviewRepository;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMapper _mapper;
 
-        public ReviewService(IReviewRepository reviewRepository, IMapper mapper)
+        public ReviewService(IReviewRepository reviewRepository, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             _reviewRepository = reviewRepository;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
         public async Task<IEnumerable<ReviewResponse>> GetReviewsByOrderDetailIdAsync(Guid orderDetailId)
@@ -32,21 +35,60 @@ namespace Services.ReviewService
         public async Task<ReviewResponse> CreateReviewAsync(ReviewRequest review)
         {
             if (review == null || review.OrderDetailId == Guid.Empty)
-                throw new ArgumentNullException("Review or OrderDetailId is null");
+                throw new ArgumentNullException(nameof(review), "Review or OrderDetailId is null");
 
             var existingReview = await _reviewRepository.GetReviewsByOrderDetailIdAsync(review.OrderDetailId);
 
-            if (existingReview.Count() > 0)
+            if (existingReview.Count() >0)
             {
                 throw new InvalidOperationException("Review for this OrderDetailId already exists.");
             }
 
-            var newReview = _mapper.Map<ReviewRequest, Review>(review);
+            // Tìm account bằng await thay vì .Result
+            var account = await _userManager.FindByIdAsync(review.AccountId);
+            if (account == null)
+            {
+                throw new KeyNotFoundException("Account not found.");
+            }
+
+            // Tạo đối tượng Review mới
+            var newReview = new Review
+            {
+                ReviewId = Guid.NewGuid(),
+                OrderDetailId = review.OrderDetailId,
+                AccountId = review.AccountId,
+                Account = account,  // Gán Account để có dữ liệu khi trả về
+                Rating = review.Rating,
+                Comment = review.Comment,
+                imageUrl = review.ImageURL,
+                CreateAt = DateTime.UtcNow,
+                ReviewStatus = "Pending"
+                
+            };
 
             await _reviewRepository.AddReviewAsync(newReview);
             await _reviewRepository.SaveChangesAsync();
-            return _mapper.Map<Review, ReviewResponse>(newReview);
+
+            // Map sang ReviewResponse
+            var reviewResponse = new ReviewResponse
+            {
+                ReviewId = newReview.ReviewId,
+                OrderDetailId = newReview.OrderDetailId,
+                Account = new AccountReviewResponse // Nếu không muốn trả về toàn bộ Account, chỉ lấy dữ liệu cần thiết
+                {
+                    FirstName = account.FirstName,
+                    LastName = account.LastName,
+                    AvatarURL = account.AvatarURL
+                },
+                Rating = newReview.Rating,
+                Comment = newReview.Comment,
+                CreateAt = newReview.CreateAt,
+                ReviewStatus = newReview.ReviewStatus
+            };
+
+            return reviewResponse;
         }
+
 
         public async Task<bool> ApproveReviewAsync(Guid reviewId)
         {
@@ -71,16 +113,52 @@ namespace Services.ReviewService
             return await _reviewRepository.GetAllReviewsAsync();
         }
 
-        // ✅ Lấy Review theo BlindBoxId
-        public async Task<IEnumerable<Review>> GetAllReviewsByBlindBoxIdAsync(Guid blindBoxId)
+
+        public async Task<IEnumerable<ReviewResponse>> GetAllReviewsByPackageIdAsync(Guid packageId)
         {
-            return await _reviewRepository.GetAllReviewsByBlindBoxIdAsync(blindBoxId);
+            var reviews = await _reviewRepository.GetAllReviewsByPackageIdAsync(packageId);
+
+            var reviewResponses = reviews.Select(review => new ReviewResponse
+            {
+                ReviewId = review.ReviewId,
+                OrderDetailId = review.OrderDetailId,
+                Account = review.Account != null ? new AccountReviewResponse
+        {
+            FirstName = review.Account.FirstName,
+            LastName = review.Account.LastName,
+            AvatarURL = review.Account.AvatarURL
+        } : null, 
+                Rating = review.Rating,
+                Comment = review.Comment,
+                CreateAt = review.CreateAt,
+                ReviewStatus = review.ReviewStatus
+            });
+
+            return reviewResponses;
         }
 
-        // ✅ Lấy Review theo PackageId
-        public async Task<IEnumerable<Review>> GetAllReviewsByPackageIdAsync(Guid packageId)
+
+        public async Task<IEnumerable<ReviewResponse>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId)
         {
-            return await _reviewRepository.GetAllReviewsByPackageIdAsync(packageId);
+            var reviews = await _reviewRepository.GetAllReviewsByBlindBoxIdAsync(blindBoxId);
+
+            var reviewResponses = reviews.Select(review => new ReviewResponse
+            {
+                ReviewId = review.ReviewId,
+                OrderDetailId = review.OrderDetailId,
+                Account = new AccountReviewResponse
+                {
+                    FirstName = review.Account?.FirstName,
+                    LastName = review.Account?.LastName,
+                    AvatarURL = review.Account?.AvatarURL
+                },
+                Rating = review.Rating,
+                Comment = review.Comment,
+                CreateAt = review.CreateAt,
+                ReviewStatus = review.ReviewStatus
+            });
+
+            return reviewResponses;
         }
 
     }

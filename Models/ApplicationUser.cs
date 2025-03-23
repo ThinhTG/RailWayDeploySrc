@@ -8,7 +8,7 @@ namespace Models
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
 
-        public Guid? ReviewId { get; set; }
+        //public Guid? ReviewId { get; set; }
 
         public virtual ICollection<Review>? Reviews { get; set; }
 
