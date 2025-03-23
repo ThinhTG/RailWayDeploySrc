@@ -30,7 +30,7 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpGet("managed-carts/{userId}")]
-        [Cache(100000)]
+        [Cache(10000)]
         //[Authorize("UserPolicy")]
         public async Task<IActionResult> GetCartByUserId(string userId)
         {

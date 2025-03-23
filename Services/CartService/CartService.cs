@@ -20,28 +20,55 @@ namespace Services
 
         public async Task AddToCart(CartDTO cartDto)
         {
+            // Kiểm tra đầu vào
             if (cartDto == null)
                 throw new ArgumentNullException(nameof(cartDto), "Cart data cannot be null.");
+
+            if (string.IsNullOrEmpty(cartDto.UserId))
+                throw new ArgumentException("UserId cannot be null or empty.");
 
             if (cartDto.Quantity <= 0)
                 throw new ArgumentException("Quantity must be greater than zero.");
 
-            var cartRepository = _unitOfWork.GetRepository<Cart>();
-            var blindBox = await _unitOfWork.GetRepository<BlindBox>().GetByIdAsync(cartDto.BlindBoxId);
-            var package = await _unitOfWork.GetRepository<Package>().GetByIdAsync(cartDto.PackageId);
+            if (cartDto.BlindBoxId == null && cartDto.PackageId == null)
+                throw new ArgumentException("Either BlindBoxId or PackageId must be provided.");
 
+            // Lấy repository
+            var cartRepository = _unitOfWork.GetRepository<Cart>();
+
+            // Kiểm tra BlindBox hoặc Package nếu có
+            BlindBox? blindBox = null;
+            Package? package = null;
+
+            if (cartDto.BlindBoxId.HasValue)
+            {
+                blindBox = await _unitOfWork.GetRepository<BlindBox>().GetByIdAsync(cartDto.BlindBoxId.Value);
+                if (blindBox == null)
+                    throw new ArgumentException($"BlindBox with ID {cartDto.BlindBoxId} not found.");
+            }
+
+            if (cartDto.PackageId.HasValue)
+            {
+                package = await _unitOfWork.GetRepository<Package>().GetByIdAsync(cartDto.PackageId.Value);
+                if (package == null)
+                    throw new ArgumentException($"Package with ID {cartDto.PackageId} not found.");
+            }
+
+            // Tìm cart item hiện có
             var existingCartItem = await cartRepository.FindAsync(c =>
                 c.UserId == cartDto.UserId &&
-                 (cartDto.BlindBoxId == null && c.PackageId == cartDto.PackageId) ||
-                 (cartDto.PackageId == null || c.BlindBoxId == cartDto.BlindBoxId));
+                ((cartDto.BlindBoxId.HasValue && c.BlindBoxId == cartDto.BlindBoxId) ||
+                 (cartDto.PackageId.HasValue && c.PackageId == cartDto.PackageId)));
 
             if (existingCartItem != null)
             {
+                // Cập nhật số lượng nếu đã tồn tại
                 existingCartItem.Quantity += cartDto.Quantity;
                 await cartRepository.UpdateAsync(existingCartItem);
             }
             else
             {
+                // Tạo mới cart item
                 var newCart = new Cart
                 {
                     CartId = Guid.NewGuid(),
@@ -54,14 +81,11 @@ namespace Services
                     Package = package
                 };
                 await cartRepository.InsertAsync(newCart);
-                await _unitOfWork.SaveAsync();
             }
 
-           
+            // Lưu thay đổi vào DB
+            await _unitOfWork.SaveAsync();
         }
-
-
-
 
         public async Task<IEnumerable<Cart>> GetCartByUserId(string userId)
         {
@@ -70,7 +94,14 @@ namespace Services
 
             var cartRepository = _unitOfWork.GetRepository<Cart>();
 
-            var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
+            //var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
+            var carts = await cartRepository
+                        .Query() 
+                      .Include(c => c.BlindBox)
+                      .Include(c => c.Package)
+                     .Where(c => c.UserId == userId)
+                       .ToListAsync();
+
 
             return carts ?? throw new KeyNotFoundException("User not found or cart is empty.");
         }
