@@ -84,7 +84,6 @@ public class OrderController : ControllerBase
             AddressId = createDto.AddressId,
             PaymentConfirmed = false,
             Note = createDto.Note,
-            PhoneNumber = createDto.PhoneNumber,
             CreatedDate = DateTime.UtcNow
         };
 

@@ -35,7 +35,7 @@ namespace BlindBoxSS.API.Controllers
 
         [HttpGet("user/{id}")]
         [Authorize(Policy = "UserPolicy")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(string id)
         {
             return Ok(await _accountService.GetByIdAsync(id));
         }

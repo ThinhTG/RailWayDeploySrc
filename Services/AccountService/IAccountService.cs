@@ -13,7 +13,7 @@ namespace Services.AccountService
     public interface IAccountService
     {
         Task<UserResponse> RegisterAsync(UserRegisterRequest request);
-        Task<UserResponse> GetByIdAsync(Guid id);
+        Task<UserResponse> GetByIdAsync(string id);
         Task<UserResponse> UpdateAsync(Guid id, UpdateUserRequest request);
         Task DeleteAsync(Guid id);
         Task<RevokeRefreshTokenResponse> RevokeRefreshToken(RefreshTokenRequest refreshTokenRemoveRequest);
@@ -29,7 +29,7 @@ namespace Services.AccountService
         Task<bool> ResendConfirmationEmailAsync(string email);
 
         //Create Wallet
-        Task CreateWalletForUserAsync(string accountId);
+        Task CreateWalletForUserAsync(Guid accountId);
 
         Task<PaginatedList<UserResponseAdmin>> GetAllAccountsAsync(int pageNumber, int pageSize);
         Task<UserResponse> AdminUpdateAsync(Guid id, AdminUpdateRequest request);

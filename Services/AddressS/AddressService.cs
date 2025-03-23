@@ -83,7 +83,7 @@ namespace Services.AddressS
             return await PaginatedList<Address>.CreateAsync(address, pageNumber, pageSize);
         }
 
-        public async Task<Address> GetByIdAsync(Guid id)
+        public async Task<Address> GetByIdAsync(Guid? id)
         {
             return await _addressRepository.GetByIdAsync(id);
         }

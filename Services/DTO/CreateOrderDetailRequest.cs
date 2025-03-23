@@ -21,7 +21,5 @@ namespace Services.DTO
 
         [Required]
         public decimal Price { get; set; } = decimal.Zero;
-
-        public Guid? ReviewId { get; set; }
     }
 }

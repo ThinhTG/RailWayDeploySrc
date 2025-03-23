@@ -11,7 +11,7 @@ namespace Models
         public Guid WalletId { get; set; } = Guid.NewGuid();
 
         [Required]
-        public string AccountId { get; set; }
+        public Guid AccountId { get; set; }
 
         [Required]
         public decimal Balance { get; set; }

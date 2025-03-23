@@ -58,7 +58,8 @@ namespace Services.AccountService
             newUser.UserName = GenerateUserName(request.FirstName, request.LastName);
             newUser.EmailConfirmed = false;
             var result = await _userManager.CreateAsync(newUser, request.Password);
-            await CreateWalletForUserAsync(newUser.Id);
+            var newuserId = Guid.Parse(newUser.Id);
+            await CreateWalletForUserAsync(newuserId);
             await _userManager.AddToRoleAsync(newUser, "User");
 
             if (!result.Succeeded)
@@ -76,7 +77,7 @@ namespace Services.AccountService
             return _mapper.Map<UserResponse>(newUser);
         }
 
-        public async Task CreateWalletForUserAsync(string accountId)
+        public async Task CreateWalletForUserAsync(Guid accountId)
         {
             var wallet = new Models.Wallet
             {
@@ -140,7 +141,8 @@ namespace Services.AccountService
             // Update user information in database
             var result = await _userManager.UpdateAsync(user);
             //create wallet for user login with google
-            await CreateWalletForUserAsync(user.Id);
+            var newuserId = Guid.Parse(user.Id);
+            await CreateWalletForUserAsync(newuserId);
 
             if (!result.Succeeded)
             {
@@ -157,7 +159,7 @@ namespace Services.AccountService
             return userResponse;
         }
 
-        public async Task<UserResponse> GetByIdAsync(Guid id)
+        public async Task<UserResponse> GetByIdAsync(string id)
         {
             _logger.LogInformation("Getting user by id");
             var user = await _userManager.FindByIdAsync(id.ToString());
@@ -334,7 +336,8 @@ namespace Services.AccountService
                     throw new Exception($"User creation failed: {errors}");
                 }
 
-                await CreateWalletForUserAsync(user.Id);
+                var newuserId = Guid.Parse(user.Id);
+                await CreateWalletForUserAsync(newuserId);
                 var roleResult = await _userManager.AddToRoleAsync(user, "User");
                 if (!roleResult.Succeeded)
                 {

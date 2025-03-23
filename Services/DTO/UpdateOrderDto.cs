@@ -32,8 +32,8 @@ namespace Models
         [Required]
         public string Note { get; set; }
 
-        [Required]
-        public int PhoneNumber { get; set; }
+        //[Required]
+        //public int PhoneNumber { get; set; }
 
         [Required]
         public decimal DiscountMoney { get; set; }

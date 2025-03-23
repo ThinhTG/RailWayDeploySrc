@@ -4,9 +4,9 @@ namespace Repositories.WalletRepo
 {
     public interface IWalletRepository
     {
-        Task<Wallet> GetWalletByAccountIdAsync(string accountId);
+        Task<Wallet> GetWalletByAccountIdAsync(Guid accountId);
         Task UpdateWalletAsync(Wallet wallet);
         Task<Wallet> CreateWallet(Wallet wallet);
-        Task<Wallet> GetBalanceAccountIdAsync(string accountId);
+        Task<Wallet> GetBalanceAccountIdAsync(Guid accountId);
     }
 }

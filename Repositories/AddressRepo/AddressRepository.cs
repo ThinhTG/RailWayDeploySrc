@@ -53,7 +53,7 @@ namespace Repositories.AddressRepo
             return _context.Address.Where(o => o.AccountId == id);
         }
 
-        public async Task<Address> GetByIdAsync(Guid id)
+        public async Task<Address> GetByIdAsync(Guid? id)
         {
             return await _context.Set<Address>().FindAsync(id);
         }

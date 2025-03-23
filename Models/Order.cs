@@ -12,7 +12,7 @@ namespace Models
         public int OrderId { get; set; }
 
         [Required]
-        public String AccountId { get; set; }
+        public string AccountId { get; set; }
 
         [Required]
         public OrderStatus OrderStatus { get; set; }
@@ -36,7 +36,7 @@ namespace Models
         public string Note { get; set; }
 
         [Required]
-        public int PhoneNumber { get; set; }
+        public string? PhoneNumber { get; set; }
 
         public int? OrderCode { get; set; }
 

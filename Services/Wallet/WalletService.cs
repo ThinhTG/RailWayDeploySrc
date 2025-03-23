@@ -36,7 +36,7 @@ namespace BlindBoxSS.API.Services
             }
         }
 
-        public async Task<Wallet> GetWalletByAccountId(string accountId)
+        public async Task<Wallet> GetWalletByAccountId(Guid accountId)
         {
             var wallet = await _walletRepository.GetWalletByAccountIdAsync(accountId);
             if (wallet == null)
@@ -47,7 +47,7 @@ namespace BlindBoxSS.API.Services
             return wallet;
         }
 
-        public async Task AddMoneyToWalletAsync(string accountId, decimal amount,int orderCode)
+        public async Task AddMoneyToWalletAsync(Guid accountId, decimal amount,int orderCode)
         {
             var dateFormat = _configuration["TransactionSettings:DateFormat"] ?? "yyyy-MM-ddTHH:mm:ssZ";
             bool useUTC = bool.TryParse(_configuration["TransactionSettings:UseUTC"], out bool utc) && utc;
@@ -93,7 +93,7 @@ namespace BlindBoxSS.API.Services
             }
         }
 
-        public async Task<bool> UseWalletForPurchaseAsync(string accountId, decimal amount, int? orderId)
+        public async Task<bool> UseWalletForPurchaseAsync(Guid accountId, decimal amount, int? orderId)
         {
             var dateFormat = _configuration["TransactionSettings:DateFormat"] ?? "yyyy-MM-ddTHH:mm:ssZ";
             bool useUTC = bool.TryParse(_configuration["TransactionSettings:UseUTC"], out bool utc) && utc;

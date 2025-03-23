@@ -70,8 +70,7 @@ public class PaymentService : IPaymentService
     {
         int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
 
-        var parseID = Guid.Parse(request.accountId);
-        var account = await _accountSV.GetByIdAsync(parseID);
+        var account = await _accountSV.GetByIdAsync(request.accountId);
         if (account.orderCode != null)
         {
             var checkOrderCode = long.Parse(account.orderCode.ToString());
@@ -82,6 +81,7 @@ public class PaymentService : IPaymentService
                 {
                     orderCode = null
                 };
+                var parseID = Guid.Parse(request.accountId);
                 await _accountSV.UpdateAsync(parseID, newacount);
             }
             if (checking.status == "PAID")
@@ -90,6 +90,7 @@ public class PaymentService : IPaymentService
                 {
                     orderCode = null
                 };
+                var parseID = Guid.Parse(request.accountId);
                 await _accountSV.UpdateAsync(parseID, newacount);
                 throw new Exception("Deposit has been paid");
             }
@@ -113,6 +114,7 @@ public class PaymentService : IPaymentService
             {
                 orderCode = orderCode
             };
+            var parseID = Guid.Parse(request.accountId);
             await _accountSV.UpdateAsync(parseID, newacount);
             return createdLink;
 
@@ -177,7 +179,7 @@ public class PaymentService : IPaymentService
         int orderCode = int.Parse(DateTimeOffset.Now.ToString("ffffff"));
 
         var parseID = Guid.Parse(request.accountId);
-        var account = await _accountSV.GetByIdAsync(parseID);
+        var account = await _accountSV.GetByIdAsync(request.accountId);
         if (account.orderCode != null)
         {
             var checkOrderCode = long.Parse(account.orderCode.ToString());

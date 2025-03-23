@@ -13,7 +13,7 @@ namespace Services.AddressS
     {
 
         Task<IEnumerable<Address>> GetAllAsync();
-        Task<Address> GetByIdAsync(Guid id);
+        Task<Address> GetByIdAsync(Guid? id);
         Task<Address> AddAsync(AddAddressDTO addAddressDTO);
         Task<Address> UpdateAsync(Guid id,UpdateAddressDTO updateAddressDTO);
         Task DeleteAsync(Guid id);

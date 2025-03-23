@@ -43,10 +43,11 @@ namespace BlindBoxSS.API
 
                 var result = await userManager.CreateAsync(adminUser, "Admin@123");
                 //create wallet for user
+                var newuserId = Guid.Parse(adminUser.Id);
                 var wallet = new Wallet
                 {
                     WalletId = Guid.NewGuid(),
-                    AccountId = adminUser.Id,
+                    AccountId = newuserId,
                     Balance = 0
                 };
                 await serviceProvider.GetRequiredService<IWalletRepository>().CreateWallet(wallet);

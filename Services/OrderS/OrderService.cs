@@ -1,6 +1,8 @@
 ﻿using Models;
 using Repositories.OrderRep;
 using Repositories.Pagging;
+using Services.AccountService;
+using Services.AddressS;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +14,14 @@ namespace Services.OrderS
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IAccountService _accountService;
+        private readonly IAddressService _addressService;
 
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, IAccountService accountService, IAddressService addressService)
         {
             _orderRepository = orderRepository;
+            _accountService = accountService;
+            _addressService = addressService;
         }
 
         public async Task<PaginatedList<Order>> GetAll(int pageNumber, int pageSize)
@@ -25,6 +31,22 @@ namespace Services.OrderS
         }
         public async Task<Order> AddAsync(Order order)
         {
+            var account = await _accountService.GetByIdAsync(order.AccountId);
+            if (account == null)
+            {
+                throw new KeyNotFoundException($"Account with ID {order.AccountId} not found.");
+            }
+
+            var address = await _addressService.GetByIdAsync(order.AddressId);
+
+            if (address == null)
+            {
+                throw new KeyNotFoundException($"Address with ID {order.AddressId} not found.");
+            }
+
+            order.PhoneNumber = address.PhoneNumber;
+
+
             return await _orderRepository.AddAsync(order);
         }
 

@@ -11,7 +11,7 @@ namespace Repositories.AddressRepo
     {
 
         Task<IEnumerable<Address>> GetAddressAsync();
-        Task<Address> GetByIdAsync(Guid id);
+        Task<Address> GetByIdAsync(Guid? id);
         Task<Address> AddAsync(Address address);
         Task<Address> UpdateAsync(Address address);
         Task DeleteAsync(Guid id);

@@ -42,10 +42,12 @@ namespace Services.Product
 
         public async Task<BlindBox> AddAsync(AddBlindBoxDTO addBlindBoxDTO)
         {
+            var categoryId = await _packageRepository.GetPackageByIdAsync(addBlindBoxDTO.PackageId);
             var blindbox = new BlindBox
             {
                 BlindBoxId = Guid.NewGuid(),
                 PackageId = addBlindBoxDTO.PackageId,
+                CategoryId = categoryId.CategoryId,
                 BlindBoxName = addBlindBoxDTO.BlindBoxName,
                 Price = addBlindBoxDTO.Price,
                 Description = addBlindBoxDTO.Description,

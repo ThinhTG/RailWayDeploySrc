@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DAO.Migrations
 {
     /// <inheritdoc />
-    public partial class newDb2 : Migration
+    public partial class updateField : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,7 +61,7 @@ namespace DAO.Migrations
                 columns: table => new
                 {
                     WalletId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    AccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccountId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
@@ -128,7 +128,6 @@ namespace DAO.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -409,7 +408,7 @@ namespace DAO.Migrations
                     PaymentConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     AddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<int>(type: "int", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderCode = table.Column<int>(type: "int", nullable: true),
                     DiscountMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
@@ -526,7 +525,8 @@ namespace DAO.Migrations
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreateAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ReviewStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ReviewStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    imageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -641,9 +641,7 @@ namespace DAO.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Carts_PackageId",
                 table: "Carts",
-                column: "PackageId",
-                unique: true,
-                filter: "[PackageId] IS NOT NULL");
+                column: "PackageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_AccountId",

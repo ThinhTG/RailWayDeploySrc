@@ -21,7 +21,7 @@ namespace Repositories.WalletRepo
             return wallet;
         }
 
-        public async Task<Wallet> GetWalletByAccountIdAsync(string accountId)
+        public async Task<Wallet> GetWalletByAccountIdAsync(Guid accountId)
         {
             if (accountId == null)
             {
@@ -36,7 +36,7 @@ namespace Repositories.WalletRepo
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Wallet> GetBalanceAccountIdAsync(string accountId)
+        public async Task<Wallet> GetBalanceAccountIdAsync(Guid accountId)
         {
             if (accountId == null)
             {
