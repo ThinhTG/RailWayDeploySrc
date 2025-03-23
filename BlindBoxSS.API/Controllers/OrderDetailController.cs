@@ -179,7 +179,7 @@ public class OrderDetailController : ControllerBase
     //    return Ok(updatedorderDetail);
     //}
 
-    [HttpPost("mutiple-create")]
+    [HttpPost("multiple-create")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IEnumerable<OrderDetail>>> CreateMultipleOrderDetails([FromBody] CreateMultipleOrderDetailsRequest request)

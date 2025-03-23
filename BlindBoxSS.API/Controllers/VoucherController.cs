@@ -23,7 +23,7 @@ namespace BlindBoxSS.API.Controllers
         /// </summary>
         /// <param name="totalPrice">Total Price của Order</param>
         /// <returns>các Voucher còn hạn sử dụng và đủ điều kiện</returns>
-        [HttpGet("available-vocher")]
+        [HttpGet("available-voucher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Results<Ok<List<VoucherResponse>>, NotFound>> GetAvailableVouchers([FromQuery] decimal totalPrice)
