@@ -11,6 +11,8 @@ namespace Models
         public string Comment { get; set; }
         public DateTime CreateAt { get; set; } = DateTime.UtcNow;
         public string ReviewStatus { get; set; } = "Pending";
+
+        public string? imageUrl { get; set; }  // ảnh khi review
         // Quan hệ navigation
 
         [JsonIgnore]

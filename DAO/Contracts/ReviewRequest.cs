@@ -13,6 +13,7 @@ namespace DAO.Contracts
         public int Rating { get; set; }
         public string Comment { get; set; }
 
-       
+        public string? ImageURL { get; set; }
+
     }
 }

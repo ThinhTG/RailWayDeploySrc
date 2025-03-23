@@ -36,7 +36,7 @@ namespace Services.ReviewService
 
             var existingReview = await _reviewRepository.GetReviewsByOrderDetailIdAsync(review.OrderDetailId);
 
-            if (existingReview != null)
+            if (existingReview.Count() > 0)
             {
                 throw new InvalidOperationException("Review for this OrderDetailId already exists.");
             }
