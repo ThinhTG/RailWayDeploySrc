@@ -25,6 +25,7 @@ namespace BlindBoxSS.API.Controllers
         /// <returns>các Voucher còn hạn sử dụng và đủ điều kiện</returns>
         [HttpGet("available-voucher")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<Results<Ok<List<VoucherResponse>>, NotFound>> GetAvailableVouchers([FromQuery] decimal totalPrice)
         {

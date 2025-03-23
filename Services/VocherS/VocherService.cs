@@ -143,6 +143,12 @@ namespace Services.VocherS
 
             var vouchersQuery = _vocherRepository.GetAll();
 
+            if (!vouchersQuery.Any())
+            {
+                return TypedResults.Ok(new List<VoucherResponse>());
+            }
+
+
             var availableVouchers = await vouchersQuery
                 .Where(v => v.StartDate <= DateTime.UtcNow && v.EndDate > DateTime.UtcNow && TotalPrice >= v.Money)
                 .Select(v => new VoucherResponse
