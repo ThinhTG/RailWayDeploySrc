@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BlindBoxSS.API.Attributes;
+using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.Cache;
 using Services.DTO;
 using Services.Product;
 
@@ -8,14 +10,17 @@ using Services.Product;
 public class PackageController : ControllerBase
 {
     private readonly IPackageService _packageService;
+    private readonly IResponseCacheService _responseCacheService;
 
-    public PackageController(IPackageService packageService)
+    public PackageController(IPackageService packageService, IResponseCacheService responseCacheService )
     {
         _packageService = packageService;
+        _responseCacheService = responseCacheService;
     }
 
     // Lấy gói theo ID
     [HttpGet("{id}")]
+    [Cache(100000)]
     public async Task<IActionResult> GetById(Guid id)
     {
         var package = await _packageService.GetPackageByIdAsync(id);
@@ -25,6 +30,7 @@ public class PackageController : ControllerBase
 
     // lấy list package theo typeSell
     [HttpGet("typeSell/{typeSell}")]
+    [Cache(100000)]
     public async Task<ActionResult<List<Package>>> GetPackageByTypeSell(string typeSell)
     {
         var packages = await _packageService.GetPackageByTypeSell(typeSell);
@@ -47,6 +53,7 @@ public class PackageController : ControllerBase
             PackageStatus = package.PackageStatus
         };
         var createdPackage = await _packageService.AddPackageAsync(package1);
+        await _responseCacheService.RemoveCacheResponseAsync("/api/packages");
         return CreatedAtAction(nameof(GetById), new { id = createdPackage.PackageId }, createdPackage);
     }
 
@@ -57,6 +64,7 @@ public class PackageController : ControllerBase
         try
         {
             await _packageService.UpdatePackageAsync(id, updatePackageRequest);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/packages");
             return NoContent(); // 204 No Content indicates successful update
         }
         catch (KeyNotFoundException)
@@ -70,6 +78,7 @@ public class PackageController : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await _packageService.DeletePackageAsync(id);
+        await _responseCacheService.RemoveCacheResponseAsync("/api/packages");
         if (!result) return NotFound();
 
         return NoContent();
@@ -84,6 +93,7 @@ public class PackageController : ControllerBase
     /// <param name="maxPrice">giá tiền tối đa</param>
     /// <returns></returns>
     [HttpGet]
+    [Cache(100000)]
     public async Task<ActionResult> GetAll(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice)
     {
         var packages = await _packageService.GetAllAsync(searchByCategory, searchByName, minPrice, maxPrice);
@@ -102,6 +112,7 @@ public class PackageController : ControllerBase
     /// <param name="pageSize">số Blindbox</param>
     /// <returns></returns>
     [HttpGet("paged")]
+    [Cache(100000)]
     public async Task<IActionResult> GetPaged(string? typeSell,string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber = 1, int pageSize =6)
     {
         var result = await _packageService.GetAllFilter(typeSell,searchByCategory, searchByName, minPrice, maxPrice, pageNumber, pageSize);
@@ -121,6 +132,7 @@ public class PackageController : ControllerBase
         try
         {
             await _packageService.UpdatePackageAsyncV2(id, updatePackageDTO);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/packages");
             return NoContent(); // 204 No Content indicates successful update
         }
         catch (KeyNotFoundException)

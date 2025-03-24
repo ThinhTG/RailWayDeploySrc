@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BlindBoxSS.API.Attributes;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.Cache;
 using Services.DTO;
 using Services.VocherS;
 
@@ -12,10 +14,12 @@ namespace BlindBoxSS.API.Controllers
     public class VoucherController : ControllerBase
     {
         private readonly IVocherService _voucherService;
+        private readonly IResponseCacheService _responseCacheService;
 
-        public VoucherController(IVocherService voucherService)
+        public VoucherController(IVocherService voucherService, IResponseCacheService responseCacheService)
         {
             _voucherService = voucherService;
+            _responseCacheService = responseCacheService;
         }
 
         /// <summary>
@@ -27,6 +31,7 @@ namespace BlindBoxSS.API.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Cache(10000)]
         public async Task<Results<Ok<List<VoucherResponse>>, NotFound>> GetAvailableVouchers([FromQuery] decimal totalPrice)
         {
             return await _voucherService.GetAvailableVouchersAsync(totalPrice);
@@ -36,6 +41,7 @@ namespace BlindBoxSS.API.Controllers
         /// Lấy toàn bộ voucher
         /// </summary>
         [HttpGet]
+        [Cache(10000)]
         public async Task<ActionResult<IEnumerable<Voucher>>> GetAll()
         {
             var vouchers = await _voucherService.GetAllVouchersAsync();
@@ -50,6 +56,7 @@ namespace BlindBoxSS.API.Controllers
         /// <param name="pageSize"></param>
         /// <returns></returns>
         [HttpGet("paged")]
+        [Cache(10000)]
         public async Task<IActionResult> GetPaged(int pageNumber = 1, int pageSize = 10)
         {
             var result = await _voucherService.GetAll(pageNumber, pageSize);
@@ -60,6 +67,7 @@ namespace BlindBoxSS.API.Controllers
         /// Lấy danh sách voucher theo id
         /// </summary>
         [HttpGet("{id}")]
+        [Cache(10000)]
         public async Task<ActionResult<Voucher>> GetById(Guid id)
         {
             var voucher = await _voucherService.GetVoucherByIdAsync(id);
@@ -81,6 +89,7 @@ namespace BlindBoxSS.API.Controllers
             try
             {
                 var updatedVoucher = await _voucherService.UpdateVoucherAsync(id, updateVoucherDto);
+                await _responseCacheService.RemoveCacheResponseAsync("/api/voucher");
                 if (updatedVoucher == null)
                 {
                     return NotFound($"Voucher with ID {id} not found.");
@@ -119,6 +128,7 @@ namespace BlindBoxSS.API.Controllers
             try
             {
                 var createdVoucher = await _voucherService.AddVoucherAsync(createVocherDto);
+                await _responseCacheService.RemoveCacheResponseAsync("/api/voucher");
                 return CreatedAtAction(nameof(GetById), new { id = createdVoucher.VoucherId }, createdVoucher);
             }
             catch (InvalidOperationException ex)
@@ -146,6 +156,7 @@ namespace BlindBoxSS.API.Controllers
                 }
 
                 await _voucherService.DeleteVoucherAsync(id);
+                await _responseCacheService.RemoveCacheResponseAsync("/api/voucher");
                 return NoContent(); // 204 No Content indicates successful deletion
             }
             catch (KeyNotFoundException ex)

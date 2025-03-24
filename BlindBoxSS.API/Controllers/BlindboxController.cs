@@ -27,6 +27,7 @@ public class BlindBoxController : ControllerBase
     /// <param name="maxPrice">giá tiền tối đa</param>
     /// <returns></returns>
     [HttpGet]
+    [Cache(100000)]
     public async Task<ActionResult> GetAll(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, string? size)
     {
         var blindBoxes = await _service.GetAllAsync(searchByCategory, searchByName, minPrice, maxPrice,size);
@@ -45,6 +46,7 @@ public class BlindBoxController : ControllerBase
     /// <param name="pageSize">số Blindbox</param>
     /// <returns></returns>
     [HttpGet("paged")]
+    [Cache(100000)]
     public async Task<IActionResult> GetPaged(string? searchByCategory,string? typeSell,string? size, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber=1, int pageSize = 6)
     {
         var result = await _service.GetAllFilter(searchByCategory, typeSell,size, searchByName, minPrice, maxPrice, pageNumber, pageSize);
@@ -53,6 +55,7 @@ public class BlindBoxController : ControllerBase
 
     // Lấy một blindbox theo ID
     [HttpGet("{id}")]
+    [Cache(100000)]
     public async Task<ActionResult<BlindBox>> GetById(Guid id)
     {
         var blindBox = await _service.GetByIdAsync(id);
@@ -65,6 +68,7 @@ public class BlindBoxController : ControllerBase
 
     // lấy list blindbox theo typeSell
     [HttpGet("typeSell/{typeSell}")]
+    [Cache(100000)]
     public async Task<ActionResult<List<BlindBox>>> GetBlindboxeByTypeSell(string typeSell)
     {
         var blindBoxes = await _service.GetBlindboxeByTypeSell(typeSell);
@@ -85,6 +89,7 @@ public class BlindBoxController : ControllerBase
         try
         {
             var createdBlindBox= await _service.AddAsync(addBlindBoxDTO);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
             return CreatedAtAction(nameof(GetById), new { id = createdBlindBox.BlindBoxId}, createdBlindBox);
         }
         catch (InvalidOperationException ex)
@@ -109,6 +114,7 @@ public class BlindBoxController : ControllerBase
         try
         {
             var updatedBlindbox = await _service.UpdateAsync(id, updateBlindBoxDTO);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
             if (updatedBlindbox == null)
             {
                 return NotFound($"Blindbox with ID {id} not found.");
@@ -128,6 +134,7 @@ public class BlindBoxController : ControllerBase
     public async Task<IActionResult> Delete(Guid id)
     {
         await _service.DeleteAsync(id);
+        await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
         return NoContent();
     }
 
@@ -147,6 +154,7 @@ public class BlindBoxController : ControllerBase
         try
         {
             var createdBlindBoxV2 = await _service.AddAsyncV2(addBlindBoxDTOV2);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
             return CreatedAtAction(nameof(GetById), new { id = createdBlindBoxV2.BlindBoxId }, createdBlindBoxV2);
         }
         catch (InvalidOperationException ex)
@@ -176,6 +184,7 @@ public class BlindBoxController : ControllerBase
         try
         {
             var updatedBlindboxV2 = await _service.UpdateAsyncV2(id, updateBlindBoxDTOV2);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
             if (updatedBlindboxV2 == null)
             {
                 return NotFound($"Blindbox with ID {id} not found.");
