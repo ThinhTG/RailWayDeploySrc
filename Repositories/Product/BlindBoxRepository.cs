@@ -35,7 +35,7 @@ namespace Repositories.Product
                 .ToListAsync();
         }
 
-        public async Task<BlindBox> GetByIdAsync(Guid id)
+        public async Task<BlindBox> GetByIdAsync(Guid? id)
         {
             return await _context.Set<BlindBox>().FindAsync(id);
         }
