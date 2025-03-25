@@ -18,5 +18,9 @@ namespace Repositories.Product
         IQueryable<Package> GetAll();
         Task<List<Package>> GetPackageByTypeSell(string typeSell);
 
+        Task<IEnumerable<Package>> GetActiveLWPackage();
+
+
+
     }
 }

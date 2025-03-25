@@ -70,5 +70,15 @@ namespace Repositories.Product
         {
             return _context.Packages.AsQueryable();
         }
+
+        public async Task<IEnumerable<Package>> GetActiveLWPackage()
+        {
+            var packages = await _context.Packages.Where(p => p.PackageStatus == "Active" && p.TypeSell == "LuckyWheel").ToListAsync();
+            if (packages == null)
+            {
+                throw new Exception("packages null");
+            }
+            return packages;
+        }
     }
 }

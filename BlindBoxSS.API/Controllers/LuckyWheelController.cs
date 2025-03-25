@@ -39,6 +39,13 @@ namespace BlindBoxSS.API.Controllers
             _configuration = configuration;
         }
 
+        [HttpGet("packages/active")]
+        public async Task<IActionResult> GetActivePackages()
+        {
+            var packages = await _packageService.GetActiveLWPackages();
+            return Ok(packages);
+        }
+
         [HttpPost("spin")]
         public async Task<IActionResult> SpinWheel([FromBody] SpinRequest request)
         {
