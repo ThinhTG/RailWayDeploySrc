@@ -69,7 +69,24 @@ namespace BlindBoxSS.API.Controllers
             // Chuyển trạng thái BlindBox thành "Sold"
             await _blindBoxService.UpdateStatusAsync(blindBox.BlindBoxId, "SoldOut");
 
-           var address = await _addressService.GetDefaultAddressByAccoutId(request.AccountId);
+            if (package.Amount > 0)
+            {
+
+                var newUpdatePackage = new UpdatePackageRequest
+                {
+                    CategoryId = package.CategoryId,
+                    PackageName = package.PackageName,
+                    PackagePrice = package.PackagePrice,
+                    Amount = package.Amount - 1,
+                    Description = package.Description,
+                    Stock = package.Stock,
+                    PackageStatus = package.PackageStatus,
+                    TypeSell = package.TypeSell,
+                };
+                await _packageService.UpdatePackageAsync(request.PackageId, newUpdatePackage);
+            }
+
+            var address = await _addressService.GetDefaultAddressByAccoutId(request.AccountId);
         
             // Tạo đơn hàng
             var order = new Order
