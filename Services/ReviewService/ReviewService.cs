@@ -46,7 +46,8 @@ namespace Services.ReviewService
                     Rating = review.Rating,
                     Comment = review.Comment,
                     CreateAt = review.CreateAt,
-                    ReviewStatus = review.ReviewStatus
+                    ReviewStatus = review.ReviewStatus,
+                    ImageUrl = review.imageUrl
                 };
 
                 reviewResponses.Add(reviewResponse);
@@ -112,7 +113,8 @@ namespace Services.ReviewService
                 Rating = newReview.Rating,
                 Comment = newReview.Comment,
                 CreateAt = newReview.CreateAt,
-                ReviewStatus = newReview.ReviewStatus
+                ReviewStatus = newReview.ReviewStatus,
+                ImageUrl = newReview.imageUrl
             };
 
             return reviewResponse;
@@ -168,7 +170,8 @@ namespace Services.ReviewService
                     Rating = review.Rating,
                     Comment = review.Comment,
                     CreateAt = review.CreateAt,
-                    ReviewStatus = review.ReviewStatus
+                    ReviewStatus = review.ReviewStatus,
+                    ImageUrl = review.imageUrl
                 };
 
                 reviewResponses.Add(reviewResponse);
@@ -203,7 +206,8 @@ namespace Services.ReviewService
                     Rating = review.Rating,
                     Comment = review.Comment,
                     CreateAt = review.CreateAt,
-                    ReviewStatus = review.ReviewStatus
+                    ReviewStatus = review.ReviewStatus,
+                    ImageUrl = review.imageUrl
                 };
 
                 reviewResponses.Add(reviewResponse);

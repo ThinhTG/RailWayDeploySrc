@@ -6,7 +6,7 @@ namespace Services.Product
 {
     public interface IBlindBoxImageService
     {
-        Task AddBlindBoxImage(BBImageDTO blindboxImageDTO);
+        Task AddBlindBoxImages(BBImageDTO blindBoxImage);
         Task<IEnumerable<BlindBoxImage>> GetBlindBoxImages(Guid blindboxId);
         Task<bool> UpdateBlindBoxImage(Guid blindboximageId, string imageURL);
         Task<bool> DeleteBlindBoxImage(Guid blindboximageId);

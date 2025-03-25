@@ -13,26 +13,38 @@ namespace Services.Product
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddPackageImage(PackageImageDTO packageImage)
+        public async Task AddPackageImages(PackageImageDTO packageImageDTO)
         {
-            if (packageImage.PackageId == null)
+            if (packageImageDTO.PackageId == null)
             {
                 throw new Exception("PackageId is required");
             }
-            if (packageImage.ImageUrl is null)
+            if (packageImageDTO.ImageUrl == null || !packageImageDTO.ImageUrl.Any())
             {
-                throw new Exception("Image URL is required");
+                throw new Exception("At least one Image URL is required");
             }
-            var packageImageRepo = _unitOfWork.GetRepository<PackageImage>();
-            var newPackageImage = new PackageImage
-            {
-                PackageId = packageImage.PackageId,
-                PackageImageId = Guid.NewGuid(),
-                DisplayPackageId = packageImage.DisplayPackageId,
-                ImageUrl = packageImage.ImageUrl
-            };
 
-            packageImageRepo.Insert(newPackageImage);
+            var packageImageRepo = _unitOfWork.GetRepository<PackageImage>();
+            var package = _unitOfWork.GetRepository<Package>();
+            var Packages = package.GetById(packageImageDTO.PackageId);
+
+            //var newPackageImages = packageImageDTO.ImageUrl.Select((imageUrl,index) => new PackageImage
+            //{
+            //    PackageId = packageImageDTO.PackageId,
+            //    PackageImageId = Guid.NewGuid(),
+            //    DisplayPackageId = index == 0 ? 1 : 0, // Set DisplayBlindboxId to 1 for the first image, 0 for others
+            //    ImageUrl = imageUrl
+            //}).ToList();
+            var newPackageImages = packageImageDTO.ImageUrl.Select((imageUrl, index) => new PackageImage
+            {
+                PackageId = packageImageDTO.PackageId,
+                PackageImageId = Guid.NewGuid(),
+                ImageUrl = imageUrl,
+                DisplayPackageId = index == 0 ? 1 : 0, // Set DisplayBlindboxId to 1 for the first image, 0 for others
+                Package = Packages
+            }).ToList();
+
+            packageImageRepo.InsertRange(newPackageImages);
 
             await _unitOfWork.SaveAsync();
         }
