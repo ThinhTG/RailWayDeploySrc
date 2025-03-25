@@ -5,6 +5,7 @@ using Repositories.Pagging;
 using Repositories.Product;
 using Services.AccountService;
 using Services.AddressS;
+using Services.Cache;
 using Services.DTO;
 using Services.Payment;
 
@@ -20,8 +21,9 @@ namespace Services.OrderS
         private readonly IAddressService _addressService;
         private readonly ICartService _cartService;
         private readonly Lazy<IPaymentService> _paymentService;
+        private readonly IResponseCacheService _responseCacheService;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IAccountService accountService, IAddressService addressService, Lazy<IPaymentService> paymentService, IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository, ICartService cartService)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IAccountService accountService, IAddressService addressService, Lazy<IPaymentService> paymentService, IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository, ICartService cartService, IResponseCacheService responseCacheService)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -31,6 +33,7 @@ namespace Services.OrderS
             _packageRepository = packageRepository;
             _blindBoxRepository = blindBoxRepository;
             _cartService = cartService;
+            _responseCacheService = responseCacheService;
         }
 
         public async Task<PaginatedList<Order>> GetAll(int pageNumber, int pageSize)
@@ -288,6 +291,8 @@ namespace Services.OrderS
                     // Update BlindBox and Package stock
                     await UpdateStockAndCartAsync(orderDetails, cart, blindbox, package);
 
+                    await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+
                     return await _orderRepository.UpdateAsync(order);
                 }
             }
@@ -297,6 +302,9 @@ namespace Services.OrderS
 
             // Final confirmation of payment
             order.PaymentConfirmed = true;
+
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+
             return await _orderRepository.UpdateAsync(order);
         }
 
@@ -307,12 +315,14 @@ namespace Services.OrderS
             var blindboxQuantity = orderDetails.Sum(o => o.Quantity);
             blindbox.Stock -= blindboxQuantity;
             await _blindBoxRepository.UpdateAsync(blindbox);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
 
             // Remove BlindBox from the cart
             foreach (var item in cart.Where(item => item.BlindBoxId == blindbox.BlindBoxId))
             {
                 await _cartService.DeleteCartItem(item.CartId);
             }
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
 
             // Update Package stock
             var packageQuantity = orderDetails.Sum(o => o.Quantity);
@@ -324,6 +334,7 @@ namespace Services.OrderS
             {
                 await _cartService.DeleteCartItem(item.CartId);
             }
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
         }
 
 
