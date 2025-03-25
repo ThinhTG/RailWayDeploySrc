@@ -1,4 +1,5 @@
 ﻿using DAO.Contracts;
+using DAO.Migrations;
 using Net.payOS;
 using Net.payOS.Types;
 using Services.AccountService;
@@ -92,6 +93,7 @@ public class PaymentService : IPaymentService
                 };
                 var parseID = Guid.Parse(request.accountId);
                 await _accountSV.UpdateAsync(parseID, newacount);
+
                 throw new Exception("Deposit has been paid");
             }
             if (checking.status == "PROCESSING")
@@ -123,7 +125,6 @@ public class PaymentService : IPaymentService
         {
             throw new Exception();
         }
-
     }
 
     public async Task<CreatePaymentResult> CreatePaymentLinkMBAsync(CreatePaymentLinkRequestMB request)

@@ -63,6 +63,28 @@ namespace Services.Product
                     }
                 }
 
+                if (newPackage.TypeSell == "BlindBox")
+                {
+                    
+                        var blindBox = new AddBlindBoxDTO
+                        {
+                            PackageId = newPackage.PackageId,
+                            TypeSell = "BlindBox",
+                            Price = package.PackagePrice + 50,
+                            Size = "Small",
+                            Description = $"BlindBox {package.Description}",
+                            BlindBoxName = $"BlindBox {package.PackageName}",
+                            Stock = 10*package.Stock,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            Percent = 10,
+                            BlindBoxStatus = "Active"
+                        };
+                        await _blindBoxService.AddAsync(blindBox);
+
+                    
+                }
+
                 return newPackage;
             }
             catch (Exception ex)

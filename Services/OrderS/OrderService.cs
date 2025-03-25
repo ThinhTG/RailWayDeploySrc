@@ -5,6 +5,7 @@ using Repositories.Pagging;
 using Repositories.Product;
 using Services.AccountService;
 using Services.AddressS;
+using Services.Cache;
 using Services.DTO;
 using Services.Payment;
 
@@ -20,8 +21,9 @@ namespace Services.OrderS
         private readonly IAddressService _addressService;
         private readonly ICartService _cartService;
         private readonly Lazy<IPaymentService> _paymentService;
+        private readonly IResponseCacheService _responseCacheService;
 
-        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IAccountService accountService, IAddressService addressService, Lazy<IPaymentService> paymentService, IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository, ICartService cartService)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IAccountService accountService, IAddressService addressService, Lazy<IPaymentService> paymentService, IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository, ICartService cartService, IResponseCacheService responseCacheService)
         {
             _orderRepository = orderRepository;
             _orderDetailRepository = orderDetailRepository;
@@ -31,6 +33,7 @@ namespace Services.OrderS
             _packageRepository = packageRepository;
             _blindBoxRepository = blindBoxRepository;
             _cartService = cartService;
+            _responseCacheService = responseCacheService;
         }
 
         public async Task<PaginatedList<Order>> GetAll(int pageNumber, int pageSize)
@@ -146,29 +149,32 @@ namespace Services.OrderS
 
 
         //update paymentConfirmed by param orderCode
-        public async Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId)
+        /*public async Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
-
             if (order == null)
             {
                 throw new KeyNotFoundException($"Order with ID {orderId} not found.");
             }
             var orderDetail = await _orderDetailRepository.GetOrderDetailsByOrderIdAsync(orderId);
-            var card = await _cartService.GetCartByUserId(order.AccountId);
-
+            if (orderDetail == null)
+            {
+                throw new KeyNotFoundException($"OrderDetail with ID {orderId} not found.");
+            }
+            var cart = await _cartService.GetCartByUserId(order.AccountId);
+            if (cart == null)
+            {
+                throw new KeyNotFoundException($"Cart with ID {order.AccountId} not found.");
+            }
             var blindbox = await _blindBoxRepository.GetByIdAsync(orderDetail.First().BlindBoxId);
-            //if (blindbox == null)
-            //{
-            //    throw new KeyNotFoundException($"BlindBox with ID {orderDetail.First().BlindBoxId} not found.");
-            //}
+            if (blindbox == null) {
+                throw new KeyNotFoundException($"Blindbox with ID {orderDetail.First().BlindBoxId} not found.");
+            }
             var package = await _packageRepository.GetPackageByIdAsync(orderDetail.First().PackageId);
-            //if (package == null)
-            //{
-            //    throw new KeyNotFoundException($"Package with ID {orderDetail.First().PackageId} not found.");
-            //}
-
-
+            if (blindbox == null)
+            {
+                throw new KeyNotFoundException($"Package with ID {orderDetail.First().PackageId} not found.");
+            }
             // if have orderCode
             if (orderCode != null)
             {
@@ -182,7 +188,7 @@ namespace Services.OrderS
                         var quantityBB = orderDetail.Sum(o => o.Quantity);
                         blindbox.Stock = blindbox.Stock - quantityBB;
                         await _blindBoxRepository.UpdateAsync(blindbox);
-                        foreach (var item in card)
+                        foreach (var item in cart)
                         {
                             if (item.BlindBoxId == blindbox.BlindBoxId)
                             {
@@ -195,7 +201,7 @@ namespace Services.OrderS
                         var quantityPackage = orderDetail.Sum(o => o.Quantity);
                         package.Stock = package.Stock - quantityPackage;
                         await _packageRepository.UpdatePackageAsync(package);
-                        foreach (var item in card)
+                        foreach (var item in cart)
                         {
                             if (item.PackageId == package.PackageId)
                             {
@@ -213,7 +219,7 @@ namespace Services.OrderS
                 var quantityBB = orderDetail.Sum(o => o.Quantity);
                 blindbox.Stock = blindbox.Stock - quantityBB;
                 await _blindBoxRepository.UpdateAsync(blindbox);
-                foreach (var item in card)
+                foreach (var item in cart)
                 {
                     if (item.BlindBoxId == blindbox.BlindBoxId)
                     {
@@ -226,7 +232,7 @@ namespace Services.OrderS
                 var quantityPackage = orderDetail.Sum(o => o.Quantity);
                 package.Stock = package.Stock - quantityPackage;
                 await _packageRepository.UpdatePackageAsync(package);
-                foreach (var item in card)
+                foreach (var item in cart)
                 {
                     if (item.PackageId == package.PackageId)
                     {
@@ -236,7 +242,101 @@ namespace Services.OrderS
             }
             order.PaymentConfirmed = true;
             return await _orderRepository.UpdateAsync(order);
+        }*/
+        public async Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId)
+        {
+            // Fetch order and validate it
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order with ID {orderId} not found.");
+            }
+
+            // Fetch order details and validate them
+            var orderDetails = await _orderDetailRepository.GetOrderDetailsByOrderIdAsync(orderId);
+            if (orderDetails == null || !orderDetails.Any())
+            {
+                throw new KeyNotFoundException($"OrderDetail with ID {orderId} not found.");
+            }
+
+            // Fetch cart by user ID
+            var cart = await _cartService.GetCartByUserId(order.AccountId);
+            if (cart == null)
+            {
+                throw new KeyNotFoundException($"Cart with ID {order.AccountId} not found.");
+            }
+
+            // Fetch BlindBox and Package from OrderDetails
+            var blindbox = await _blindBoxRepository.GetByIdAsync(orderDetails.First().BlindBoxId);
+            var package = await _packageRepository.GetPackageByIdAsync(orderDetails.First().PackageId);
+
+            if (blindbox == null)
+            {
+                throw new KeyNotFoundException($"Blindbox with ID {orderDetails.First().BlindBoxId} not found.");
+            }
+
+            if (package == null)
+            {
+                throw new KeyNotFoundException($"Package with ID {orderDetails.First().PackageId} not found.");
+            }
+
+            // If we have an orderCode, validate payment status
+            if (orderCode != null)
+            {
+                var payment = await _paymentService.Value.GetPaymentLinkInformationAsync(orderCode.Value);
+                if (payment.status == "PAID")
+                {
+                    order.PaymentConfirmed = true;
+
+                    // Update BlindBox and Package stock
+                    await UpdateStockAndCartAsync(orderDetails, cart, blindbox, package);
+
+                    await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+
+                    return await _orderRepository.UpdateAsync(order);
+                }
+            }
+
+            // Update stock and cart even if no orderCode is provided
+            await UpdateStockAndCartAsync(orderDetails, cart, blindbox, package);
+
+            // Final confirmation of payment
+            order.PaymentConfirmed = true;
+
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+
+            return await _orderRepository.UpdateAsync(order);
         }
+
+        // Helper method to update BlindBox, Package stock and clear cart items
+        private async Task UpdateStockAndCartAsync(IEnumerable<OrderDetail> orderDetails, IEnumerable<Cart> cart, BlindBox blindbox, Package package)
+        {
+            // Update BlindBox stock
+            var blindboxQuantity = orderDetails.Sum(o => o.Quantity);
+            blindbox.Stock -= blindboxQuantity;
+            await _blindBoxRepository.UpdateAsync(blindbox);
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+
+            // Remove BlindBox from the cart
+            foreach (var item in cart.Where(item => item.BlindBoxId == blindbox.BlindBoxId))
+            {
+                await _cartService.DeleteCartItem(item.CartId);
+            }
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+
+            // Update Package stock
+            var packageQuantity = orderDetails.Sum(o => o.Quantity);
+            package.Stock -= packageQuantity;
+            await _packageRepository.UpdatePackageAsync(package);
+
+            // Remove Package from the cart
+            foreach (var item in cart.Where(item => item.PackageId == package.PackageId))
+            {
+                await _cartService.DeleteCartItem(item.CartId);
+            }
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+        }
+
 
         public async Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
         {
