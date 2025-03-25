@@ -54,13 +54,13 @@ namespace Repositories.ReviewRepo
         }
 
         // ✅ Lấy Review theo BlindBoxId
-        public async Task<IEnumerable<Review>> GetAllReviewsByBlindBoxIdAsync(Guid blindBoxId)
+        public async Task<IEnumerable<Review>> GetReviewsByBlindBoxId(Guid blindBoxId)
         {
-            return await _DbContext.Reviews
-                .Include(r => r.OrderDetail)
-                .ThenInclude(od => od.BlindBox)
+            var reviews = await _DbContext.Reviews
                 .Where(r => r.OrderDetail.BlindBoxId == blindBoxId)
                 .ToListAsync();
+
+            return reviews;
         }
 
         // ✅ Lấy Review theo PackageId

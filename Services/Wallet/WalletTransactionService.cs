@@ -1,4 +1,5 @@
 ﻿using Models;
+using Repositories.Pagging;
 using Repositories.WalletRepo;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,23 @@ namespace Services.Wallet
             await _walletTransactionRepository.AddWalletTransactionAsync(walletTransaction);
         }
 
-        
+        public async Task<IEnumerable<WalletTransaction>> GetAllAsync()
+        {
+            return await _walletTransactionRepository.GetAllAsync();
+        }
+        public async Task<PaginatedList<WalletTransaction>> GetAll(int pageNumber, int pageSize)
+        {
+            IQueryable<WalletTransaction> walletTransaction = _walletTransactionRepository.GetAll().AsQueryable();
+            return await PaginatedList<WalletTransaction>.CreateAsync(walletTransaction, pageNumber, pageSize);
+        }
+
+        public async Task<PaginatedList<WalletTransaction>> GetWalletTransactionByWalletIdAsync(Guid walletId, int pageNumber, int pageSize)
+        {
+            IQueryable<WalletTransaction> walletTransactions = _walletTransactionRepository.GetAll()
+                .Where(wt => wt.WalletId == walletId)
+                .AsQueryable();
+            return await PaginatedList<WalletTransaction>.CreateAsync(walletTransactions, pageNumber, pageSize);
+        }
+
     }
 }
