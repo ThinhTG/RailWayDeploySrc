@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.Cache;
 using Services.DTO;
 using Services.OrderS;
 
@@ -8,10 +9,12 @@ using Services.OrderS;
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
+    private readonly IResponseCacheService _responseCacheService;
 
-    public OrderController(IOrderService orderService)
+    public OrderController(IOrderService orderService, IResponseCacheService responseCacheService)
     {
         _orderService = orderService;
+        _responseCacheService = responseCacheService;
     }
 
     // Lấy tất cả đơn hàng (dùng HTTP GET với collection resource, không cần "getAll")
@@ -141,6 +144,7 @@ public class OrderController : ControllerBase
     public async Task<IActionResult> UpdatePaymentConfirmed(int? orderCode, int orderId)
     {
         var response = await _orderService.UpdatePaymentConfirmed(orderCode, orderId);
+        await _responseCacheService.RemoveCacheResponseAsync($"/cart-management/managed-carts/{response.AccountId}");
         if (response == null) return NotFound();
         else { return Ok(response); }
     }
