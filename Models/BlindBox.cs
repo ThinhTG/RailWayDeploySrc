@@ -59,6 +59,7 @@ namespace Models
         [StringLength(50)]
         public string BlindBoxStatus { get; set; }
 
+        public bool isSecret { get; set; }
 
         [JsonIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();

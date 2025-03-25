@@ -270,15 +270,15 @@ namespace Services.OrderS
             var blindbox = await _blindBoxRepository.GetByIdAsync(orderDetails.First().BlindBoxId);
             var package = await _packageRepository.GetPackageByIdAsync(orderDetails.First().PackageId);
 
-            if (blindbox == null)
-            {
-                throw new KeyNotFoundException($"Blindbox with ID {orderDetails.First().BlindBoxId} not found.");
-            }
+            //if (blindbox == null)
+            //{
+            //    throw new KeyNotFoundException($"Blindbox with ID {orderDetails.First().BlindBoxId} not found.");
+            //}
 
-            if (package == null)
-            {
-                throw new KeyNotFoundException($"Package with ID {orderDetails.First().PackageId} not found.");
-            }
+            //if (package == null)
+            //{
+            //    throw new KeyNotFoundException($"Package with ID {orderDetails.First().PackageId} not found.");
+            //}
 
             // If we have an orderCode, validate payment status
             if (orderCode != null)
@@ -311,30 +311,36 @@ namespace Services.OrderS
         // Helper method to update BlindBox, Package stock and clear cart items
         private async Task UpdateStockAndCartAsync(IEnumerable<OrderDetail> orderDetails, IEnumerable<Cart> cart, BlindBox blindbox, Package package)
         {
-            // Update BlindBox stock
-            var blindboxQuantity = orderDetails.Sum(o => o.Quantity);
-            blindbox.Stock -= blindboxQuantity;
-            await _blindBoxRepository.UpdateAsync(blindbox);
-            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
-
-            // Remove BlindBox from the cart
-            foreach (var item in cart.Where(item => item.BlindBoxId == blindbox.BlindBoxId))
+            // Update BlindBox stock if BlindBoxId is present in orderDetails
+            if (orderDetails.Any(o => o.BlindBoxId.HasValue))
             {
-                await _cartService.DeleteCartItem(item.CartId);
+                var blindboxQuantity = orderDetails.Where(o => o.BlindBoxId.HasValue).Sum(o => o.Quantity);
+                blindbox.Stock -= blindboxQuantity;
+                await _blindBoxRepository.UpdateAsync(blindbox);
+                await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+
+                // Remove BlindBox from the cart
+                foreach (var item in cart.Where(item => item.BlindBoxId == blindbox.BlindBoxId))
+                {
+                    await _cartService.DeleteCartItem(item.CartId);
+                }
+                await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
             }
-            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
 
-            // Update Package stock
-            var packageQuantity = orderDetails.Sum(o => o.Quantity);
-            package.Stock -= packageQuantity;
-            await _packageRepository.UpdatePackageAsync(package);
-
-            // Remove Package from the cart
-            foreach (var item in cart.Where(item => item.PackageId == package.PackageId))
+            // Update Package stock if PackageId is present in orderDetails
+            if (orderDetails.Any(o => o.PackageId.HasValue))
             {
-                await _cartService.DeleteCartItem(item.CartId);
+                var packageQuantity = orderDetails.Where(o => o.PackageId.HasValue).Sum(o => o.Quantity);
+                package.Stock -= packageQuantity;
+                await _packageRepository.UpdatePackageAsync(package);
+
+                // Remove Package from the cart
+                foreach (var item in cart.Where(item => item.PackageId == package.PackageId))
+                {
+                    await _cartService.DeleteCartItem(item.CartId);
+                }
+                await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
             }
-            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
         }
 
 

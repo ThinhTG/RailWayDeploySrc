@@ -33,6 +33,8 @@ namespace Services.DTO
       
         public string PackageStatus { get; set; }
 
+        public decimal DefaultPrice { get; set; }
+
 
     }
 }

@@ -24,7 +24,7 @@ namespace Services.Product
             return await _packageRepository.GetAllPackagesAsync();
         }
 
-        public async Task<Package?> GetPackageByIdAsync(Guid id)
+        public async Task<Package?> GetPackageByIdAsync(Guid? id)
         {
             return await _packageRepository.GetPackageByIdAsync(id);
         }
@@ -41,8 +41,8 @@ namespace Services.Product
                 var newPackage = await _packageRepository.AddPackageAsync(package);
                 if (newPackage.TypeSell == "LuckyWheel")
                 {
-                    // generate random 10 BlindBox cho package LuckyWheel
-                    for (int i = 0; i < 10; i++)
+                    // generate random 8 BlindBox cho package LuckyWheel
+                    for (int i = 0; i < 8; i++)
                     {
                         var blindBox = new AddBlindBoxDTO
                         {
@@ -56,10 +56,32 @@ namespace Services.Product
                             CreatedAt = DateTime.UtcNow,
                             UpdatedAt = DateTime.UtcNow,
                             Percent = 10,
-                            BlindBoxStatus = "Active"
+                            BlindBoxStatus = "Active",
+                            isSecret = false
                         };
                         await _blindBoxService.AddAsync(blindBox);
+                    }
 
+                    // generate 2 Secret BlindBox cho package LuckyWheel
+                    for (int i = 0; i < 2; i++)
+                    {
+                        var blindBox = new AddBlindBoxDTO
+                        {
+                            PackageId = newPackage.PackageId,
+                            TypeSell = "LuckyWheel",
+                            Price = package.PackagePrice + 100,
+                            Size = "Small",
+                            Description = $"Secret BlindBox LuckyWheel {i + 1}",
+                            BlindBoxName = $"Secret BlindBox {package.PackageName} {i + 1}",
+                            Stock = 1,
+                            CreatedAt = DateTime.UtcNow,
+                            UpdatedAt = DateTime.UtcNow,
+                            Percent = 5,
+                            BlindBoxStatus = "Active",
+                            isSecret = true
+
+                        };
+                        await _blindBoxService.AddAsync(blindBox);
                     }
                 }
 
@@ -78,7 +100,8 @@ namespace Services.Product
                             CreatedAt = DateTime.UtcNow,
                             UpdatedAt = DateTime.UtcNow,
                             Percent = 10,
-                            BlindBoxStatus = "Active"
+                            BlindBoxStatus = "Active",
+                            isSecret = false
                         };
                         await _blindBoxService.AddAsync(blindBox);
 
@@ -111,8 +134,9 @@ namespace Services.Product
             Package.TypeSell = updatePackageRequest.TypeSell;
            Package.Stock = updatePackageRequest.Stock;
             Package.Amount = updatePackageRequest.Amount;
+            Package.DefaultPrice = updatePackageRequest.DefaultPrice;
 
-             await _packageRepository.UpdatePackageAsync(Package);
+            await _packageRepository.UpdatePackageAsync(Package);
             return Package;
         }
 

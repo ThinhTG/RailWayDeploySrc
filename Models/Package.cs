@@ -33,6 +33,9 @@ namespace Models
         public int Amount { get; set; }
 
         [Required]
+        public decimal DefaultPrice { get; set; }
+
+        [Required]
         [StringLength(50)]
         public string PackageStatus { get; set; }
 

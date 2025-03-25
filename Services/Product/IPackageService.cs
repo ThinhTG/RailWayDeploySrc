@@ -12,7 +12,7 @@ namespace Services.Product
     public interface IPackageService
     {
         Task<IEnumerable<Package>> GetAllPackagesAsync();
-        Task<Package?> GetPackageByIdAsync(Guid id);
+        Task<Package?> GetPackageByIdAsync(Guid? id);
         Task<Package> AddPackageAsync(Package package);
         Task<Package?> UpdatePackageAsync(Guid id, UpdatePackageRequest updatePackageRequest);
 

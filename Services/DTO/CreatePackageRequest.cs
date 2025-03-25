@@ -36,5 +36,14 @@ namespace Services.DTO
         [Required]
         [StringLength(50)]
         public string PackageStatus { get; set; }
+
+        [Required]
+        [Column(TypeName = "decimal(19,0)")]
+        public decimal DefaultPrice { get; set; }
+
+        public CreatePackageRequest()
+        {
+            DefaultPrice = PackagePrice;
+        }
     }
 }

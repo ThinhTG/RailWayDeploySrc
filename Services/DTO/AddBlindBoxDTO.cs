@@ -34,5 +34,7 @@ namespace Services.DTO
         public float? Percent { get; set; } // Cho phép null
       
         public string BlindBoxStatus { get; set; }
+
+        public bool isSecret { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Services.Product
     public interface IBlindBoxService
     {
         Task<IEnumerable<BlindBoxMobileResponse>> GetAllAsync(string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, string? size);
-        Task<BlindBox> GetByIdAsync(Guid id);
+        Task<BlindBox> GetByIdAsync(Guid? id);
         Task<BlindBox> AddAsync(AddBlindBoxDTO addBlindBoxDTO);
         Task<BlindBox> UpdateAsync(Guid id, UpdateBlindBoxDTO updateBlindBoxDTO);
 
