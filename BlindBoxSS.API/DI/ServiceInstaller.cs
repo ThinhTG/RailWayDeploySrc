@@ -54,6 +54,9 @@ namespace BlindBoxSS.API.DI
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IBlindBoxImageService, BlindBoxImageService>();
             services.AddScoped<IPackageImageService, PackageImageService>();
+
+            services.AddScoped<Lazy<IOrderService>>(provider => new Lazy<IOrderService>(() => provider.GetRequiredService<IOrderService>()));
+            services.AddScoped<Lazy<IPaymentService>>(provider => new Lazy<IPaymentService>(() => provider.GetRequiredService<IPaymentService>()));
         }
     }
 }

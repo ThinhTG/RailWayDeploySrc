@@ -26,5 +26,6 @@ namespace Services.OrderS
         List<RevenueReportDTO> GetRevenueByDay(DateTime startDate, DateTime endDate);
         List<RevenueReportDTO> GetRevenueByMonth(int year);
         List<RevenueReportDTO> GetRevenueByYear();
+        Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId);
     }
 }

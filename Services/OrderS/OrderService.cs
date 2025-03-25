@@ -5,6 +5,7 @@ using Repositories.Pagging;
 using Services.AccountService;
 using Services.AddressS;
 using Services.DTO;
+using Services.Payment;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,12 +19,14 @@ namespace Services.OrderS
         private readonly IOrderRepository _orderRepository;
         private readonly IAccountService _accountService;
         private readonly IAddressService _addressService;
+        private readonly Lazy<IPaymentService> _paymentService;
 
-        public OrderService(IOrderRepository orderRepository, IAccountService accountService, IAddressService addressService)
+        public OrderService(IOrderRepository orderRepository, IAccountService accountService, IAddressService addressService, Lazy<IPaymentService> paymentService)
         {
             _orderRepository = orderRepository;
             _accountService = accountService;
             _addressService = addressService;
+            _paymentService = paymentService;
         }
 
         public async Task<PaginatedList<Order>> GetAll(int pageNumber, int pageSize)
@@ -135,6 +138,26 @@ namespace Services.OrderS
                 })
                 .OrderBy(r => r.Date)
                 .ToList();
+        }
+
+
+        //update paymentConfirmed by param orderCode
+        public async Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            // if have orderCode
+            if (orderCode != null)
+            {
+                var payment = await _paymentService.Value.GetPaymentLinkInformationAsync(orderCode.Value);
+                if (payment.status == "PAID")
+                {
+                    order.PaymentConfirmed = true;
+                    return await _orderRepository.UpdateAsync(order);
+                }
+                return order;
+            }
+            order.PaymentConfirmed = true;
+            return await _orderRepository.UpdateAsync(order);
         }
     }
 }

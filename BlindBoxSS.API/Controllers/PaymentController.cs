@@ -106,6 +106,10 @@ public class PaymentController : ControllerBase
         try
         {
             var paymentInfo = await _paymentService.GetPaymentLinkInformationAsync(orderCode);
+            if (paymentInfo.status == "")
+            {
+
+            }
             return Ok(new Response(0, "Success", paymentInfo));
         }
         catch (Exception ex)
