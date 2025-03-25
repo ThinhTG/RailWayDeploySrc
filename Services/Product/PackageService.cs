@@ -48,7 +48,7 @@ namespace Services.Product
                         {
                             PackageId = newPackage.PackageId,
                             TypeSell = "LuckyWheel",
-                            Price = package.PackagePrice + 50,
+                            Price = package.PackagePrice,
                             Size = "Small",
                             Description = $"BlindBox LuckyWheel {i + 1}",
                             BlindBoxName = $"BlindBox {package.PackageName} {i + 1}",
@@ -92,7 +92,7 @@ namespace Services.Product
                         {
                             PackageId = newPackage.PackageId,
                             TypeSell = "BlindBox",
-                            Price = package.PackagePrice + 50,
+                            Price = package.PackagePrice/10,
                             Size = "Small",
                             Description = $"BlindBox {package.Description}",
                             BlindBoxName = $"BlindBox {package.PackageName}",
