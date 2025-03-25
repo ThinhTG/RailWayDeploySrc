@@ -14,5 +14,8 @@ namespace Repositories.OrderRep
 
         IQueryable<Order> GetByAccountId(string id);
         IQueryable<Order> GetListOrderForCheck();
+        List<Order> GetOrdersByDateRange(DateTime startDate, DateTime endDate);
+        List<Order> GetOrdersByYear(int year);
+        List<Order> GetAllConfirmedOrders();
     }
 }

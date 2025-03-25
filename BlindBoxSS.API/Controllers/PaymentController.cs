@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Net.payOS.Types;
 using Org.BouncyCastle.Bcpg;
+using Repositories.WalletRepo;
 using Services.Cache;
 using Services.OrderS;
 using Services.Payment;
 using Services.Request;
+using Services.Wallet;
 
 [Route("api/payments")]
 [ApiController]
@@ -13,12 +15,14 @@ public class PaymentController : ControllerBase
     private readonly IPaymentService _paymentService;
     private readonly IResponseCacheService _responseCacheService;
     private readonly IOrderService _orderService;
+  
 
     public PaymentController(IPaymentService paymentService, IResponseCacheService responseCacheService,IOrderService orderService)
     {
         _paymentService = paymentService;
         _responseCacheService = responseCacheService;
         _orderService = orderService;
+       
     }
 
     // Tạo link thanh toán

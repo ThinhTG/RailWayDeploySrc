@@ -6,6 +6,7 @@ using Services.OrderS;
 using Services.Product;
 using Services.Request;
 using Services.DTO;
+using Services.Wallet;
 
 namespace BlindBoxSS.API.Controllers
 {
@@ -18,14 +19,16 @@ namespace BlindBoxSS.API.Controllers
         private readonly IOrderService _orderService;
         private readonly IOrderDetailService _orderDetailService;
         private readonly IBlindBoxService _blindBoxService;
+        private readonly IWalletTransactionService _walletTransaction;
 
-        public LuckyWheelController(IPackageService packageService, IWalletService walletService, IOrderService orderService, IOrderDetailService orderDetailService,IBlindBoxService blindBoxService)
+        public LuckyWheelController(IPackageService packageService, IWalletService walletService, IOrderService orderService, IOrderDetailService orderDetailService,IBlindBoxService blindBoxService, IWalletTransactionService transactionService)
         {
             _packageService = packageService;
             _walletService = walletService;
             _orderService = orderService;
             _orderDetailService = orderDetailService;
             _blindBoxService = blindBoxService;
+            _walletTransaction = transactionService;
         }
 
         [HttpPost("spin")]

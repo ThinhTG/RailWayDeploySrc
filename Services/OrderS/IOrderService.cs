@@ -1,5 +1,6 @@
 ﻿using Models;
 using Repositories.Pagging;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,9 @@ namespace Services.OrderS
         Task<PaginatedList<Order>> GetByAccountId(string accountId,int pageNumber,int pageSize);
 
         Task<PaginatedList<Order>> GetListOrderForCheck(int pageNumber, int pageSize);
+
+        List<RevenueReportDTO> GetRevenueByDay(DateTime startDate, DateTime endDate);
+        List<RevenueReportDTO> GetRevenueByMonth(int year);
+        List<RevenueReportDTO> GetRevenueByYear();
     }
 }

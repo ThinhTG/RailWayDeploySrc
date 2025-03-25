@@ -1,8 +1,10 @@
-﻿using Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using Repositories.OrderRep;
 using Repositories.Pagging;
 using Services.AccountService;
 using Services.AddressS;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,6 +84,57 @@ namespace Services.OrderS
             IQueryable<Order> orders = _orderRepository.GetListOrderForCheck().AsQueryable();
 
             return await PaginatedList<Order>.CreateAsync(orders, pageNumber, pageSize);
+        }
+
+
+        // daonh thu theo ngay
+        public List<RevenueReportDTO> GetRevenueByDay(DateTime startDate, DateTime endDate)
+        {
+            var orders = _orderRepository.GetOrdersByDateRange(startDate, endDate);
+            return orders
+                .GroupBy(o => o.CreatedDate.Date)
+                .Select(g => new RevenueReportDTO
+                {
+                    Date = g.Key,
+                    TotalRevenue = g.Sum(o => o.PriceTotal),
+                    TotalOrders = g.Count()
+                })
+                .OrderBy(r => r.Date)
+                .ToList();
+        }
+
+
+        // doanh thu theo thang
+        public List<RevenueReportDTO> GetRevenueByMonth(int year)
+        {
+            var orders = _orderRepository.GetOrdersByYear(year);
+            return orders
+                .GroupBy(o => new { o.CreatedDate.Year, o.CreatedDate.Month })
+                .Select(g => new RevenueReportDTO
+                {
+                    Date = new DateTime(g.Key.Year, g.Key.Month, 1),
+                    TotalRevenue = g.Sum(o => o.PriceTotal),
+                    TotalOrders = g.Count()
+                })
+                .OrderBy(r => r.Date)
+                .ToList();
+        }
+
+
+        // doanh thu theo nam
+        public List<RevenueReportDTO> GetRevenueByYear()
+        {
+            var orders = _orderRepository.GetAllConfirmedOrders();
+            return orders
+                .GroupBy(o => o.CreatedDate.Year)
+                .Select(g => new RevenueReportDTO
+                {
+                    Date = new DateTime(g.Key, 1, 1),
+                    TotalRevenue = g.Sum(o => o.PriceTotal),
+                    TotalOrders = g.Count()
+                })
+                .OrderBy(r => r.Date)
+                .ToList();
         }
     }
 }

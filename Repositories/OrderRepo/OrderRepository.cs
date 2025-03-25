@@ -66,5 +66,26 @@ namespace Repositories.OrderRep
         {
             return _context.Orders.Where(o => o.OrderCode != null && o.PaymentConfirmed == true && o.OrderStatus == Models.Enum.OrderStatus.PENDING);
         }
+
+        public List<Order> GetOrdersByDateRange(DateTime startDate, DateTime endDate)
+        {
+            return _context.Orders
+                .Where(o => o.CreatedDate >= startDate && o.CreatedDate <= endDate && o.PaymentConfirmed)
+                .ToList();
+        }
+
+        public List<Order> GetOrdersByYear(int year)
+        {
+            return _context.Orders
+                .Where(o => o.CreatedDate.Year == year && o.PaymentConfirmed)
+                .ToList();
+        }
+
+        public List<Order> GetAllConfirmedOrders()
+        {
+            return _context.Orders
+                .Where(o => o.PaymentConfirmed)
+                .ToList();
+        }
     }
 }
