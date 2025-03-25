@@ -5,7 +5,7 @@ namespace Services.Request
         public string? accountId { get; set; }
         public string description = "Deposit ";
         public int price { get; set; }
-        public string returnUrl = "http://localhost:3000/payment-success";
-        public string cancelUrl = "http://localhost:3000/payment-fail";
+        public string returnUrl = "http://localhost:3000/wallet-success";
+        public string cancelUrl = "http://localhost:3000/wallet-fail";
     }
 }
