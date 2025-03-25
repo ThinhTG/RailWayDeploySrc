@@ -145,5 +145,46 @@ public class OrderController : ControllerBase
         else { return Ok(response); }
     }
 
+    /// <summary>
+    /// Update orderStatus
+    /// </summary>
+    /// <param name="orderId">orderCode</param>
+    /// <param name="orderStatus">orderId</param>
+    /// <returns></returns>
 
+    [HttpPatch("orderStatus")]
+    public async Task<IActionResult> UpdateOrderStatus(int orderId, Models.Enum.OrderStatus orderStatus)
+    {
+        var response = await _orderService.UpdateOrderStatus(orderId, orderStatus);
+        if (response == null) return NotFound();
+        else { return Ok(response); }
+    }
+
+    /// <summary>
+    /// get list order by orderStatus = DELIVERING
+    /// </summary>
+    /// <param name="pageNumber">Số Trang</param>
+    /// <param name="pageSize">Số Đơn hàng trong 1 trang</param>
+    /// <returns></returns>
+
+    [HttpGet("delivering")]
+    public async Task<ActionResult<IEnumerable<Order>>> GetListOrderDelivering(int pageNumber = 1, int pageSize = 10)
+    {
+        var orders = await _orderService.GetListOrderDelivering(pageNumber, pageSize);
+        return Ok(orders);
+    }
+
+    /// <summary>
+    /// get list order by orderStatus = COMPLETED
+    /// </summary>
+    /// <param name="pageNumber">Số Trang</param>
+    /// <param name="pageSize">Số Đơn hàng trong 1 trang</param>
+    /// <returns></returns>
+
+    [HttpGet("completed")]
+    public async Task<ActionResult<IEnumerable<Order>>> GetListOrderCompleted( int pageNumber = 1, int pageSize = 10)
+    {
+        var orders = await _orderService.GetListOrderCompleted(pageNumber, pageSize);
+        return Ok(orders);
+    }
 }

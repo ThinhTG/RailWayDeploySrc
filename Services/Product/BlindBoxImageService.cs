@@ -13,29 +13,36 @@ namespace Services.Product
             _unitOfWork = unitOfWork;
         }
 
-        public async Task AddBlindBoxImage(BBImageDTO blindBoxImage)
+        public async Task AddBlindBoxImages(BBImageDTO blindBoxImage)
         {
-            if (blindBoxImage.BlindBoxId == null)
+            if (blindBoxImage.BlindBoxId == Guid.Empty)
             {
                 throw new Exception("BlindBoxId is required");
             }
-            if (blindBoxImage.ImageUrl is null)
+            if (blindBoxImage.ImageUrls == null || !blindBoxImage.ImageUrls.Any())
             {
-                throw new Exception("Image URL is required");
+                throw new Exception("At least one Image URL is required");
             }
+
             var blindboxImageRepo = _unitOfWork.GetRepository<BlindBoxImage>();
             var blindbox = _unitOfWork.GetRepository<BlindBox>();
-            var newBlindBoxImage = new BlindBoxImage
+
+            var blindBox = blindbox.GetById(blindBoxImage.BlindBoxId);
+            if (blindBox == null)
+            {
+                throw new Exception("BlindBox not found");
+            }
+
+            var newBlindBoxImages = blindBoxImage.ImageUrls.Select((imageUrl, index) => new BlindBoxImage
             {
                 BlindBoxId = blindBoxImage.BlindBoxId,
                 BlindBoxImageId = Guid.NewGuid(),
-                ImageUrl = blindBoxImage.ImageUrl,
-                DisplayBlindboxId= blindBoxImage.DisplayBlindboxId,
-                BlindBox = blindbox.GetById(blindBoxImage.BlindBoxId)
+                ImageUrl = imageUrl,
+                DisplayBlindboxId = index == 0 ? 1 : 0, // Set DisplayBlindboxId to 1 for the first image, 0 for others
+                BlindBox = blindBox
+            }).ToList();
 
-            };
-
-            blindboxImageRepo.Insert(newBlindBoxImage);
+            blindboxImageRepo.InsertRange(newBlindBoxImages);
 
             await _unitOfWork.SaveAsync();
         }

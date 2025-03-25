@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Enum;
 
 namespace Repositories.OrderRep
 {
@@ -17,5 +18,8 @@ namespace Repositories.OrderRep
         List<Order> GetOrdersByDateRange(DateTime startDate, DateTime endDate);
         List<Order> GetOrdersByYear(int year);
         List<Order> GetAllConfirmedOrders();
+        Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus);
+        Task<IEnumerable<Order>> GetListOrderDelivering();
+        Task<IEnumerable<Order>> GetListOrderCompleted();
     }
 }

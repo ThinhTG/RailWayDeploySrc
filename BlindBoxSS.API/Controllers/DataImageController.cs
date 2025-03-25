@@ -18,17 +18,20 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpPost("Blindbox-Images")]
-        public async Task<IActionResult> AddBlindBoxImage([FromBody] BBImageDTO bbimageDTO)
+        public async Task<IActionResult> AddBlindBoxImages([FromBody] List<BBImageDTO> bbimageDTOs)
         {
-            if (bbimageDTO == null)
+            if (bbimageDTOs == null || !bbimageDTOs.Any())
             {
                 return BadRequest();
             }
 
             try
             {
-                await _blindBoxImageService.AddBlindBoxImage(bbimageDTO);
-                return Ok(new { Message = "Add blindboxImage successfully" });
+                foreach (var bbimageDTO in bbimageDTOs)
+                {
+                    await _blindBoxImageService.AddBlindBoxImages(bbimageDTO);
+                }
+                return Ok(new { Message = "Add blindboxImages successfully" });
             }
             catch (Exception ex)
             {
@@ -127,17 +130,20 @@ namespace BlindBoxSS.API.Controllers
         }
 
         [HttpPost("Package-Images")]
-        public async Task<IActionResult> AddPackageImage([FromBody] PackageImageDTO packageImageDTO)
+        public async Task<IActionResult> AddPackageImages([FromBody] List<PackageImageDTO> packageImageDTOs)
         {
-            if (packageImageDTO == null)
+            if (packageImageDTOs == null || !packageImageDTOs.Any())
             {
                 return BadRequest();
             }
 
             try
             {
-                await _packageImageService.AddPackageImage(packageImageDTO);
-                return Ok(new { Message = "Add packageImage successfully" });
+                foreach (var packageImageDTO in packageImageDTOs)
+                {
+                    await _packageImageService.AddPackageImages(packageImageDTO);
+                }
+                return Ok(new { Message = "Add packageImages successfully" });
             }
             catch (Exception ex)
             {

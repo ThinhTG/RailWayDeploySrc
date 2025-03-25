@@ -1,6 +1,7 @@
 ﻿using DAO;
 using Microsoft.EntityFrameworkCore;
 using Models;
+using Models.Enum;
 
 namespace Repositories.OrderRep
 {
@@ -86,6 +87,32 @@ namespace Repositories.OrderRep
             return _context.Orders
                 .Where(o => o.PaymentConfirmed)
                 .ToList();
+        }
+
+        public async Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order != null)
+            {
+                order.OrderStatus = orderStatus;
+                _context.Orders.Update(order);
+                _context.SaveChanges();
+            }
+            return order;
+        }
+
+        public async Task<IEnumerable<Order>> GetListOrderDelivering()
+        {
+            return await _context.Orders
+                .Where(o => o.OrderStatus == OrderStatus.DELIVERING)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Order>> GetListOrderCompleted()
+        {
+            return await _context.Orders
+                .Where(o => o.OrderStatus == OrderStatus.COMPLETED)
+                .ToListAsync();
         }
     }
 }

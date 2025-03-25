@@ -16,6 +16,7 @@ namespace DAO.Contracts
         public string Comment { get; set; }
         public DateTime CreateAt { get; set; }
         public string ReviewStatus { get; set; }
+        public string ImageUrl { get; set; }
 
         public AccountReviewResponse Account { get; set; }
     }
