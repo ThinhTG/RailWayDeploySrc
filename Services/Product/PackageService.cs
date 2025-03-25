@@ -242,10 +242,12 @@ namespace Services.Product
             return true;
         }
 
-        public async Task<IEnumerable<Package>> GetActiveLWPackages()
+        public async Task<PaginatedList<Package>> GetActiveLWPackagesPaged(int pageNumber, int pageSize)
         {
-            var packages = await _packageRepository.GetActiveLWPackage();
-            return packages;
+            var packages = _packageRepository.GetAll()
+                .Where(p => p.TypeSell == "LuckyWheel" && p.PackageStatus == "Active");
+
+            return await PaginatedList<Package>.CreateAsync(packages, pageNumber, pageSize);
         }
     }
 }
