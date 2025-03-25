@@ -8,6 +8,9 @@ using Services.Request;
 using Services.DTO;
 using Services.Wallet;
 using Services.AddressS;
+using System.Transactions;
+using TimeZoneConverter;
+using System.Globalization;
 
 namespace BlindBoxSS.API.Controllers
 {
@@ -22,8 +25,9 @@ namespace BlindBoxSS.API.Controllers
         private readonly IBlindBoxService _blindBoxService;
         private readonly IWalletTransactionService _walletTransaction;
         private readonly IAddressService _addressService;
+        private readonly IConfiguration _configuration;
 
-        public LuckyWheelController(IPackageService packageService, IWalletService walletService, IOrderService orderService, IOrderDetailService orderDetailService,IBlindBoxService blindBoxService, IWalletTransactionService transactionService, IAddressService addressService)
+        public LuckyWheelController(IPackageService packageService, IWalletService walletService, IOrderService orderService, IOrderDetailService orderDetailService,IBlindBoxService blindBoxService, IWalletTransactionService transactionService, IAddressService addressService, IConfiguration configuration)
         {
             _packageService = packageService;
             _walletService = walletService;
@@ -32,11 +36,17 @@ namespace BlindBoxSS.API.Controllers
             _blindBoxService = blindBoxService;
             _walletTransaction = transactionService;
             _addressService = addressService;
+            _configuration = configuration;
         }
 
         [HttpPost("spin")]
         public async Task<IActionResult> SpinWheel([FromBody] SpinRequest request)
         {
+            var dateFormat = _configuration["TransactionSettings:DateFormat"] ?? "yyyy-MM-ddTHH:mm:ssZ";
+            bool useUTC = bool.TryParse(_configuration["TransactionSettings:UseUTC"], out bool utc) && utc;
+            var timeZoneId = _configuration["TransactionSettings:TimeZone"] ?? "UTC";
+            DateTime transactionDatetime = DateTime.UtcNow; // Default to UTC
+
             var package = await _packageService.GetPackageByIdAsync(request.PackageId);
             if (package == null || package.Stock <= 0)
                 return BadRequest("Package not available or out of stock.");
@@ -50,6 +60,7 @@ namespace BlindBoxSS.API.Controllers
             decimal spinCost = package.PackagePrice / 10;
             userWallet.Balance -= spinCost;
             await _walletService.UpdateUserWalletAsync(userWallet);
+        
 
             var blindBox = await _packageService.GetRandomBlindBoxFromPackage(request.PackageId);
             if (blindBox == null)
@@ -85,7 +96,23 @@ namespace BlindBoxSS.API.Controllers
                 Price = spinCost
             };
 
+            if (!useUTC)
+            {
+                try
+                {
+                    // Convert UTC time to specified TimeZone
+                    TimeZoneInfo timeZone = TZConvert.GetTimeZoneInfo(timeZoneId);
+                    transactionDatetime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
+                }
+                catch (TimeZoneNotFoundException)
+                {
+                    throw new Exception("Invalid TimeZone");
+                }
+            }
+
             await _orderDetailService.AddOrderDetailAsync(orderDetail);
+
+            await _walletTransaction.AddWalletTransactionAsync(userWallet.WalletId, spinCost, "spin", "success", transactionDatetime.ToString(dateFormat, CultureInfo.InvariantCulture), userWallet.Balance, createdOrder.OrderId);
 
             return Ok(new { Message = "Spin successful!", BlindBox = blindBox, Balance = userWallet.Balance });
         }
