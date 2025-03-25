@@ -249,5 +249,11 @@ namespace Services.Product
             await _repository.UpdateAsync(blindbox);
             return blindbox;
         }
+
+        public async Task<List<BlindBox>> GetBlindBoxLuckyWheel(Guid PackageId)
+        {
+            var blindboxes = await _repository.GetBlindBoxLuckyWheel(PackageId);
+            return blindboxes.ToList();
+        }
     }
 }

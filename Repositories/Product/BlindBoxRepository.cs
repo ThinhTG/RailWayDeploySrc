@@ -84,5 +84,12 @@ namespace Repositories.Product
                 .Include(b => b.Package);
             return await blindBoxes.ToListAsync();
         }
+
+        public async Task<IEnumerable<BlindBox>> GetBlindBoxLuckyWheel(Guid PackageId)
+        {
+            return await _context.BlindBoxes
+                .Where(b => b.PackageId == PackageId && b.BlindBoxStatus == "Active")
+                .ToListAsync();
+        }
     }
 }

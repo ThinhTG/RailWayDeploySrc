@@ -24,7 +24,7 @@ namespace Services.Product
 
         Task<PaginatedList<BlindBox>> GetAllFilter(string? searchByCategory, string? typeSell, string? size , string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize);
 
-       
+        Task<List<BlindBox>> GetBlindBoxLuckyWheel(Guid PackageId);
 
     }
 }

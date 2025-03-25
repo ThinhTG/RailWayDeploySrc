@@ -21,6 +21,8 @@ namespace Repositories.Product
 
         Task<IEnumerable<BlindBox>> GetBlindBoxByTypeSellPaged(string typeSell);
 
+        Task<IEnumerable<BlindBox>> GetBlindBoxLuckyWheel(Guid PackageId);
+
 
     }
 }

@@ -199,4 +199,24 @@ public class BlindBoxController : ControllerBase
         }
     }
 
+
+
+    /// <summary>
+    /// Lấy All BlindBoxes cho LuckyWheel ( available và trong PackageId)
+    /// </summary>
+    /// <param name="PackageId">PackageId</param>
+    /// <returns>List BlindBox để Quay số</returns>
+    /// <exception cref="KeyNotFoundException"></exception>
+    [HttpGet("luckywheel")]
+    public async Task<ActionResult> GetLuckyWheel(Guid PackageId)
+    {
+        var blindBoxes = await _service.GetBlindBoxLuckyWheel(PackageId);
+
+        if(blindBoxes == null)
+        {
+            throw new KeyNotFoundException("Blindbox not found");
+        }
+        return Ok(blindBoxes);
+    }
+
 }
