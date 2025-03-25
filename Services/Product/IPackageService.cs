@@ -22,9 +22,10 @@ namespace Services.Product
         Task<PaginatedList<Package>> GetAllFilter(string? typeSell,string? searchByCategory, string? searchByName, decimal? minPrice, decimal? maxPrice, int pageNumber, int pageSize);
 
         Task<List<Package>> GetPackageByTypeSell(string typeSell);
+        Task<bool> UpdateStatusAsync(Guid id, string status);
 
 
-      Task<BlindBox> GetRandomBlindBoxFromPackage(Guid packageId);
+        Task<BlindBox> GetRandomBlindBoxFromPackage(Guid packageId);
 
     }
 }

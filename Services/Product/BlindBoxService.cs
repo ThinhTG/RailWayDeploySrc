@@ -64,9 +64,9 @@ namespace Services.Product
                     ? DateTime.SpecifyKind(addBlindBoxDTO.UpdatedAt, DateTimeKind.Utc)
                     : addBlindBoxDTO.UpdatedAt.ToUniversalTime()
             };
-            await _repository.AddAsync(blindbox);
-            package.BlindBoxes.Add(blindbox);
-          _packageRepository.UpdatePackageAsync(package);
+             await _repository.AddAsync(blindbox);
+             package.BlindBoxes.Add(blindbox);
+        await  _packageRepository.UpdatePackageAsync(package);
             
             return blindbox;
         }
@@ -245,7 +245,7 @@ namespace Services.Product
         public async Task<BlindBox> UpdateStatusAsync(Guid id, string status)
         {
             var blindbox = await _repository.GetByIdAsync(id);
-            blindbox.BlindBoxStatus = status;
+            blindbox.BlindBoxStatus = "SoldOut";
             await _repository.UpdateAsync(blindbox);
             return blindbox;
         }

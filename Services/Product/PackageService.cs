@@ -10,11 +10,13 @@ namespace Services.Product
     {
         private readonly IPackageRepository _packageRepository;
         private readonly IBlindBoxRepository _blindBoxRepository;
+        private readonly IBlindBoxService _blindBoxService;
 
-        public PackageService(IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository)
+        public PackageService(IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository, IBlindBoxService blindBoxService)
         {
             _packageRepository = packageRepository;
             _blindBoxRepository = blindBoxRepository;
+            _blindBoxService = blindBoxService;
         }
 
         public async Task<IEnumerable<Package>> GetAllPackagesAsync()
@@ -42,13 +44,11 @@ namespace Services.Product
                     // generate random 10 BlindBox cho package LuckyWheel
                     for (int i = 0; i < 10; i++)
                     {
-                        var blindBox = new BlindBox
+                        var blindBox = new AddBlindBoxDTO
                         {
-                            BlindBoxId = Guid.NewGuid(),
                             PackageId = newPackage.PackageId,
-                            CategoryId = newPackage.CategoryId,
                             TypeSell = "LuckyWheel",
-                            Price = package.PackagePrice+50,
+                            Price = package.PackagePrice + 50,
                             Size = "Small",
                             Description = $"BlindBox LuckyWheel {i + 1}",
                             BlindBoxName = $"BlindBox {package.PackageName} {i + 1}",
@@ -58,16 +58,21 @@ namespace Services.Product
                             Percent = 10,
                             BlindBoxStatus = "Active"
                         };
-                        await _blindBoxRepository.AddAsync(blindBox);
+                        await _blindBoxService.AddAsync(blindBox);
+
                     }
                 }
+
                 return newPackage;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
-            
+
         }
+
+
 
         public async Task<Package?> UpdatePackageAsync(Guid id, UpdatePackageRequest updatePackageRequest)
         {
@@ -197,6 +202,21 @@ namespace Services.Product
             await _packageRepository.UpdatePackageAsync(Package);
             return Package;
 
+        }
+
+        public async Task<bool> UpdateStatusAsync(Guid id, string status)
+        {
+            var package = await _packageRepository.GetPackageByIdAsync(id);
+            if (package == null)
+            {
+                throw new KeyNotFoundException("Package not found");
+            }
+
+            package.PackageStatus = status;
+
+            await _packageRepository.UpdatePackageAsync(package);
+
+            return true;
         }
     }
 }

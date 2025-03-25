@@ -66,7 +66,11 @@ namespace BlindBoxSS.API.Controllers
             if (blindBox == null)
                 return BadRequest("No BlindBox available in package.");
 
-            // Chuyển trạng thái BlindBox thành "Sold"
+            if(package.Amount <= 0) {
+            // Chuyển trạng thái Package thành "SoldOut"
+            await _packageService.UpdateStatusAsync(package.PackageId, "SoldOut");
+            }
+
             await _blindBoxService.UpdateStatusAsync(blindBox.BlindBoxId, "SoldOut");
 
             if (package.Amount > 0)
