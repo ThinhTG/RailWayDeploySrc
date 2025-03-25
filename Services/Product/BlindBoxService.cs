@@ -42,12 +42,13 @@ namespace Services.Product
 
         public async Task<BlindBox> AddAsync(AddBlindBoxDTO addBlindBoxDTO)
         {
-            var categoryId = await _packageRepository.GetPackageByIdAsync(addBlindBoxDTO.PackageId);
+            var package = await _packageRepository.GetPackageByIdAsync(addBlindBoxDTO.PackageId);
             var blindbox = new BlindBox
             {
                 BlindBoxId = Guid.NewGuid(),
                 PackageId = addBlindBoxDTO.PackageId,
-                CategoryId = categoryId.CategoryId,
+                Package = package,
+                CategoryId = package.CategoryId,
                 BlindBoxName = addBlindBoxDTO.BlindBoxName,
                 Price = addBlindBoxDTO.Price,
                 Description = addBlindBoxDTO.Description,
@@ -64,6 +65,9 @@ namespace Services.Product
                     : addBlindBoxDTO.UpdatedAt.ToUniversalTime()
             };
             await _repository.AddAsync(blindbox);
+            package.BlindBoxes.Add(blindbox);
+          _packageRepository.UpdatePackageAsync(package);
+            
             return blindbox;
         }
 
@@ -234,6 +238,14 @@ namespace Services.Product
             blindbox.UpdatedAt = updateBlindBoxDTOV2.UpdatedAt.Kind == DateTimeKind.Unspecified
                 ? DateTime.SpecifyKind(updateBlindBoxDTOV2.UpdatedAt, DateTimeKind.Utc)
                 : updateBlindBoxDTOV2.UpdatedAt.ToUniversalTime();
+            await _repository.UpdateAsync(blindbox);
+            return blindbox;
+        }
+
+        public async Task<BlindBox> UpdateStatusAsync(Guid id, string status)
+        {
+            var blindbox = await _repository.GetByIdAsync(id);
+            blindbox.BlindBoxStatus = status;
             await _repository.UpdateAsync(blindbox);
             return blindbox;
         }

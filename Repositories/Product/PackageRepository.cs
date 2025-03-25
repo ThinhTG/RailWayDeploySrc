@@ -25,7 +25,7 @@ namespace Repositories.Product
 
         public async Task<Package?> GetPackageByIdAsync(Guid id)
         {
-            return await _context.Set<Package>().FindAsync(id);
+            return await _context.Set<Package>().Include(p => p.BlindBoxes).FirstOrDefaultAsync(p => p.PackageId == id);
         }
 
         public async Task<List<Package>> GetPackageByTypeSell(string typeSell)

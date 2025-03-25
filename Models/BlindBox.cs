@@ -18,6 +18,7 @@ namespace Models
         [Required]
         public Guid PackageId { get; set; }
 
+        [JsonIgnore]
         public virtual Package Package { get; set; }    
 
 
@@ -57,6 +58,7 @@ namespace Models
         [Required]
         [StringLength(50)]
         public string BlindBoxStatus { get; set; }
+
 
         [JsonIgnore]
         public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();

@@ -7,6 +7,7 @@ using Services.Product;
 using Services.Request;
 using Services.DTO;
 using Services.Wallet;
+using Services.AddressS;
 
 namespace BlindBoxSS.API.Controllers
 {
@@ -20,8 +21,9 @@ namespace BlindBoxSS.API.Controllers
         private readonly IOrderDetailService _orderDetailService;
         private readonly IBlindBoxService _blindBoxService;
         private readonly IWalletTransactionService _walletTransaction;
+        private readonly IAddressService _addressService;
 
-        public LuckyWheelController(IPackageService packageService, IWalletService walletService, IOrderService orderService, IOrderDetailService orderDetailService,IBlindBoxService blindBoxService, IWalletTransactionService transactionService)
+        public LuckyWheelController(IPackageService packageService, IWalletService walletService, IOrderService orderService, IOrderDetailService orderDetailService,IBlindBoxService blindBoxService, IWalletTransactionService transactionService, IAddressService addressService)
         {
             _packageService = packageService;
             _walletService = walletService;
@@ -29,6 +31,7 @@ namespace BlindBoxSS.API.Controllers
             _orderDetailService = orderDetailService;
             _blindBoxService = blindBoxService;
             _walletTransaction = transactionService;
+            _addressService = addressService;
         }
 
         [HttpPost("spin")]
@@ -53,12 +56,10 @@ namespace BlindBoxSS.API.Controllers
                 return BadRequest("No BlindBox available in package.");
 
             // Chuyển trạng thái BlindBox thành "Sold"
-            blindBox.BlindBoxStatus = "SoldOut";
-            await _blindBoxService.UpdateAsync(blindBox.BlindBoxId, new UpdateBlindBoxDTO
-            {
-                BlindBoxStatus = blindBox.BlindBoxStatus
-            });
+            await _blindBoxService.UpdateStatusAsync(blindBox.BlindBoxId, "SoldOut");
 
+           var address = await _addressService.GetDefaultAddressByAccoutId(request.AccountId);
+        
             // Tạo đơn hàng
             var order = new Order
             {
@@ -70,7 +71,8 @@ namespace BlindBoxSS.API.Controllers
                 PaymentConfirmed = true, 
                 Note = "Spin reward",
                 PhoneNumber = "",
-                DiscountMoney = 0
+                DiscountMoney = 0,
+                AddressId = address.AddressId
             };
 
             var createdOrder = await _orderService.AddAsync(order);

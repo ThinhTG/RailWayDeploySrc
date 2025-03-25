@@ -20,5 +20,7 @@ namespace Services.AddressS
         Task<PaginatedList<Address>> GetAll(int pageNumber, int pageSize);
 
         Task<PaginatedList<Address>> GetByAccountId(string accountId, int pageNumber, int pageSize);
+
+        Task<Address> GetDefaultAddressByAccoutId(string accountId);
     }
 }

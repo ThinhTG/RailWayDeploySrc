@@ -88,6 +88,16 @@ namespace Services.AddressS
             return await _addressRepository.GetByIdAsync(id);
         }
 
+        public async Task<Address> GetDefaultAddressByAccoutId(string accountId)
+        {
+           var address = _addressRepository.GetByAccountId(accountId).FirstOrDefault(a => a.IsDefault);
+            if (address == null)
+            {
+                throw new KeyNotFoundException($"Default address for account with ID {accountId} not found.");
+            }
+            return address;
+        }
+
         public async Task<Address> UpdateAsync(Guid addressId, UpdateAddressDTO updateAddressDTO)
         {
             if (updateAddressDTO == null)

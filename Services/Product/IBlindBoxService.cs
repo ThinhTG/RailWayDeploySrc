@@ -12,6 +12,8 @@ namespace Services.Product
         Task<BlindBox> AddAsync(AddBlindBoxDTO addBlindBoxDTO);
         Task<BlindBox> UpdateAsync(Guid id, UpdateBlindBoxDTO updateBlindBoxDTO);
 
+        Task<BlindBox> UpdateStatusAsync(Guid id, string Status);
+
         Task<BlindBox> AddAsyncV2(AddBlindBoxDTOV2 addBlindBoxDTOV2);
         Task<BlindBox> UpdateAsyncV2(Guid id, UpdateBlindBoxDTOV2 updateBlindBoxDTOV2);
         Task DeleteAsync(Guid id);

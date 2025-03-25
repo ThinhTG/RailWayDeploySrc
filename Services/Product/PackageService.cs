@@ -169,9 +169,8 @@ namespace Services.Product
             if (package == null || package.BlindBoxes == null || !package.BlindBoxes.Any())
                 throw new Exception("Package not found or contains no BlindBox.");
 
-            // Chọn ngẫu nhiên một BlindBox từ danh sách
-            var random = new Random();
-            int index = random.Next(package.BlindBoxes.Count);
+            // Chọn ngẫu nhiên 1 BlindBox
+            int index = Random.Shared.Next(package.BlindBoxes.Count);
 
             return package.BlindBoxes.ElementAt(index);
         }
