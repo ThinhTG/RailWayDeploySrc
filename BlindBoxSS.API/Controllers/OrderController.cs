@@ -161,6 +161,20 @@ public class OrderController : ControllerBase
     }
 
     /// <summary>
+    /// get list order by orderStatus = CONFIRMED
+    /// </summary>
+    /// <param name="pageNumber">Số Trang</param>
+    /// <param name="pageSize">Số Đơn hàng trong 1 trang</param>
+    /// <returns></returns>
+
+    [HttpGet("confirmed")]
+    public async Task<ActionResult<IEnumerable<Order>>> GetListOrderConfirmed(int pageNumber = 1, int pageSize = 10)
+    {
+        var orders = await _orderService.GetListOrderConfirmed(pageNumber, pageSize);
+        return Ok(orders);
+    }
+
+    /// <summary>
     /// get list order by orderStatus = DELIVERING
     /// </summary>
     /// <param name="pageNumber">Số Trang</param>
