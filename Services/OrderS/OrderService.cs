@@ -149,25 +149,14 @@ namespace Services.OrderS
         public async Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
-
             if (order == null)
             {
                 throw new KeyNotFoundException($"Order with ID {orderId} not found.");
             }
             var orderDetail = await _orderDetailRepository.GetOrderDetailsByOrderIdAsync(orderId);
             var card = await _cartService.GetCartByUserId(order.AccountId);
-
             var blindbox = await _blindBoxRepository.GetByIdAsync(orderDetail.First().BlindBoxId);
-            //if (blindbox == null)
-            //{
-            //    throw new KeyNotFoundException($"BlindBox with ID {orderDetail.First().BlindBoxId} not found.");
-            //}
             var package = await _packageRepository.GetPackageByIdAsync(orderDetail.First().PackageId);
-            //if (package == null)
-            //{
-            //    throw new KeyNotFoundException($"Package with ID {orderDetail.First().PackageId} not found.");
-            //}
-
 
             // if have orderCode
             if (orderCode != null)
