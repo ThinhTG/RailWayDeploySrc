@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Enum;
 using Repositories.OrderRep;
 using Repositories.Pagging;
 using Repositories.Product;
@@ -148,7 +149,7 @@ namespace Services.OrderS
         public async Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
-            
+
             if (order == null)
             {
                 throw new KeyNotFoundException($"Order with ID {orderId} not found.");
@@ -166,7 +167,7 @@ namespace Services.OrderS
             //{
             //    throw new KeyNotFoundException($"Package with ID {orderDetail.First().PackageId} not found.");
             //}
-            
+
 
             // if have orderCode
             if (orderCode != null)
@@ -235,6 +236,29 @@ namespace Services.OrderS
             }
             order.PaymentConfirmed = true;
             return await _orderRepository.UpdateAsync(order);
+        }
+
+        public async Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order with ID {orderId} not found.");
+            }
+            order.OrderStatus = orderStatus;
+            return await _orderRepository.UpdateAsync(order);
+
+        }
+
+        public async Task<PaginatedList<Order>> GetListOrderDelivering(int pageNumber, int pageSize)
+        {
+            IEnumerable<Order> orders = await _orderRepository.GetListOrderDelivering();
+            return PaginatedList<Order>.Create(orders.ToList(), pageNumber, pageSize);
+        }
+        public async Task<PaginatedList<Order>> GetListOrderCompleted(int pageNumber, int pageSize)
+        {
+            IEnumerable<Order> orders = await _orderRepository.GetListOrderCompleted();
+            return PaginatedList<Order>.Create(orders.ToList(), pageNumber, pageSize);
         }
     }
 }

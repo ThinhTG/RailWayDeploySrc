@@ -1,4 +1,5 @@
 ﻿using Models;
+using Models.Enum;
 using Repositories.Pagging;
 using Services.DTO;
 using System;
@@ -27,5 +28,8 @@ namespace Services.OrderS
         List<RevenueReportDTO> GetRevenueByMonth(int year);
         List<RevenueReportDTO> GetRevenueByYear();
         Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId);
+        Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus);
+        Task<PaginatedList<Order>> GetListOrderDelivering( int pageNumber, int pageSize);
+        Task<PaginatedList<Order>> GetListOrderCompleted(int pageNumber, int pageSize);
     }
 }

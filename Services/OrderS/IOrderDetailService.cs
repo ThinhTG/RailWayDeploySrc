@@ -19,6 +19,6 @@ namespace Services.OrderS
 
         Task<IEnumerable<OrderDetail>> GetOrderDetailsByOrderIdAsync(int orderId);
         Task<IEnumerable<OrderDetail>> AddMultipleOrderDetailsAsync(int orderId, List<OrderDetailRq> orderDetails);
-
+        
     }
 }
