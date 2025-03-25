@@ -56,7 +56,7 @@ namespace BlindBoxSS.API.Exceptions
                     response.StatusCode = (int)HttpStatusCode.Conflict;
                     response.Title = "Invalid Operation";
                     break;
-
+                
 
 
                 default:

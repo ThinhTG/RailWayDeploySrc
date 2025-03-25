@@ -219,5 +219,11 @@ namespace Services.Product
 
             return true;
         }
+
+        public async Task<IEnumerable<Package>> GetActiveLWPackages()
+        {
+            var packages = await _packageRepository.GetActiveLWPackage();
+            return packages;
+        }
     }
 }
