@@ -67,39 +67,47 @@ namespace BlindBoxSS.API.Controllers
 
             var blindbox = await _blindBoxService.GetByIdAsync(orderDetail.BlindBoxId);
             if (blindbox == null) return BadRequest("BlindBox không tồn tại!");
+
+            // Reset the price if the BlindBox is marked as secret
             if (blindbox.isSecret)
             {
                 var package = await _packageService.GetPackageByIdAsync(orderDetail.PackageId);
                 if (package == null) return BadRequest("Package không tồn tại!");
-                var updatedPackage = new UpdatePackageRequest
+
+                // Ensure DefaultPrice and PackagePrice are correctly set
+                if (package.DefaultPrice > 0) // Prevent overwriting with 0
                 {
-                    CategoryId = package.CategoryId,
-                    PackageName = package.PackageName,
-                    TypeSell = package.TypeSell,
-                    PackagePrice = package.DefaultPrice,
-                    Description = package.Description,
-                    Stock = package.Stock,
-                    Amount = package.Amount,
-                    PackageStatus = package.PackageStatus,
-                    DefaultPrice = package.DefaultPrice
-                };
-                var packageId = package.PackageId;
-                await _packageService.UpdatePackageAsync(packageId, updatedPackage);
+                    var updatedPackage = new UpdatePackageRequest
+                    {
+                        CategoryId = package.CategoryId,
+                        PackageName = package.PackageName,
+                        TypeSell = package.TypeSell,
+                        PackagePrice = package.DefaultPrice, // Reset to the default price
+                        Description = package.Description,
+                        Stock = package.Stock,
+                        Amount = package.Amount,
+                        PackageStatus = package.PackageStatus,
+                        DefaultPrice = package.DefaultPrice // Ensure DefaultPrice is retained
+                    };
+                    await _packageService.UpdatePackageAsync(package.PackageId, updatedPackage);
+                }
             }
 
-            var reviewed = new ReviewRequest
+            var newReview = new ReviewRequest
             {
                 OrderDetailId = review.OrderDetailId,
                 AccountId = review.AccountId,
                 Rating = review.Rating,
                 Comment = review.Comment,
-                ImageURL = review.ImageURL
+                ImageURL = review.ImageURL,
             };
 
-            var NewReview = await _reviewService.CreateReviewAsync(reviewed);
-            if (NewReview == null) return BadRequest("Không thể tạo đánh giá!");
-            return Ok(NewReview);
+            var createdReview = await _reviewService.CreateReviewAsync(newReview);
+            if (createdReview == null) return BadRequest("Không thể tạo đánh giá!");
+
+            return Ok(createdReview);
         }
+
 
 
         /// <summary>

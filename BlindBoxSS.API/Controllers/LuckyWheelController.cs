@@ -165,13 +165,13 @@ namespace BlindBoxSS.API.Controllers
             if (userWallet == null || userWallet.Balance < package.PackagePrice / 10)
                 return BadRequest("Insufficient balance.");
 
-            // Trừ tiền trong ví
+            // Deduct money from the wallet
             decimal spinCost = package.PackagePrice / 10;
             userWallet.Balance -= spinCost;
             await _walletService.UpdateUserWalletAsync(userWallet);
 
-            // Update the spin cost for the next spin
-            package.PackagePrice *= 1.1m;  // Increase price by 10% for the next spin
+            // Update the spin cost for the next spin (increase by 10%)
+            package.PackagePrice *= 1.1m; // Increase price by 10% for the next spin
             var updatedPackage = new UpdatePackageRequest
             {
                 CategoryId = package.CategoryId,
@@ -182,7 +182,7 @@ namespace BlindBoxSS.API.Controllers
                 Stock = package.Stock,
                 PackageStatus = package.PackageStatus,
                 Amount = package.Amount,
-                DefaultPrice = package.DefaultPrice
+                DefaultPrice = package.DefaultPrice // Retaining the default price
             };
             await _packageService.UpdatePackageAsync(package.PackageId, updatedPackage);
 
@@ -192,7 +192,7 @@ namespace BlindBoxSS.API.Controllers
 
             if (package.Amount == 1)
             {
-                // Chuyển trạng thái Package thành "SoldOut"
+                // Change the package status to "SoldOut"
                 await _packageService.UpdateStatusAsync(package.PackageId, "SoldOut");
             }
 
@@ -210,13 +210,14 @@ namespace BlindBoxSS.API.Controllers
                     Stock = package.Stock,
                     PackageStatus = package.PackageStatus,
                     TypeSell = package.TypeSell,
+                    DefaultPrice = package.DefaultPrice
                 };
                 await _packageService.UpdatePackageAsync(request.PackageId, newUpdatePackage);
             }
 
             var address = await _addressService.GetDefaultAddressByAccoutId(request.AccountId);
 
-            // Tạo đơn hàng
+            // Create order
             var order = new Order
             {
                 AccountId = request.AccountId,
