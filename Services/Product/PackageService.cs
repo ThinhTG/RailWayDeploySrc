@@ -171,13 +171,14 @@ namespace Services.Product
         public async Task<BlindBox> GetRandomBlindBoxFromPackage(Guid packageId)
         {
             var package = await _packageRepository.GetPackageByIdAsync(packageId);
-            if (package == null || package.BlindBoxes == null || !package.BlindBoxes.Any())
+            var blindBoxes = await _blindBoxService.GetBlindBoxLuckyWheel(packageId);    // Get BlindBox còn trong Package
+            if (package == null || blindBoxes == null || !blindBoxes.Any())
                 throw new Exception("Package not found or contains no BlindBox.");
 
             // Chọn ngẫu nhiên 1 BlindBox
-            int index = Random.Shared.Next(package.BlindBoxes.Count);
+            int index = Random.Shared.Next(blindBoxes.Count);
 
-            return package.BlindBoxes.ElementAt(index);
+            return blindBoxes.ElementAt(index);
         }
 
 
