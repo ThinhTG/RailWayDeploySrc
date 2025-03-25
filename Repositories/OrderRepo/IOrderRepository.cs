@@ -19,6 +19,7 @@ namespace Repositories.OrderRep
         List<Order> GetOrdersByYear(int year);
         List<Order> GetAllConfirmedOrders();
         Task<Order> UpdateOrderStatus(int orderId, OrderStatus orderStatus);
+        Task<IEnumerable<Order>> GetListOrderConfirmed();
         Task<IEnumerable<Order>> GetListOrderDelivering();
         Task<IEnumerable<Order>> GetListOrderCompleted();
     }

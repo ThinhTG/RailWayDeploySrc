@@ -250,11 +250,18 @@ namespace Services.OrderS
 
         }
 
+        public async Task<PaginatedList<Order>> GetListOrderConfirmed(int pageNumber, int pageSize)
+        {
+            IEnumerable<Order> orders = await _orderRepository.GetListOrderConfirmed();
+            return PaginatedList<Order>.Create(orders.ToList(), pageNumber, pageSize);
+        }
+
         public async Task<PaginatedList<Order>> GetListOrderDelivering(int pageNumber, int pageSize)
         {
             IEnumerable<Order> orders = await _orderRepository.GetListOrderDelivering();
             return PaginatedList<Order>.Create(orders.ToList(), pageNumber, pageSize);
         }
+
         public async Task<PaginatedList<Order>> GetListOrderCompleted(int pageNumber, int pageSize)
         {
             IEnumerable<Order> orders = await _orderRepository.GetListOrderCompleted();

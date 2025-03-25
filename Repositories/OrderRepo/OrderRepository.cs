@@ -101,6 +101,13 @@ namespace Repositories.OrderRep
             return order;
         }
 
+        public async Task<IEnumerable<Order>> GetListOrderConfirmed()
+        {
+            return await _context.Orders
+                .Where(o => o.OrderStatus == OrderStatus.CONFIRMED)
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<Order>> GetListOrderDelivering()
         {
             return await _context.Orders
