@@ -39,10 +39,12 @@ namespace BlindBoxSS.API.Controllers
             _configuration = configuration;
         }
 
+        /// <param name="pageNumber">số trang</param>
+        /// <param name="pageSize">số Blindbox</param>
         [HttpGet("packages/active")]
-        public async Task<IActionResult> GetActivePackages()
+        public async Task<IActionResult> GetActivePackages(int pageNumber = 1, int pageSize = 5)
         {
-            var packages = await _packageService.GetActiveLWPackages();
+            var packages = await _packageService.GetActiveLWPackagesPaged(pageNumber, pageSize);
             return Ok(packages);
         }
 

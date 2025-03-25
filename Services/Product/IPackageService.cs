@@ -27,7 +27,7 @@ namespace Services.Product
 
         Task<BlindBox> GetRandomBlindBoxFromPackage(Guid packageId);
 
-        Task<IEnumerable<Package>> GetActiveLWPackages();
+        Task<PaginatedList<Package>> GetActiveLWPackagesPaged(int pageNumber, int pageSize);
 
     }
 }
