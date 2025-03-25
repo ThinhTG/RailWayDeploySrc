@@ -96,4 +96,49 @@ public class WalletController : ControllerBase
             return StatusCode(500, new { Message = "Internal Server Error. Please try again later." });
         }
     }
+
+    /// <summary>
+    /// Lấy all wallet transaction
+    /// </summary>
+    /// <param name="pageNumber">số trang</param>
+    /// <param name="pageSize">số Blindbox</param>
+    /// <returns></returns>
+
+    [HttpGet("transactions")]
+    public async Task<IActionResult> GetAllWalletTransactions(int pageNumber = 1, int pageSize = 5)
+    {
+        try
+        {
+            var transactions = await _walletTransactionService.GetAll(pageNumber, pageSize);
+            return Ok(transactions);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching wallet transactions.");
+            return StatusCode(500, new { Message = "Internal Server Error. Please try again later." });
+        }
+    }
+
+    /// <summary>
+    /// lấy all wallet transaction theo walletId
+    /// </summary>
+    /// <param name="walletId"></param>
+    /// <param name="pageNumber">số trang</param>
+    /// <param name="pageSize">số Blindbox</param>
+    /// <returns></returns>
+
+    [HttpGet("{walletId}/transactions")]
+    public async Task<IActionResult> GetWalletTransactions(Guid walletId, int pageNumber = 1 , int pageSize = 5)
+    {
+        try
+        {
+            var transactions = await _walletTransactionService.GetWalletTransactionByWalletIdAsync(walletId,pageNumber, pageSize);
+            return Ok(transactions);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching wallet transactions for walletId: {WalletId}", walletId);
+            return StatusCode(500, new { Message = "Internal Server Error. Please try again later." });
+        }
+    }
 }

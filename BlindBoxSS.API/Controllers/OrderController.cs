@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Models;
+using Services.DTO;
 using Services.OrderS;
 
 [Route("api/orders")]
@@ -128,5 +129,19 @@ public class OrderController : ControllerBase
 
         await _orderService.UpdateAsync(order);
         return Ok(order);
+    }
+
+    /// <summary>
+    /// Update paymentConfirmed = true
+    /// </summary>
+    /// <param name="orderCode">orderCode</param>
+    /// <param name="orderId">orderId</param>
+    /// <returns></returns>
+    [HttpPatch("paymentConfirmed")]
+    public async Task<IActionResult> UpdatePaymentConfirmed(int? orderCode, int orderId)
+    {
+        var response = await _orderService.UpdatePaymentConfirmed(orderCode, orderId);
+        if (response == null) return NotFound();
+        else { return Ok(response); }
     }
 }

@@ -235,7 +235,8 @@ public class PaymentService : IPaymentService
     public async Task<PaymentLinkInformation> GetPaymentLinkInformationAsync(int orderCode)
     {
         var checkOrderCode = long.Parse(orderCode.ToString());
-        return await _payOS.getPaymentLinkInformation(checkOrderCode);
+        var response = await _payOS.getPaymentLinkInformation(checkOrderCode);
+        return response;
     }
 
     public async Task ConfirmWebhookAsync(string webhookUrl)

@@ -19,5 +19,22 @@ namespace Repositories.WalletRepo
             await _context.WalletTransaction.AddAsync(walletTransaction);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<WalletTransaction>> GetAllAsync()
+        {
+            return await _context.Set<WalletTransaction>().ToListAsync();
+        }
+        public IQueryable<WalletTransaction> GetAll()
+        {
+            return _context.WalletTransaction.AsQueryable();
+        }
+
+        //get all wallet transaction by wallet id
+        public async Task<IEnumerable<WalletTransaction>> GetWalletTransactionByWalletIdAsync(Guid walletId)
+        {
+            return await _context.WalletTransaction
+                .Where(wt => wt.WalletId == walletId)
+                .ToListAsync();
+        }
     }
 }

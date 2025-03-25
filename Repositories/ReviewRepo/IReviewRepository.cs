@@ -17,7 +17,7 @@ namespace Repositories.ReviewRepo
 
         //Task<IEnumerable<Review>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId);
         Task<IEnumerable<Review>> GetAllReviewsAsync();
-        Task<IEnumerable<Review>> GetAllReviewsByBlindBoxIdAsync(Guid blindBoxId);
+        Task<IEnumerable<Review>> GetReviewsByBlindBoxId(Guid blindBoxId);
         Task<IEnumerable<Review>> GetAllReviewsByPackageIdAsync(Guid packageId);
     }
 }

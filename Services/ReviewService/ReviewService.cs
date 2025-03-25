@@ -23,7 +23,36 @@ namespace Services.ReviewService
         public async Task<IEnumerable<ReviewResponse>> GetReviewsByOrderDetailIdAsync(Guid orderDetailId)
         {
             var reviews = await _reviewRepository.GetReviewsByOrderDetailIdAsync(orderDetailId);
-            return _mapper.Map<IEnumerable<Review>, IEnumerable<ReviewResponse>>(reviews);
+            var reviewResponses = new List<ReviewResponse>();
+
+            foreach (var review in reviews)
+            {
+                ApplicationUser account = null;
+                if (review.AccountId != null)
+                {
+                    account = await _userManager.FindByIdAsync(review.AccountId);
+                }
+
+                var reviewResponse = new ReviewResponse
+                {
+                    ReviewId = review.ReviewId,
+                    OrderDetailId = review.OrderDetailId,
+                    Account = account != null ? new AccountReviewResponse
+                    {
+                        FirstName = account.FirstName,
+                        LastName = account.LastName,
+                        AvatarURL = account.AvatarURL
+                    } : null,
+                    Rating = review.Rating,
+                    Comment = review.Comment,
+                    CreateAt = review.CreateAt,
+                    ReviewStatus = review.ReviewStatus
+                };
+
+                reviewResponses.Add(reviewResponse);
+            }
+
+            return reviewResponses;
         }
 
         public async Task<ReviewResponse> GetReviewByIdAsync(Guid reviewId)
@@ -117,47 +146,68 @@ namespace Services.ReviewService
         public async Task<IEnumerable<ReviewResponse>> GetAllReviewsByPackageIdAsync(Guid packageId)
         {
             var reviews = await _reviewRepository.GetAllReviewsByPackageIdAsync(packageId);
-
-            var reviewResponses = reviews.Select(review => new ReviewResponse
+            var reviewResponses = new List<ReviewResponse>();
+            foreach (var review in reviews)
             {
-                ReviewId = review.ReviewId,
-                OrderDetailId = review.OrderDetailId,
-                Account = review.Account != null ? new AccountReviewResponse
-        {
-            FirstName = review.Account.FirstName,
-            LastName = review.Account.LastName,
-            AvatarURL = review.Account.AvatarURL
-        } : null, 
-                Rating = review.Rating,
-                Comment = review.Comment,
-                CreateAt = review.CreateAt,
-                ReviewStatus = review.ReviewStatus
-            });
+                ApplicationUser account = null;
+                if (review.AccountId != null)
+                {
+                    account = await _userManager.FindByIdAsync(review.AccountId);
+                }
 
+                var reviewResponse = new ReviewResponse
+                {
+                    ReviewId = review.ReviewId,
+                    OrderDetailId = review.OrderDetailId,
+                    Account = account != null ? new AccountReviewResponse
+                    {
+                        FirstName = account.FirstName,
+                        LastName = account.LastName,
+                        AvatarURL = account.AvatarURL
+                    } : null,
+                    Rating = review.Rating,
+                    Comment = review.Comment,
+                    CreateAt = review.CreateAt,
+                    ReviewStatus = review.ReviewStatus
+                };
+
+                reviewResponses.Add(reviewResponse);
+            }
             return reviewResponses;
         }
 
 
         public async Task<IEnumerable<ReviewResponse>> GetReviewsByBlindBoxIdAsync(Guid blindBoxId)
         {
-            var reviews = await _reviewRepository.GetAllReviewsByBlindBoxIdAsync(blindBoxId);
+            var reviews = await _reviewRepository.GetReviewsByBlindBoxId(blindBoxId);
+            var reviewResponses = new List<ReviewResponse>();
 
-            var reviewResponses = reviews.Select(review => new ReviewResponse
+            foreach (var review in reviews)
             {
-                ReviewId = review.ReviewId,
-                OrderDetailId = review.OrderDetailId,
-                Account = new AccountReviewResponse
+                ApplicationUser account = null;
+                if (review.AccountId != null)
                 {
-                    FirstName = review.Account?.FirstName,
-                    LastName = review.Account?.LastName,
-                    AvatarURL = review.Account?.AvatarURL
-                },
-                Rating = review.Rating,
-                Comment = review.Comment,
-                CreateAt = review.CreateAt,
-                ReviewStatus = review.ReviewStatus
-            });
+                    account = await _userManager.FindByIdAsync(review.AccountId);
+                }
 
+                var reviewResponse = new ReviewResponse
+                {
+                    ReviewId = review.ReviewId,
+                    OrderDetailId = review.OrderDetailId,
+                    Account = account != null ? new AccountReviewResponse
+                    {
+                        FirstName = account.FirstName,
+                        LastName = account.LastName,
+                        AvatarURL = account.AvatarURL
+                    } : null,
+                    Rating = review.Rating,
+                    Comment = review.Comment,
+                    CreateAt = review.CreateAt,
+                    ReviewStatus = review.ReviewStatus
+                };
+
+                reviewResponses.Add(reviewResponse);
+            }
             return reviewResponses;
         }
 
