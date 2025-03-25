@@ -30,7 +30,7 @@ namespace Models
         public Guid AddressId { get; set; }
 
         [Required]
-        public string Note { get; set; }
+        public string? Note { get; set; }
 
         //[Required]
         //public int PhoneNumber { get; set; }

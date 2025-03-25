@@ -54,6 +54,7 @@ public class PackageController : ControllerBase
         };
         var createdPackage = await _packageService.AddPackageAsync(package1);
         await _responseCacheService.RemoveCacheResponseAsync("/api/packages");
+        await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
         return CreatedAtAction(nameof(GetById), new { id = createdPackage.PackageId }, createdPackage);
     }
 
