@@ -1,32 +1,35 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Models;
+﻿using Models;
 using Repositories.OrderRep;
 using Repositories.Pagging;
+using Repositories.Product;
 using Services.AccountService;
 using Services.AddressS;
 using Services.DTO;
 using Services.Payment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Services.OrderS
 {
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IOrderDetailRepository _orderDetailRepository;
+        private readonly IBlindBoxRepository _blindBoxRepository;
+        private readonly IPackageRepository _packageRepository;
         private readonly IAccountService _accountService;
         private readonly IAddressService _addressService;
+        private readonly ICartService _cartService;
         private readonly Lazy<IPaymentService> _paymentService;
 
-        public OrderService(IOrderRepository orderRepository, IAccountService accountService, IAddressService addressService, Lazy<IPaymentService> paymentService)
+        public OrderService(IOrderRepository orderRepository, IOrderDetailRepository orderDetailRepository, IAccountService accountService, IAddressService addressService, Lazy<IPaymentService> paymentService, IPackageRepository packageRepository, IBlindBoxRepository blindBoxRepository, ICartService cartService)
         {
             _orderRepository = orderRepository;
+            _orderDetailRepository = orderDetailRepository;
             _accountService = accountService;
             _addressService = addressService;
             _paymentService = paymentService;
+            _packageRepository = packageRepository;
+            _blindBoxRepository = blindBoxRepository;
+            _cartService = cartService;
         }
 
         public async Task<PaginatedList<Order>> GetAll(int pageNumber, int pageSize)
@@ -145,6 +148,26 @@ namespace Services.OrderS
         public async Task<Order> UpdatePaymentConfirmed(int? orderCode, int orderId)
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
+            
+            if (order == null)
+            {
+                throw new KeyNotFoundException($"Order with ID {orderId} not found.");
+            }
+            var orderDetail = await _orderDetailRepository.GetOrderDetailsByOrderIdAsync(orderId);
+            var card = await _cartService.GetCartByUserId(order.AccountId);
+
+            var blindbox = await _blindBoxRepository.GetByIdAsync(orderDetail.First().BlindBoxId);
+            //if (blindbox == null)
+            //{
+            //    throw new KeyNotFoundException($"BlindBox with ID {orderDetail.First().BlindBoxId} not found.");
+            //}
+            var package = await _packageRepository.GetPackageByIdAsync(orderDetail.First().PackageId);
+            //if (package == null)
+            //{
+            //    throw new KeyNotFoundException($"Package with ID {orderDetail.First().PackageId} not found.");
+            //}
+            
+
             // if have orderCode
             if (orderCode != null)
             {
@@ -152,9 +175,63 @@ namespace Services.OrderS
                 if (payment.status == "PAID")
                 {
                     order.PaymentConfirmed = true;
+                    //get all quantity of blindbox in order
+                    if (blindbox != null)
+                    {
+                        var quantityBB = orderDetail.Sum(o => o.Quantity);
+                        blindbox.Stock = blindbox.Stock - quantityBB;
+                        await _blindBoxRepository.UpdateAsync(blindbox);
+                        foreach (var item in card)
+                        {
+                            if (item.BlindBoxId == blindbox.BlindBoxId)
+                            {
+                                await _cartService.DeleteCartItem(item.CartId);
+                            }
+                        }
+                    }
+                    if (package != null)
+                    {
+                        var quantityPackage = orderDetail.Sum(o => o.Quantity);
+                        package.Stock = package.Stock - quantityPackage;
+                        await _packageRepository.UpdatePackageAsync(package);
+                        foreach (var item in card)
+                        {
+                            if (item.PackageId == package.PackageId)
+                            {
+                                await _cartService.DeleteCartItem(item.CartId);
+                            }
+                        }
+                    }
                     return await _orderRepository.UpdateAsync(order);
+
                 }
                 return order;
+            }
+            if (blindbox != null)
+            {
+                var quantityBB = orderDetail.Sum(o => o.Quantity);
+                blindbox.Stock = blindbox.Stock - quantityBB;
+                await _blindBoxRepository.UpdateAsync(blindbox);
+                foreach (var item in card)
+                {
+                    if (item.BlindBoxId == blindbox.BlindBoxId)
+                    {
+                        await _cartService.DeleteCartItem(item.CartId);
+                    }
+                }
+            }
+            if (package != null)
+            {
+                var quantityPackage = orderDetail.Sum(o => o.Quantity);
+                package.Stock = package.Stock - quantityPackage;
+                await _packageRepository.UpdatePackageAsync(package);
+                foreach (var item in card)
+                {
+                    if (item.PackageId == package.PackageId)
+                    {
+                        await _cartService.DeleteCartItem(item.CartId);
+                    }
+                }
             }
             order.PaymentConfirmed = true;
             return await _orderRepository.UpdateAsync(order);

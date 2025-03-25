@@ -23,7 +23,7 @@ namespace Repositories.Product
             return await _context.Set<Package>().ToListAsync();
         }
 
-        public async Task<Package?> GetPackageByIdAsync(Guid id)
+        public async Task<Package?> GetPackageByIdAsync(Guid? id)
         {
             return await _context.Set<Package>().Include(p => p.BlindBoxes).FirstOrDefaultAsync(p => p.PackageId == id);
         }
