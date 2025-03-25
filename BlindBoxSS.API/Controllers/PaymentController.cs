@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Net.payOS.Types;
+using Org.BouncyCastle.Bcpg;
+using Services.Cache;
+using Services.OrderS;
 using Services.Payment;
 using Services.Request;
 
@@ -8,10 +11,14 @@ using Services.Request;
 public class PaymentController : ControllerBase
 {
     private readonly IPaymentService _paymentService;
+    private readonly IResponseCacheService _responseCacheService;
+    private readonly IOrderService _orderService;
 
-    public PaymentController(IPaymentService paymentService)
+    public PaymentController(IPaymentService paymentService, IResponseCacheService responseCacheService,IOrderService orderService)
     {
         _paymentService = paymentService;
+        _responseCacheService = responseCacheService;
+        _orderService = orderService;
     }
 
     // Tạo link thanh toán
@@ -19,10 +26,13 @@ public class PaymentController : ControllerBase
     public async Task<IActionResult> CreatePayment([FromBody] CreatePaymentLinkRequest body)
     {
         if (body == null) return BadRequest(new Response(-1, "Request body is null", null));
+        var order = await _orderService.GetByIdAsync(body.orderId);
+        var userId = order.AccountId;  // lấy accountId từ order
 
         try
         {
             var paymentLink = await _paymentService.CreatePaymentLinkAsync(body);
+            await _responseCacheService.RemoveCacheResponseAsync($"/cart-management/managed-carts/{userId}");  // xóa Cache Cart khi tạo link thanh toán thành công
             return Ok(new Response(0, "Success", paymentLink));
         }
         catch (Exception ex)
