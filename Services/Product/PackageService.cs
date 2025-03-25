@@ -65,17 +65,16 @@ namespace Services.Product
 
                 if (newPackage.TypeSell == "BlindBox")
                 {
-                    for (int i = 0; i < 10; i++)
-                    {
+                    
                         var blindBox = new AddBlindBoxDTO
                         {
                             PackageId = newPackage.PackageId,
                             TypeSell = "BlindBox",
                             Price = package.PackagePrice + 50,
                             Size = "Small",
-                            Description = $"BlindBox {package.Description} {i + 1}",
-                            BlindBoxName = $"BlindBox {package.PackageName} {i + 1}",
-                            Stock = 1,
+                            Description = $"BlindBox {package.Description}",
+                            BlindBoxName = $"BlindBox {package.PackageName}",
+                            Stock = 10*package.Stock,
                             CreatedAt = DateTime.UtcNow,
                             UpdatedAt = DateTime.UtcNow,
                             Percent = 10,
@@ -83,7 +82,7 @@ namespace Services.Product
                         };
                         await _blindBoxService.AddAsync(blindBox);
 
-                    }
+                    
                 }
 
                 return newPackage;
