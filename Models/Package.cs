@@ -39,9 +39,6 @@ namespace Models
         public virtual Category? Category { get; set; }
 
         public virtual ICollection<PackageImage>? Images { get; set; }
-
-      
-
         public virtual ICollection<BlindBox>? BlindBoxes { get; set; }
         public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
     }

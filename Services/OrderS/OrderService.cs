@@ -154,10 +154,24 @@ namespace Services.OrderS
                 throw new KeyNotFoundException($"Order with ID {orderId} not found.");
             }
             var orderDetail = await _orderDetailRepository.GetOrderDetailsByOrderIdAsync(orderId);
-            var card = await _cartService.GetCartByUserId(order.AccountId);
+            if (orderDetail == null)
+            {
+                throw new KeyNotFoundException($"OrderDetail with ID {orderId} not found.");
+            }
+            var cart = await _cartService.GetCartByUserId(order.AccountId);
+            if (cart == null)
+            {
+                throw new KeyNotFoundException($"Cart with ID {order.AccountId} not found.");
+            }
             var blindbox = await _blindBoxRepository.GetByIdAsync(orderDetail.First().BlindBoxId);
+            if (blindbox == null) {
+                throw new KeyNotFoundException($"Blindbox with ID {orderDetail.First().BlindBoxId} not found.");
+            }
             var package = await _packageRepository.GetPackageByIdAsync(orderDetail.First().PackageId);
-
+            if (blindbox == null)
+            {
+                throw new KeyNotFoundException($"Package with ID {orderDetail.First().PackageId} not found.");
+            }
             // if have orderCode
             if (orderCode != null)
             {
@@ -171,7 +185,7 @@ namespace Services.OrderS
                         var quantityBB = orderDetail.Sum(o => o.Quantity);
                         blindbox.Stock = blindbox.Stock - quantityBB;
                         await _blindBoxRepository.UpdateAsync(blindbox);
-                        foreach (var item in card)
+                        foreach (var item in cart)
                         {
                             if (item.BlindBoxId == blindbox.BlindBoxId)
                             {
@@ -184,7 +198,7 @@ namespace Services.OrderS
                         var quantityPackage = orderDetail.Sum(o => o.Quantity);
                         package.Stock = package.Stock - quantityPackage;
                         await _packageRepository.UpdatePackageAsync(package);
-                        foreach (var item in card)
+                        foreach (var item in cart)
                         {
                             if (item.PackageId == package.PackageId)
                             {
@@ -202,7 +216,7 @@ namespace Services.OrderS
                 var quantityBB = orderDetail.Sum(o => o.Quantity);
                 blindbox.Stock = blindbox.Stock - quantityBB;
                 await _blindBoxRepository.UpdateAsync(blindbox);
-                foreach (var item in card)
+                foreach (var item in cart)
                 {
                     if (item.BlindBoxId == blindbox.BlindBoxId)
                     {
@@ -215,7 +229,7 @@ namespace Services.OrderS
                 var quantityPackage = orderDetail.Sum(o => o.Quantity);
                 package.Stock = package.Stock - quantityPackage;
                 await _packageRepository.UpdatePackageAsync(package);
-                foreach (var item in card)
+                foreach (var item in cart)
                 {
                     if (item.PackageId == package.PackageId)
                     {
