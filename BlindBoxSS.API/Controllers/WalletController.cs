@@ -1,6 +1,7 @@
 ﻿using BlindBoxSS.API.Services;
 using Microsoft.AspNetCore.Mvc;
 using Services.Cache;
+using Services.DTO;
 using Services.Wallet;
 
 [Route("api/wallets")]
@@ -92,6 +93,7 @@ public class WalletController : ControllerBase
                 return BadRequest(new { Message = "Insufficient balance or transaction failed." });
             await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
             await _responseCacheService.RemoveCacheResponseAsync("/api/packages");
+            await _responseCacheService.RemoveCacheResponseAsync($"/cart-management/managed-carts/{accountId}");
             return Ok(new { Message = "Purchase successful. Wallet updated." });
         }
         catch (Exception ex)
