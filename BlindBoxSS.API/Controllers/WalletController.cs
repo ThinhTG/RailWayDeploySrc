@@ -1,5 +1,6 @@
 ﻿using BlindBoxSS.API.Services;
 using Microsoft.AspNetCore.Mvc;
+using Services.Cache;
 using Services.Wallet;
 
 [Route("api/wallets")]
@@ -9,15 +10,17 @@ public class WalletController : ControllerBase
     private readonly IWalletService _walletService;
     private readonly IWalletTransactionService _walletTransactionService;
     private readonly ILogger<WalletController> _logger;
+    private readonly IResponseCacheService _responseCacheService;
 
     public WalletController(
         IWalletService walletService,
         IWalletTransactionService walletTransactionService,
-        ILogger<WalletController> logger)
+        ILogger<WalletController> logger,IResponseCacheService responseCacheService)
     {
         _walletService = walletService;
         _walletTransactionService = walletTransactionService;
         _logger = logger;
+        _responseCacheService = responseCacheService;   
     }
 
    /// <summary>
@@ -87,7 +90,8 @@ public class WalletController : ControllerBase
             var success = await _walletService.UseWalletForPurchaseAsync(accountId, amount, orderId);
             if (!success)
                 return BadRequest(new { Message = "Insufficient balance or transaction failed." });
-
+            await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
+            await _responseCacheService.RemoveCacheResponseAsync("/api/packages");
             return Ok(new { Message = "Purchase successful. Wallet updated." });
         }
         catch (Exception ex)

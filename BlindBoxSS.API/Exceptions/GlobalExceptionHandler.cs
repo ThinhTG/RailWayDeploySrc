@@ -56,8 +56,11 @@ namespace BlindBoxSS.API.Exceptions
                     response.StatusCode = (int)HttpStatusCode.Conflict;
                     response.Title = "Invalid Operation";
                     break;
-                
 
+                case OutOfStockException:
+                    response.StatusCode = (int)HttpStatusCode.OK;
+                    response.Title = "The product is out of stock or does not exist!";
+                    break;
 
                 default:
                     break;

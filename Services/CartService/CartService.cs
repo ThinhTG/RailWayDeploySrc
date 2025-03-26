@@ -4,18 +4,23 @@ using Microsoft.EntityFrameworkCore;
 using Models;
 using Repositories.UnitOfWork;
 using Services.DTO;
-
+using Services.Product;
+using BlindBoxSS.API;
 namespace Services
 {
     public class CartService : ICartService
     {
         public readonly IUnitOfWork _unitOfWork;
         public readonly IMapper _mapper;
+        private readonly IBlindBoxService _blindBoxService;
+        private readonly IPackageService _packageService;
 
-        public CartService(IUnitOfWork unitOfWork, IMapper mapper)
+        public CartService(IUnitOfWork unitOfWork, IMapper mapper, IBlindBoxService blindBoxService, IPackageService packageService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _blindBoxService = blindBoxService;
+            _packageService = packageService;
         }
 
         public async Task AddToCart(CartDTO cartDto)
@@ -43,15 +48,15 @@ namespace Services
             if (cartDto.BlindBoxId.HasValue)
             {
                 blindBox = await _unitOfWork.GetRepository<BlindBox>().GetByIdAsync(cartDto.BlindBoxId.Value);
-                if (blindBox == null)
-                    throw new ArgumentException($"BlindBox with ID {cartDto.BlindBoxId} not found.");
+                if (blindBox == null || blindBox.Stock < cartDto.Quantity)
+                    throw new OutOfStockException($"BlindBox with ID {cartDto.BlindBoxId} not found or out of stock.");
             }
 
             if (cartDto.PackageId.HasValue)
             {
                 package = await _unitOfWork.GetRepository<Package>().GetByIdAsync(cartDto.PackageId.Value);
-                if (package == null)
-                    throw new ArgumentException($"Package with ID {cartDto.PackageId} not found.");
+                if (package == null || package.Stock < cartDto.Quantity)
+                    throw new OutOfStockException($"Package with ID {cartDto.PackageId} not found or out of stock.");
             }
 
             // Tìm cart item hiện có
@@ -94,14 +99,12 @@ namespace Services
 
             var cartRepository = _unitOfWork.GetRepository<Cart>();
 
-            //var carts = await cartRepository.FindListAsync(c => c.UserId == userId);
             var carts = await cartRepository
-                        .Query() 
-                      .Include(c => c.BlindBox)
-                      .Include(c => c.Package)
-                     .Where(c => c.UserId == userId)
-                       .ToListAsync();
-
+                .Query()
+                .Include(c => c.BlindBox)
+                .Include(c => c.Package)
+                .Where(c => c.UserId == userId)
+                .ToListAsync();
 
             return carts ?? throw new KeyNotFoundException("User not found or cart is empty.");
         }
@@ -112,6 +115,7 @@ namespace Services
                 throw new ArgumentException("Quantity cannot be negative.");
 
             var cartRepository = _unitOfWork.GetRepository<Cart>();
+           
             var cartItem = await cartRepository.FindAsync(c => c.CartId == cartId && c.UserId == userId);
 
             if (cartItem == null)
@@ -126,6 +130,7 @@ namespace Services
                 cartItem.Quantity = quantity;
                 await cartRepository.UpdateAsync(cartItem);
             }
+          
 
             await _unitOfWork.SaveAsync();
             return true;
