@@ -316,6 +316,10 @@ namespace Services.OrderS
             {
                 var blindboxQuantity = orderDetails.Where(o => o.BlindBoxId.HasValue).Sum(o => o.Quantity);
                 blindbox.Stock -= blindboxQuantity;
+                if (blindbox.Stock < 1)
+                {
+                    blindbox.BlindBoxStatus = "SoldOut";
+                }
                 await _blindBoxRepository.UpdateAsync(blindbox);
                 await _responseCacheService.RemoveCacheResponseAsync("/api/blindboxes");
 
@@ -331,7 +335,12 @@ namespace Services.OrderS
             if (orderDetails.Any(o => o.PackageId.HasValue))
             {
                 var packageQuantity = orderDetails.Where(o => o.PackageId.HasValue).Sum(o => o.Quantity);
+
                 package.Stock -= packageQuantity;
+                if (package.Stock < 1)
+                {
+                    package.PackageStatus = "SoldOut";
+                }
                 await _packageRepository.UpdatePackageAsync(package);
 
                 // Remove Package from the cart
