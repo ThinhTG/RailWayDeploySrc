@@ -1,4 +1,5 @@
 ﻿using BlindBoxSS.API.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Cache;
@@ -7,6 +8,7 @@ using Services.Product;
 
 [Route("api/blindboxes")]
 [ApiController]
+
 public class BlindBoxController : ControllerBase
 {
     private readonly IBlindBoxService _service;
@@ -79,6 +81,7 @@ public class BlindBoxController : ControllerBase
 
     // Tạo một blindbox mới
     [HttpPost]
+    [Authorize("AdminPolicy")]
     public async Task<ActionResult<BlindBox>> Create([FromBody] AddBlindBoxDTO addBlindBoxDTO)
     {
         if (addBlindBoxDTO == null)
@@ -104,6 +107,7 @@ public class BlindBoxController : ControllerBase
 
     // Cập nhật blindbox theo ID
     [HttpPut("{id}")]
+    [Authorize("AdminPolicy")]
     public async Task<IActionResult> Update(Guid id, UpdateBlindBoxDTO updateBlindBoxDTO)
     {
         if (updateBlindBoxDTO == null)
@@ -131,6 +135,7 @@ public class BlindBoxController : ControllerBase
 
     // Xóa blindbox theo ID
     [HttpDelete("{id}")]
+    [Authorize("AdminPolicy")]
     public async Task<IActionResult> Delete(Guid id)
     {
         await _service.DeleteAsync(id);
@@ -144,6 +149,7 @@ public class BlindBoxController : ControllerBase
     /// <param name="addBlindBoxDTOV2"></param>
     /// <returns></returns>
     [HttpPost("v2blindbox")]
+    [Authorize("AdminPolicy")]
     public async Task<ActionResult<BlindBox>> Create([FromBody] AddBlindBoxDTOV2 addBlindBoxDTOV2)
     {
         if (addBlindBoxDTOV2 == null)
@@ -174,6 +180,7 @@ public class BlindBoxController : ControllerBase
     /// <param name="updateBlindBoxDTOV2"></param>
     /// <returns></returns>
     [HttpPut("v2/{id}")]
+    [Authorize("AdminPolicy")]
     public async Task<IActionResult> Update(Guid id, UpdateBlindBoxDTOV2 updateBlindBoxDTOV2)
     {
         if (updateBlindBoxDTOV2 == null)
